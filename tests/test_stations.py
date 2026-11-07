@@ -157,3 +157,17 @@ def test_uic_code_other_ids():
     assert uic_code("stop_area:SNCF:83045013") == "83045013"
     assert uic_code("stop_point:SNCF:87756056:Train") == "87756056"
     assert uic_code("stop_area:SNCF:87401323") == "87401323"
+
+
+# --- Ruling R3: every Unicode dash (category Pd) counts as a space ----------
+
+def test_search_ignores_en_dash_villeneuve():
+    assert search_stations("villeneuve loubet plage")[0].name == "Villeneuve-Loubet – Plage"
+
+
+def test_search_ignores_en_dash_golfe_juan():
+    assert search_stations("golfe juan vallauris")[0].name == "Golfe-Juan – Vallauris"
+
+
+def test_search_ascii_hyphen_query_matches_en_dash_name():
+    assert search_stations("villeneuve-loubet - plage")[0].name == "Villeneuve-Loubet – Plage"
