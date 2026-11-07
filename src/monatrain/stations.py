@@ -83,5 +83,8 @@ def uic_code(stop_id: str) -> str:
 def _normalize(text: str) -> str:
     decomposed = unicodedata.normalize("NFKD", text)
     without_accents = "".join(char for char in decomposed if not unicodedata.combining(char))
-    spaced = without_accents.lower().replace("-", " ").replace("'", " ")
+    spaced = "".join(
+        " " if char == "'" or unicodedata.category(char) == "Pd" else char
+        for char in without_accents.lower()
+    )
     return " ".join(spaced.split())
