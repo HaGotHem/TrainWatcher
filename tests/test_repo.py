@@ -389,3 +389,51 @@ def test_kv_get_set(repo):
     assert repo.kv_get("a") == "1"
     repo.kv_set("a", "2")
     assert repo.kv_get("a") == "2"
+
+
+# --- controller rulings R4 (cache families) and R6 (missing_streak ignores NULL) ---------------
+
+
+def test_cache_latest_returns_newest_entry_of_family(repo):
+    t0 = datetime(2026, 11, 6, 8, 0, tzinfo=PARIS)
+    fam = f"journeys:{MONACO}:{NICE}"
+    other = f"journeys:{NICE}:{MONACO}"
+    # Inserted newest-first: the order must come from fetched_at, not insertion.
+    repo.cache_put("k-0805", {"v": "08:05"}, t0 + timedelta(minutes=5), family=fam)
+    repo.cache_put("k-0800", {"v": "08:00"}, t0, family=fam)
+    repo.cache_put("k-other", {"v": "other"}, t0 + timedelta(minutes=9), family=other)
+    repo.cache_put("k-nofam", {"v": "nofam"}, t0 + timedelta(minutes=10))
+
+    assert repo.cache_latest(fam) == ({"v": "08:05"}, t0 + timedelta(minutes=5))
+    assert repo.cache_latest(other) == ({"v": "other"}, t0 + timedelta(minutes=9))
+    assert repo.cache_latest("journeys:none:none") is None
+    # Entries are still reachable by their exact key.
+    assert repo.cache_get("k-0800") == ({"v": "08:00"}, t0)
+    assert repo.cache_get("k-nofam") == ({"v": "nofam"}, t0 + timedelta(minutes=10))
+
+
+def test_cache_latest_follows_overwrites(repo):
+    t0 = datetime(2026, 11, 6, 8, 0, tzinfo=PARIS)
+    repo.cache_put("a", {"v": 1}, t0, family="fam")
+    repo.cache_put("b", {"v": 2}, t0 + timedelta(minutes=1), family="fam")
+    repo.cache_put("a", {"v": 3}, t0 + timedelta(minutes=2), family="fam")
+    assert repo.cache_latest("fam") == ({"v": 3}, t0 + timedelta(minutes=2))
+
+
+def test_missing_streak_ignores_null_rows(repo):
+    _user(repo)
+    a = _follow(repo, dep_time="08:04")
+    b = _follow(repo, dep_time="09:04")
+
+    # found 0, NULL, 0 -> 2 (the NULL row is created by set_last_delay alone)
+    repo.set_found(a.id, D1, False)
+    repo.set_last_delay(a.id, D2, 5)
+    repo.set_found(a.id, D3, False)
+    assert repo.get_daily(a.id, D2).found is None
+    assert repo.missing_streak(a.id) == 2
+
+    # found 0, 0, NULL (most recent) -> 2
+    repo.set_found(b.id, D1, False)
+    repo.set_found(b.id, D2, False)
+    repo.set_notified(b.id, D3, "delayed", 6)
+    assert repo.missing_streak(b.id) == 2

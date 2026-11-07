@@ -5,6 +5,7 @@ the real fixtures captured in Task 2. Time comes from the injected `clock` fixtu
 """
 
 import base64
+import copy
 import json
 import logging
 from datetime import UTC, datetime, timedelta
@@ -437,3 +438,160 @@ async def test_401_is_not_a_quota_or_unavailable_error(make_client):
         await make_client(server).departures(MONACO)
     assert isinstance(excinfo.value, SncfAuthError)
     assert not isinstance(excinfo.value, (SncfQuotaError, SncfUnavailable))
+
+
+# --- controller ruling R4: cache keys, and stale fallback by family -----------------------------
+
+
+async def test_departures_unavailable_serves_stale_from_an_earlier_minute(make_client, clock, fixed_now):
+    server = FakeServer(DEPARTURES_MONACO)
+    client = make_client(server)
+    await client.departures(MONACO)  # 08:00
+
+    clock.advance(minutes=3)  # 08:03
+    server.set_status(503)
+    result = await client.departures(MONACO)
+
+    assert len(server.requests) == 2
+    assert result.stale is True
+    assert result.items == parse_departures(DEPARTURES_MONACO, MONACO)
+    assert result.fetched_at == fixed_now
+
+
+async def test_departures_cache_uses_ttl_not_minute(make_client, repo, clock, fixed_now):
+    server = FakeServer(DEPARTURES_MONACO)
+    client = make_client(server)
+    await client.departures(MONACO)  # 08:00:00
+    clock.advance(seconds=30)  # 08:00:30
+    await client.departures(MONACO)
+    assert len(server.requests) == 1
+
+    clock.advance(seconds=35)  # 08:01:05, 65 s after the fetch
+    result = await client.departures(MONACO)
+    assert len(server.requests) == 2
+    assert result.stale is False
+    assert result.fetched_at == fixed_now + timedelta(seconds=65)
+    assert repo.quota_count(fixed_now.date()) == 2
+
+
+async def test_departures_cache_hit_across_a_minute_boundary(make_client, clock):
+    server = FakeServer(DEPARTURES_MONACO)
+    client = make_client(server)
+    clock.advance(seconds=50)  # 08:00:50
+    await client.departures(MONACO)
+    clock.advance(seconds=30)  # 08:01:20: 30 s later, but in another minute
+    result = await client.departures(MONACO)
+    assert len(server.requests) == 1
+    assert result.stale is False
+
+
+async def test_departures_cache_is_per_stop(make_client):
+    server = FakeServer(DEPARTURES_MONACO)
+    client = make_client(server)
+    await client.departures(MONACO)
+    await client.departures(NICE)
+    assert len(server.requests) == 2
+
+
+async def test_journeys_budget_refused_falls_back_to_latest_of_same_route(make_client, budget, clock, fixed_now):
+    server = FakeServer(JOURNEYS)
+    client = make_client(server, consumer="web")
+    await client.journeys(MONACO, NICE, datetime(2026, 11, 6, 8, 0, tzinfo=PARIS))
+
+    for _ in range(3000):
+        budget.record("web", fixed_now)
+    clock.advance(minutes=2)
+    result = await client.journeys(MONACO, NICE, datetime(2026, 11, 6, 8, 5, tzinfo=PARIS))
+
+    assert len(server.requests) == 1
+    assert result.stale is True
+    assert result.items == expected_journeys()
+    assert result.fetched_at == fixed_now
+
+
+async def test_journeys_fallback_family_is_per_route(make_client, budget, fixed_now):
+    server = FakeServer(JOURNEYS)
+    client = make_client(server, consumer="web")
+    await client.journeys(MONACO, NICE, datetime(2026, 11, 6, 8, 0, tzinfo=PARIS))
+
+    for _ in range(3000):
+        budget.record("web", fixed_now)
+    with pytest.raises(SncfQuotaError):
+        await client.journeys(NICE, MONACO, datetime(2026, 11, 6, 8, 0, tzinfo=PARIS))
+    assert len(server.requests) == 1
+
+
+async def test_journeys_fallback_prefers_exact_key_over_newer_family_entry(make_client, budget, clock, fixed_now):
+    one_journey = copy.deepcopy(JOURNEYS)
+    one_journey["journeys"] = one_journey["journeys"][:1]
+    server = FakeServer(JOURNEYS)
+    client = make_client(server, consumer="web")
+
+    await client.journeys(MONACO, NICE, datetime(2026, 11, 6, 8, 0, tzinfo=PARIS))  # fetched 08:00, 4 trains
+    clock.advance(minutes=1)
+    server.set(one_journey)
+    await client.journeys(MONACO, NICE, datetime(2026, 11, 6, 8, 5, tzinfo=PARIS))  # fetched 08:01, 1 train
+    assert len(server.requests) == 2
+
+    for _ in range(3000):
+        budget.record("web", fixed_now)
+    clock.advance(minutes=2)
+
+    exact = await client.journeys(MONACO, NICE, datetime(2026, 11, 6, 8, 0, tzinfo=PARIS))
+    assert exact.stale is True
+    assert exact.items == expected_journeys()
+    assert exact.fetched_at == fixed_now
+
+    latest = await client.journeys(MONACO, NICE, datetime(2026, 11, 6, 8, 10, tzinfo=PARIS))
+    assert latest.stale is True
+    assert latest.items == parse_journeys(one_journey, MONACO, NICE)
+    assert latest.fetched_at == fixed_now + timedelta(minutes=1)
+    assert len(server.requests) == 2
+
+
+async def test_journeys_503_falls_back_to_latest_of_same_route(make_client, clock, fixed_now):
+    server = FakeServer(JOURNEYS)
+    client = make_client(server)
+    await client.journeys(MONACO, NICE, datetime(2026, 11, 6, 8, 0, tzinfo=PARIS))
+
+    clock.advance(minutes=5)
+    server.set_status(503)
+    result = await client.journeys(MONACO, NICE, datetime(2026, 11, 6, 8, 5, tzinfo=PARIS))
+    assert result.stale is True
+    assert result.items == expected_journeys()
+    assert result.fetched_at == fixed_now
+
+
+# --- controller ruling R5: every request sent counts against the quota --------------------------
+
+
+async def test_every_sent_request_counts_whatever_its_status(make_client, repo, fixed_now):
+    server = FakeServer(JOURNEYS)
+    client = make_client(server, consumer="web")
+    day = fixed_now.date()
+
+    server.set_status(503)
+    with pytest.raises(SncfUnavailable):
+        await client.journeys(MONACO, NICE, datetime(2026, 11, 6, 8, 0, tzinfo=PARIS))
+    assert repo.quota_count(day, "web") == 1
+
+    server.set_status(401)
+    with pytest.raises(SncfAuthError):
+        await client.journeys(MONACO, NICE, datetime(2026, 11, 6, 8, 1, tzinfo=PARIS))
+    assert repo.quota_count(day, "web") == 2
+
+    server.set_status(429)
+    with pytest.raises(SncfQuotaError):
+        await client.journeys(MONACO, NICE, datetime(2026, 11, 6, 8, 2, tzinfo=PARIS))
+    assert repo.quota_count(day, "web") == 3
+    assert repo.quota_count(day) == 3
+    assert len(server.requests) == 3
+
+
+async def test_watcher_failed_request_counts_for_watcher(make_client, repo, fixed_now):
+    server = FakeServer(DEPARTURES_MONACO)
+    server.set_status(500)
+    with pytest.raises(SncfUnavailable):
+        await make_client(server, consumer="watcher").departures(MONACO)
+    assert repo.quota_count(fixed_now.date(), "watcher") == 1
+    assert repo.quota_count(fixed_now.date(), "web") == 0
