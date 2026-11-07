@@ -595,3 +595,138 @@ async def test_watcher_failed_request_counts_for_watcher(make_client, repo, fixe
         await make_client(server, consumer="watcher").departures(MONACO)
     assert repo.quota_count(fixed_now.date(), "watcher") == 1
     assert repo.quota_count(fixed_now.date(), "web") == 0
+
+
+# --- controller ruling R7: Navitia 404 no_solution is an empty answer, other 4xx raise SncfError ---
+
+
+def _navitia_error(error_id: str) -> dict:
+    return {"error": {"id": error_id, "message": f"navitia error {error_id}"}}
+
+
+async def test_journeys_404_no_solution_is_an_empty_answer(make_client, repo, clock, fixed_now):
+    server = FakeServer(_navitia_error("no_solution"), status=404)
+    client = make_client(server)
+    when = datetime(2026, 11, 6, 8, 0, tzinfo=PARIS)
+
+    result = await client.journeys(MONACO, NICE, when)
+    assert result == Fetched(items=[], fetched_at=fixed_now, stale=False)
+
+    # Cached like a 200: a second identical call within 60 s sends nothing.
+    clock.advance(seconds=30)
+    again = await client.journeys(MONACO, NICE, when)
+    assert again == Fetched(items=[], fetched_at=fixed_now, stale=False)
+    assert len(server.requests) == 1
+    assert repo.quota_count(fixed_now.date()) == 1
+
+
+async def test_departures_404_no_solution_is_an_empty_answer(make_client, repo, clock, fixed_now):
+    server = FakeServer(_navitia_error("no_solution"), status=404)
+    client = make_client(server)
+
+    result = await client.departures(MONACO)
+    assert result == Fetched(items=[], fetched_at=fixed_now, stale=False)
+
+    clock.advance(seconds=30)
+    again = await client.departures(MONACO)
+    assert again.items == [] and again.stale is False
+    assert len(server.requests) == 1
+    assert repo.quota_count(fixed_now.date()) == 1
+
+
+async def test_404_no_solution_is_cached_in_the_route_family(make_client, budget, clock, fixed_now):
+    server = FakeServer(_navitia_error("no_solution"), status=404)
+    client = make_client(server, consumer="web")
+    await client.journeys(MONACO, NICE, datetime(2026, 11, 6, 8, 0, tzinfo=PARIS))
+
+    for _ in range(3000):
+        budget.record("web", fixed_now)
+    clock.advance(minutes=2)
+    result = await client.journeys(MONACO, NICE, datetime(2026, 11, 6, 8, 5, tzinfo=PARIS))
+    assert result == Fetched(items=[], fetched_at=fixed_now, stale=True)
+    assert len(server.requests) == 1
+
+
+@pytest.mark.parametrize(
+    ("status", "error_id"),
+    [(404, "unknown_object"), (400, "bad_format")],
+)
+async def test_other_4xx_raise_plain_sncf_error_with_navitia_id(make_client, sncf_token, status, error_id):
+    server = FakeServer(_navitia_error(error_id), status=status)
+    client = make_client(server)
+
+    with pytest.raises(SncfError) as excinfo:
+        await client.journeys(MONACO, NICE, datetime(2026, 11, 6, 8, 0, tzinfo=PARIS))
+    exc = excinfo.value
+    assert not isinstance(exc, (SncfAuthError, SncfQuotaError, SncfUnavailable))
+    assert error_id in str(exc)
+    assert sncf_token not in str(exc)
+    assert base64.b64encode(f"{sncf_token}:".encode()).decode() not in str(exc)
+
+
+async def test_departures_404_unknown_object_raises_sncf_error(make_client):
+    server = FakeServer(_navitia_error("unknown_object"), status=404)
+    with pytest.raises(SncfError) as excinfo:
+        await make_client(server).departures("stop_area:SNCF:00000000")
+    assert not isinstance(excinfo.value, (SncfAuthError, SncfQuotaError, SncfUnavailable))
+    assert "unknown_object" in str(excinfo.value)
+
+
+# --- controller ruling R8: undecodable bodies and other httpx errors are SncfUnavailable --------
+
+GARBAGE_BODIES = [b"\xff\xfe\x00garbage", b"\x80\x81garbage\xff"]
+
+
+@pytest.mark.parametrize("content", GARBAGE_BODIES)
+async def test_non_utf8_body_raises_unavailable(make_client, content):
+    server = FakeServer(JOURNEYS)
+    server.set_raw(content, status=200)
+    with pytest.raises(SncfUnavailable):
+        await make_client(server).journeys(MONACO, NICE, datetime(2026, 11, 6, 8, 0, tzinfo=PARIS))
+
+
+@pytest.mark.parametrize("content", GARBAGE_BODIES)
+async def test_non_utf8_body_serves_stale(make_client, clock, fixed_now, content):
+    server = FakeServer(JOURNEYS)
+    client = make_client(server)
+    when = datetime(2026, 11, 6, 8, 0, tzinfo=PARIS)
+    await client.journeys(MONACO, NICE, when)
+
+    clock.advance(minutes=2)
+    server.set_raw(content, status=200)
+    result = await client.journeys(MONACO, NICE, when)
+    assert result.stale is True
+    assert result.items == expected_journeys()
+    assert result.fetched_at == fixed_now
+
+
+def _raiser(exc_type: type[httpx.RequestError]):
+    def handler(request: httpx.Request) -> httpx.Response:
+        raise exc_type("simulated", request=request)
+
+    return handler
+
+
+HTTPX_ERRORS = [httpx.DecodingError, httpx.TooManyRedirects]
+
+
+@pytest.mark.parametrize("exc_type", HTTPX_ERRORS)
+async def test_httpx_request_errors_raise_unavailable(make_client, exc_type):
+    server = FakeServer(JOURNEYS)
+    server.reply = _raiser(exc_type)
+    with pytest.raises(SncfUnavailable):
+        await make_client(server).journeys(MONACO, NICE, datetime(2026, 11, 6, 8, 0, tzinfo=PARIS))
+
+
+@pytest.mark.parametrize("exc_type", HTTPX_ERRORS)
+async def test_httpx_request_errors_serve_stale(make_client, clock, fixed_now, exc_type):
+    server = FakeServer(DEPARTURES_MONACO)
+    client = make_client(server)
+    await client.departures(MONACO)
+
+    clock.advance(minutes=2)
+    server.reply = _raiser(exc_type)
+    result = await client.departures(MONACO)
+    assert result.stale is True
+    assert result.items == parse_departures(DEPARTURES_MONACO, MONACO)
+    assert result.fetched_at == fixed_now
