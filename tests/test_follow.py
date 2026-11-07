@@ -115,16 +115,20 @@ class FakeSource:
         *,
         stale: bool = False,
         error: Exception | None = None,
+        route_errors: dict[tuple[str, str], Exception] | None = None,
     ) -> None:
         self.items = list(items or [])
         self.stale = stale
         self.error = error
+        self.route_errors = dict(route_errors or {})
         self.calls: list[Call] = []
 
     async def journeys(self, from_id: str, to_id: str, when: datetime, count: int = 8) -> Fetched[list[TrainInfo]]:
         self.calls.append(Call(from_id, to_id, when, count))
         if self.error is not None:
             raise self.error
+        if (from_id, to_id) in self.route_errors:
+            raise self.route_errors[(from_id, to_id)]
         return Fetched(list(self.items), datetime(2026, 11, 6, 7, 0, tzinfo=PARIS), self.stale)
 
 
@@ -625,3 +629,86 @@ async def test_nearest_alternative_ignores_trains_of_another_date():
     source = FakeSource([train(at(FRI, "07:50"), "86055")], stale=True)
 
     assert await nearest_alternative(source, _follow_obj("07:42"), MON) is None
+
+
+# --- Controller ruling R10 ---------------------------------------------------------------------
+
+
+async def test_today_statuses_one_call_per_route(repo):
+    _user(repo)
+    first = _follow(repo, "09:00", number="86061")
+    second = _follow(repo, "09:30", number="86065")
+    t_first = train(at(FRI, "09:00"), "86061")
+    t_second = train(at(FRI, "09:30"), "86065", delay=5, status=Status.DELAYED)
+    source = FakeSource([t_first, t_second])
+
+    items = await today_statuses(repo, source, USER, NOW_0830)
+
+    assert len(source.calls) == 1
+    assert (source.calls[0].from_id, source.calls[0].to_id) == (MONACO, NICE)
+    assert [item.follow for item in items] == [first, second]
+    assert [item.state for item in items] == ["live", "live"]
+    assert [item.train for item in items] == [t_first, t_second]
+
+
+async def test_today_statuses_is_read_only(repo):
+    _user(repo)
+    past = _follow(repo, "06:00", from_id=CANNES, to_id=ANTIBES, number="86001")
+    seen = _follow(repo, "09:00", number="86061")  # live, in the answer
+    absent = _follow(repo, "09:30", number="86065")  # live, not in the answer
+    unknown = _follow(repo, "10:00", from_id=NICE, to_id=MONACO, number="86071")  # live, no row
+    upcoming = _follow(repo, "20:00", from_id=NICE, to_id=MENTON, number="86099")
+    repo.set_found(past.id, FRI, True)
+    repo.set_last_delay(seen.id, FRI, 2)
+    repo.set_found(absent.id, FRI, True)
+    source = FakeSource([train(at(FRI, "09:00"), "86061", delay=9, status=Status.DELAYED)])
+    follows = [past, seen, absent, unknown, upcoming]
+    before = {f.id: (repo.get_daily(f.id, FRI), repo.get_daily(f.id, THU)) for f in follows}
+
+    await today_statuses(repo, source, USER, NOW_0830)
+
+    after = {f.id: (repo.get_daily(f.id, FRI), repo.get_daily(f.id, THU)) for f in follows}
+    assert after == before
+
+
+@pytest.mark.parametrize(
+    "error",
+    [
+        pytest.param(SncfError("Requête SNCF refusée (HTTP 400, bad_request)"), id="SncfError"),
+        pytest.param(SncfUnavailable("API SNCF injoignable (ConnectError)"), id="SncfUnavailable"),
+    ],
+)
+async def test_today_statuses_survives_source_error_on_one_route(repo, error):
+    _user(repo)
+    early = _follow(repo, "06:00", from_id=MONACO, to_id=NICE, number="86001")  # past, same route
+    broken_a = _follow(repo, "09:00", from_id=MONACO, to_id=NICE, number="86061")
+    broken_b = _follow(repo, "09:30", from_id=MONACO, to_id=NICE, number="86065")
+    repo.set_found(broken_b.id, FRI, False)  # would be "missing" with an answer; without one: live
+    ok = _follow(repo, "10:00", from_id=NICE, to_id=MONACO, number="86071")
+    later = _follow(repo, "20:00", from_id=MONACO, to_id=NICE, number="86099")  # upcoming, same route
+    ok_train = train(at(FRI, "10:00"), "86071", from_id=NICE, to_id=MONACO)
+    source = FakeSource([ok_train], route_errors={(MONACO, NICE): error})
+
+    items = await today_statuses(repo, source, USER, NOW_0830)
+
+    assert [item.follow for item in items] == [early, broken_a, broken_b, ok, later]
+    assert [item.state for item in items] == ["past", "live", "live", "live", "upcoming"]
+    assert [item.train for item in items] == [None, None, None, ok_train, None]
+    assert [item.stale for item in items] == [False, True, True, False, False]
+    assert {(c.from_id, c.to_id) for c in source.calls} == {(MONACO, NICE), (NICE, MONACO)}
+
+
+async def test_resolve_tie_picks_earliest_scheduled(fixed_now):
+    later = train(at(MON, "08:05"), "86055")
+    earlier = train(at(MON, "07:55"), "86053")
+    source = FakeSource([later, earlier])  # the later one comes first in the answer
+
+    assert await resolve_train(source, MONACO, NICE, "08:00", MONDAY, fixed_now) == earlier
+
+
+async def test_nearest_alternative_tie_picks_earliest_scheduled():
+    later = train(at(MON, "07:50"), "86055")  # 8 min after 07:42
+    earlier = train(at(MON, "07:34"), "86051")  # 8 min before 07:42
+    source = FakeSource([later, earlier])
+
+    assert await nearest_alternative(source, _follow_obj("07:42"), MON) == earlier
