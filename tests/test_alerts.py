@@ -129,3 +129,12 @@ def test_bus_after_cancel_silent():
 )
 def test_on_time_never_alerts(state):
     assert decide(state, train(Status.ON_TIME, 0)) is None
+
+
+# --- ruling R9: a delay alerts only when the train's status is DELAYED ----------------------------
+
+
+def test_delay_on_on_time_train_never_alerts():
+    # parse sets status DELAYED only for realtime data; a base-schedule shift stays ON_TIME.
+    assert decide(NOTHING, train(Status.ON_TIME, 7)) is None
+    assert decide(notified("delayed", 8), train(Status.ON_TIME, 13)) is None

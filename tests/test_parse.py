@@ -210,3 +210,37 @@ def test_real_departures_fields():
     assert t.base_departure == t.departure == datetime(2026, 11, 7, 5, 32, tzinfo=PARIS)
     assert t.status is Status.ON_TIME and t.realtime is False and t.reason is None
     assert trains[2].physical_mode == "Train grande vitesse"
+
+
+# --- ruling R9: realtime = data_freshness != "base_schedule" -------------------------------------
+
+
+def test_adapted_schedule_journey_is_realtime_delayed():
+    # journey_adapted_schedule.json: journey_delayed.json with data_freshness "adapted_schedule"
+    # and every realtime time moved to base + 6 min (instead of + 8).
+    t = parse_journeys(load("journey_adapted_schedule.json"), MONACO, NICE)[0]
+    assert t.realtime is True
+    assert t.status is Status.DELAYED and t.delay_min == 6
+    assert t.base_departure == datetime(2026, 11, 6, 8, 4, tzinfo=PARIS)
+    assert t.departure == datetime(2026, 11, 6, 8, 10, tzinfo=PARIS)
+    assert t.arrival == datetime(2026, 11, 6, 8, 34, tzinfo=PARIS)
+
+
+def test_adapted_schedule_departure_is_realtime_delayed():
+    payload = load("departure_base_schedule.json")
+    sdt = payload["departures"][0]["stop_date_time"]
+    sdt["data_freshness"] = "adapted_schedule"
+    sdt["departure_date_time"] = _plus(sdt["base_departure_date_time"], 6)
+    t = parse_departures(payload, MONACO)[0]
+    assert t.realtime is True and t.status is Status.DELAYED and t.delay_min == 6
+
+
+def test_base_schedule_journey_with_shifted_departure_is_on_time():
+    payload = load("journey_delayed.json")
+    section = _pt_section(payload)
+    section["data_freshness"] = "base_schedule"
+    section["departure_date_time"] = _plus(section["base_departure_date_time"], 6)
+    t = parse_journeys(payload, MONACO, NICE)[0]
+    assert t.realtime is False
+    assert t.status is Status.ON_TIME
+    assert t.delay_min == 6
