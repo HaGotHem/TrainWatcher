@@ -355,20 +355,24 @@ async def test_window_across_midnight(repo):
     notifier = FakeNotifier()
     w = Watcher(repo, source, notifier)
 
-    await w.tick(at(FRI, "23:55"))
+    await w.tick(at(FRI, "23:45"))  # in the window before base: train seen at +15 min
     assert notifier.sent == [Sent(U1, format_alert(AlertKind.DELAYED, t15), None)]
     assert repo.get_daily(f.id, FRI).last_delay == 15
     assert source.calls == [Call(MONACO, NICE, at(FRI, "23:49"), 4)]
 
-    await w.tick(at(SAT, "00:03"))  # yesterday's train, still within base + 15 min
+    await w.tick(at(FRI, "23:55"))  # after base, still watched thanks to last_delay 15
     assert source.calls[1:] == [Call(MONACO, NICE, at(FRI, "23:49"), 4)]
+    assert len(notifier.sent) == 1  # no duplicate DM
+
+    await w.tick(at(SAT, "00:03"))  # yesterday's train, still within base + 15 min
+    assert source.calls[2:] == [Call(MONACO, NICE, at(FRI, "23:49"), 4)]
     assert len(notifier.sent) == 1  # no duplicate DM
     s = repo.get_daily(f.id, FRI)
     assert (s.found, s.last_delay, s.notified_status, s.notified_delay) == (True, 15, "delayed", 15)
     assert repo.get_daily(f.id, SAT) == repo.get_daily(-1, SAT)  # Saturday's own train untouched
 
     await w.tick(at(SAT, "00:06"))  # past base + 15 min: no longer watched
-    assert len(source.calls) == 2
+    assert len(source.calls) == 3
     assert len(notifier.sent) == 1
     assert repo.get_daily(f.id, FRI).found is True
 
