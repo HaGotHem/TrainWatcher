@@ -1,6 +1,7 @@
 """Shared "follow a train" services, used by both the web site and the Discord bot."""
 
 import logging
+import re
 from dataclasses import dataclass
 from datetime import date, datetime, time, timedelta
 from typing import Literal
@@ -16,6 +17,7 @@ log = logging.getLogger(__name__)
 WINDOW = timedelta(minutes=15)
 LIVE_BEFORE = timedelta(minutes=30)
 LIVE_AFTER = timedelta(hours=3)
+_HHMM = re.compile(r"([01]\d|2[0-3]):[0-5]\d")
 
 
 class FollowError(ValueError):
@@ -45,13 +47,21 @@ async def list_trains_around(
 ) -> list[TrainInfo]:
     start = _at(on, hhmm) - WINDOW
     fetched = await source.journeys(from_id, to_id, start, count)
-    # A stale answer may hold trains of an earlier query: keep only those from the window onwards.
-    return [t for t in fetched.items if t.base_departure >= start]
+    # A stale answer may hold trains of an earlier query: keep only those of day `on`, from the window onwards.
+    return [
+        t
+        for t in fetched.items
+        if t.base_departure >= start and t.base_departure.astimezone(PARIS).date() == on
+    ]
 
 
 async def resolve_train(source, from_id: str, to_id: str, hhmm: str, days: int, now: datetime) -> TrainInfo:
-    if from_id == to_id or get_station(from_id) is None or get_station(to_id) is None:
+    if get_station(from_id) is None or get_station(to_id) is None:
+        raise FollowError("Gare inconnue.")
+    if from_id == to_id:
         raise FollowError("Les gares de départ et d'arrivée doivent être différentes.")
+    if not _HHMM.fullmatch(hhmm):
+        raise FollowError("Heure invalide, utilise le format HH:MM.")
 
     service_date = next_service_date(days, hhmm, now)
     trains = await list_trains_around(source, from_id, to_id, hhmm, service_date)
@@ -94,11 +104,13 @@ async def today_statuses(repo: Repo, source, user_id: str, now: datetime) -> lis
             states[follow.id] = "live"
             live_by_route.setdefault((follow.from_id, follow.to_id), []).append(follow)
 
-    # One journeys call per route, starting at its earliest live train (follows are sorted by time).
+    # One journeys call per route, from its earliest live train, sized to reach its latest one.
     answers: dict[tuple[str, str], tuple[list[TrainInfo], bool] | None] = {}
     for (from_id, to_id), route_follows in live_by_route.items():
         try:
-            fetched = await source.journeys(from_id, to_id, _at(today, route_follows[0].dep_time))
+            first, last = _at(today, route_follows[0].dep_time), _at(today, route_follows[-1].dep_time)
+            count = max(8, int((last - first).total_seconds() // 60) // 10 + 2)
+            fetched = await source.journeys(from_id, to_id, first, count)
         except SncfError as exc:
             log.warning("Statut du jour indisponible pour %s -> %s : %s", from_id, to_id, exc)
             answers[(from_id, to_id)] = None
