@@ -18,8 +18,9 @@ Pinned behaviour (brief + global constraints + review focus 1, 3, 4):
 - An absent train never produces a "cancelled" DM; days outside the mask are ignored.
 """
 
+import contextlib
 from dataclasses import dataclass
-from datetime import date, datetime, timedelta
+from datetime import UTC, date, datetime, timedelta
 
 import pytest
 
@@ -104,12 +105,14 @@ class FakeSource:
         routes: dict[tuple[str, str], list[TrainInfo]] | None = None,
         error: Exception | None = None,
         route_errors: dict[tuple[str, str], Exception] | None = None,
+        when_errors: dict[datetime, Exception] | None = None,
         stale: bool = False,
     ) -> None:
         self.items = list(items or [])
         self.routes = dict(routes or {})
         self.error = error
         self.route_errors = dict(route_errors or {})
+        self.when_errors = dict(when_errors or {})  # raise only for queries starting at that time
         self.stale = stale
         self.calls: list[Call] = []
 
@@ -119,6 +122,8 @@ class FakeSource:
             raise self.error
         if (from_id, to_id) in self.route_errors:
             raise self.route_errors[(from_id, to_id)]
+        if when in self.when_errors:
+            raise self.when_errors[when]
         items = self.routes.get((from_id, to_id), self.items)
         return Fetched(list(items), datetime(2026, 11, 6, 7, 0, tzinfo=PARIS), self.stale)
 
@@ -133,12 +138,15 @@ class Sent:
 class FakeNotifier:
     """Records every send() attempt; returns False (DM refused) for the user ids in `refuse`."""
 
-    def __init__(self, refuse: set[str] | None = None) -> None:
+    def __init__(self, refuse: set[str] | None = None, *, crash: set[str] | None = None) -> None:
         self.refuse = set(refuse or ())
+        self.crash = set(crash or ())  # send() raises for these user ids
         self.sent: list[Sent] = []
 
     async def send(self, user_id: str, text: str, *, suggestion: tuple[int, TrainInfo] | None = None) -> bool:
         self.sent.append(Sent(user_id, text, suggestion))
+        if user_id in self.crash:
+            raise RuntimeError("discord exploded")
         return user_id not in self.refuse
 
 
@@ -594,6 +602,176 @@ async def test_day_not_in_mask_ignored(repo):
     assert notifier.sent == []
     assert repo.get_daily(f.id, FRI).found is None
     assert repo.missing_streak(f.id) == 0
+
+
+# --- R14: a stale answer counts as a failed call ------------------------------------------------
+
+
+async def test_stale_answer_without_train_never_marks_missing(repo):
+    f = follow_of(repo, days=THURSDAY | FRIDAY)
+    source = FakeSource([], stale=True)
+    notifier = FakeNotifier()
+    w = Watcher(repo, source, notifier)
+
+    for d in (THU, FRI):
+        await w.tick(at(d, "07:30"))
+        await w.tick(at(d, "07:45"))
+        await w.tick(at(d, "08:01"))
+        assert repo.get_daily(f.id, d).found is None
+    assert repo.missing_streak(f.id) == 0
+    assert notifier.sent == []
+    assert repo.all_follows()[0].suggestion_sent is False
+
+
+async def test_stale_answer_with_delayed_train_ignored(repo):
+    f = follow_of(repo, days=FRIDAY)
+    source = FakeSource([train(at(FRI, "08:00"), delay=10)], stale=True)
+    notifier = FakeNotifier()
+    w = Watcher(repo, source, notifier)
+
+    await w.tick(at(FRI, "07:30"))
+    assert len(source.calls) == 1
+    assert notifier.sent == []
+    assert repo.get_daily(f.id, FRI) == repo.get_daily(-1, FRI)  # no found / last_delay / notified
+
+
+# --- R15: tomorrow is a candidate service date --------------------------------------------------
+
+
+async def test_train_after_midnight_polled_the_evening_before(repo):
+    follow_of(repo, dep="00:20", days=ALL_DAYS)
+    source = FakeSource([])
+    w = Watcher(repo, source, FakeNotifier())
+
+    await w.tick(at(FRI, "23:20"))  # Saturday 00:20 - 60 min
+    assert source.calls == [Call(MONACO, NICE, at(SAT, "00:19"), 4)]
+
+
+async def test_midnight_train_delay_alert_from_previous_evening(repo):
+    f = follow_of(repo, dep="00:00", days=ALL_DAYS)
+    t6 = train(at(SAT, "00:00"), delay=6)
+    source = FakeSource([t6])
+    notifier = FakeNotifier()
+    w = Watcher(repo, source, notifier)
+
+    await w.tick(at(FRI, "23:00"))
+    assert source.calls == [Call(MONACO, NICE, at(FRI, "23:59"), 4)]
+    assert notifier.sent == [Sent(U1, format_alert(AlertKind.DELAYED, t6), None)]
+    s = repo.get_daily(f.id, SAT)
+    assert (s.found, s.last_delay, s.notified_status, s.notified_delay) == (True, 6, "delayed", 6)
+
+
+# --- R16: suggestion retries ---------------------------------------------------------------------
+
+
+async def test_suggestion_retry_throttled_after_source_error(repo):
+    f = follow_of(repo, days=THURSDAY | FRIDAY)
+    suggestion_query = at(FRI, "07:45")  # nearest_alternative asks from dep_time - 15 min
+    source = FakeSource([], when_errors={suggestion_query: SncfUnavailable("API SNCF indisponible (HTTP 503)")})
+    notifier = FakeNotifier()
+    w = Watcher(repo, source, notifier)
+
+    def suggestion_calls() -> int:
+        return sum(1 for c in source.calls if c.when == suggestion_query)
+
+    await w.tick(at(THU, "07:30"))
+    await w.tick(at(THU, "08:01"))  # missing day 1
+    await w.tick(at(FRI, "07:30"))
+    await w.tick(at(FRI, "08:01"))  # missing day 2: suggestion attempted, source fails
+    assert repo.get_daily(f.id, FRI).found is False
+    assert suggestion_calls() == 1
+    assert notifier.sent == []
+    assert repo.all_follows()[0].suggestion_sent is False
+
+    for hhmm in ("08:02", "08:10", "08:20", "08:30"):  # less than 30 min later: no new attempt
+        await w.tick(at(FRI, hhmm))
+    assert suggestion_calls() == 1
+
+    source.when_errors.clear()
+    await w.tick(at(FRI, "08:32"))  # 31 min after the failure: retried, succeeds
+    assert suggestion_calls() == 2
+    assert notifier.sent == [Sent(U1, format_missing(f, None), None)]
+    assert repo.all_follows()[0].suggestion_sent is True
+
+    await w.tick(at(FRI, "09:10"))
+    assert suggestion_calls() == 2
+    assert len(notifier.sent) == 1
+
+
+async def test_suggestion_send_crash_still_marked_sent(repo):
+    f = follow_of(repo, days=THURSDAY | FRIDAY | SATURDAY)
+    source = FakeSource([])
+    notifier = FakeNotifier(crash={U1})
+    w = Watcher(repo, source, notifier)
+
+    await w.tick(at(THU, "07:30"))
+    await w.tick(at(THU, "08:01"))
+    await w.tick(at(FRI, "07:30"))
+    with contextlib.suppress(Exception):  # whether tick() swallows it is not pinned here
+        await w.tick(at(FRI, "08:01"))
+    assert notifier.sent == [Sent(U1, format_missing(f, None), None)]
+    assert repo.all_follows()[0].suggestion_sent is True
+
+    for when in (at(FRI, "08:40"), at(FRI, "09:30"), at(SAT, "07:30"), at(SAT, "08:01"), at(SAT, "09:00")):
+        await w.tick(when)
+    assert len(notifier.sent) == 1
+
+
+# --- R17 -----------------------------------------------------------------------------------------
+
+
+async def test_successful_send_restores_dm_ok(repo):
+    follow_of(repo)
+    repo.set_dm_ok(U1, False)
+    t10 = train(at(FRI, "08:00"), delay=10)
+    notifier = FakeNotifier()
+    w = Watcher(repo, FakeSource([t10]), notifier)
+
+    await w.tick(at(FRI, "07:30"))
+    assert notifier.sent == [Sent(U1, format_alert(AlertKind.DELAYED, t10), None)]
+    assert repo.get_user(U1)["dm_ok"] == 1
+
+
+async def test_malformed_dep_time_follow_skipped(repo, db):
+    follow_of(repo, U1)  # creates user U1
+    repo.upsert_user(U2, "user222", None)
+    db.execute(
+        "INSERT INTO followed (user_id, from_id, to_id, dep_time, days, train_number) VALUES (?, ?, ?, ?, ?, ?)",
+        (U2, CANNES, ANTIBES, "8h", ALL_DAYS, "86077"),
+    )
+    t10 = train(at(FRI, "08:00"), delay=10)
+    source = FakeSource(routes={(MONACO, NICE): [t10]})
+    notifier = FakeNotifier()
+    w = Watcher(repo, source, notifier)
+
+    await w.tick(at(FRI, "07:30"))  # must not raise
+    assert source.calls == [Call(MONACO, NICE, at(FRI, "07:59"), 4)]
+    assert notifier.sent == [Sent(U1, format_alert(AlertKind.DELAYED, t10), None)]
+
+
+async def test_poll_interval_real_elapsed_time_across_dst_fall_back(repo):
+    """2026-10-25: 03:00 CEST -> 02:00 CET. 02:59 CEST and 02:02 CET (fold=1) are 3 real minutes apart."""
+    sun = date(2026, 10, 25)
+    base = datetime(2026, 10, 25, 1, 30, tzinfo=PARIS)  # unambiguous, CEST
+    late = train(base, delay=120)  # keeps the window open until 01:30 UTC
+    follow_of(repo, dep="01:30", days=ALL_DAYS)
+    source = FakeSource([late])
+    notifier = FakeNotifier()
+    w = Watcher(repo, source, notifier)
+
+    before = datetime(2026, 10, 25, 2, 59, tzinfo=PARIS)  # fold=0, CEST
+    after = datetime(2026, 10, 25, 2, 2, tzinfo=PARIS, fold=1)  # CET
+    assert before.utcoffset() == timedelta(hours=2)
+    assert after.utcoffset() == timedelta(hours=1)
+    assert after.astimezone(UTC) - before.astimezone(UTC) == timedelta(minutes=3)
+
+    await w.tick(at(sun, "01:00"))  # +120 seen: DM, last_delay 120
+    assert len(notifier.sent) == 1
+    await w.tick(before)
+    assert len(source.calls) == 2
+    await w.tick(after)  # 180 s of real time later: polled again
+    assert len(source.calls) == 3
+    assert len(notifier.sent) == 1
 
 
 async def test_constructor_defaults(repo):
