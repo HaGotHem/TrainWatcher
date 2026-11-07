@@ -499,6 +499,82 @@ async def test_found_train_resets_missing_streak_no_suggestion(repo):
     assert notifier.sent == []
 
 
+# Ruling R12 (a): "missing" (found=False) only after at least one SUCCESSFUL journeys call that day.
+
+
+async def test_missing_not_marked_when_first_tick_after_base(repo):
+    """Restart at base + 10 min: the train was never polled in its window, so nothing is known."""
+    f = follow_of(repo, days=FRIDAY)
+    source = FakeSource([])
+    notifier = FakeNotifier()
+    w = Watcher(repo, source, notifier)
+
+    await w.tick(at(FRI, "08:10"))
+    await w.tick(at(FRI, "08:20"))
+    assert source.calls == []
+    assert notifier.sent == []
+    assert repo.get_daily(f.id, FRI).found is None
+    assert repo.missing_streak(f.id) == 0
+
+
+async def test_missing_not_marked_when_every_call_failed(repo):
+    f = follow_of(repo, days=FRIDAY)
+    source = FakeSource([], error=SncfUnavailable("API SNCF indisponible (HTTP 503)"))
+    notifier = FakeNotifier()
+    w = Watcher(repo, source, notifier)
+
+    await w.tick(at(FRI, "07:30"))
+    await w.tick(at(FRI, "07:45"))
+    assert len(source.calls) == 2
+    await w.tick(at(FRI, "08:01"))  # window over, but every in-window call raised
+    assert notifier.sent == []
+    assert repo.get_daily(f.id, FRI).found is None
+    assert repo.missing_streak(f.id) == 0
+
+
+async def test_missing_marked_after_one_successful_call_without_train(repo):
+    f = follow_of(repo, days=FRIDAY)
+    source = FakeSource([], error=SncfUnavailable("API SNCF indisponible (HTTP 503)"))
+    notifier = FakeNotifier()
+    w = Watcher(repo, source, notifier)
+
+    await w.tick(at(FRI, "07:30"))  # fails
+    source.error = None
+    source.items = [train(at(FRI, "08:10"), "86999")]  # succeeds, but not our train
+    await w.tick(at(FRI, "07:45"))
+    assert len(source.calls) == 2
+    assert repo.get_daily(f.id, FRI).found is None  # not over yet
+
+    await w.tick(at(FRI, "08:01"))
+    assert notifier.sent == []
+    assert repo.get_daily(f.id, FRI).found is False
+    assert repo.missing_streak(f.id) == 1
+
+
+# Ruling R12 (b): a refused missing-train DM still counts as the one suggestion.
+
+
+async def test_missing_suggestion_refused_dm_still_marked_sent(repo):
+    f = follow_of(repo, days=THURSDAY | FRIDAY | SATURDAY)
+    source = FakeSource([])
+    notifier = FakeNotifier(refuse={U1})
+    w = Watcher(repo, source, notifier)
+
+    for d in (THU, FRI):
+        await w.tick(at(d, "07:30"))
+        await w.tick(at(d, "08:01"))
+
+    assert notifier.sent == [Sent(U1, format_missing(f, None), None)]
+    assert repo.all_follows()[0].suggestion_sent is True
+    assert repo.get_user(U1)["dm_ok"] == 0
+
+    await w.tick(at(FRI, "08:30"))
+    await w.tick(at(SAT, "07:30"))
+    await w.tick(at(SAT, "08:01"))  # missing a third day: still no new attempt
+    assert repo.missing_streak(f.id) == 3
+    assert len(notifier.sent) == 1
+
+
 # --- day mask ------------------------------------------------------------------------------------
 
 
