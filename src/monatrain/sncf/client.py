@@ -1,6 +1,5 @@
 """Async SNCF (Navitia) client with a SQLite-backed cache and quota accounting."""
 
-import json
 from collections.abc import Callable
 from datetime import datetime, time, timedelta
 from urllib.parse import urlencode
@@ -15,6 +14,7 @@ from monatrain.timeutil import PARIS, format_navitia_dt, now_paris
 
 BASE_URL = "https://api.sncf.com/v1/coverage/sncf"
 _TIMEOUT_S = 10.0
+_NO_SOLUTION = "no_solution"
 
 
 class SncfError(Exception):
@@ -101,7 +101,7 @@ class SncfClient:
             response = await self._http.get(
                 self._base_url + path, params=params, auth=(self._token, ""), timeout=_TIMEOUT_S
             )
-        except httpx.TransportError as exc:
+        except httpx.RequestError as exc:
             return self._stale_or_raise(
                 key, family, SncfUnavailable(f"API SNCF injoignable ({type(exc).__name__})")
             )
@@ -114,13 +114,20 @@ class SncfClient:
             return self._stale_or_raise(key, family, SncfQuotaError("Quota SNCF dépassé (HTTP 429)"))
         if status >= 500:
             return self._stale_or_raise(key, family, SncfUnavailable(f"API SNCF indisponible (HTTP {status})"))
-        if status >= 400:
-            raise SncfError(f"Requête SNCF refusée (HTTP {status})")
 
         try:
             body = response.json()
-        except json.JSONDecodeError:
+        except ValueError:  # includes JSONDecodeError and UnicodeDecodeError
             body = None
+
+        if status >= 400:
+            error_id = _navitia_error_id(body)
+            if status == 404 and error_id == _NO_SOLUTION:
+                # No train at all (night, strike): a valid, empty answer; cached like a 200.
+                self._repo.cache_put(key, body, now, family=family)
+                return body, now, False
+            raise SncfError(f"Requête SNCF refusée (HTTP {status}, {error_id or 'erreur inconnue'})")
+
         if not isinstance(body, dict):
             return self._stale_or_raise(key, family, SncfUnavailable("Réponse SNCF invalide"))
 
@@ -133,6 +140,12 @@ class SncfClient:
         if cached is None:
             raise error
         return cached[0], cached[1], True
+
+
+def _navitia_error_id(body: object) -> str | None:
+    error = body.get("error") if isinstance(body, dict) else None
+    error_id = error.get("id") if isinstance(error, dict) else None
+    return error_id if isinstance(error_id, str) else None
 
 
 def _next_paris_midnight(now: datetime) -> datetime:
