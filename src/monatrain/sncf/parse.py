@@ -72,7 +72,7 @@ def _build(
 
     linked = _linked_disruptions(info, disruptions)
     delay_min = int((departure - base_departure).total_seconds() // 60)
-    realtime = times.get("data_freshness") == "realtime"
+    realtime = times.get("data_freshness") != "base_schedule"
     physical_mode = info.get("physical_mode", "")
 
     if no_service or any(_cancels(d, user_stops) for d in linked):

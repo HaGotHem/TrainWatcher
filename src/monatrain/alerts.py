@@ -24,7 +24,7 @@ def decide(state: DailyState, train: TrainInfo) -> AlertKind | None:
         if last not in (AlertKind.REPLACED_BY_BUS, AlertKind.CANCELLED):
             return AlertKind.REPLACED_BY_BUS
 
-    if train.delay_min >= DELAY_THRESHOLD_MIN:
+    if train.status is Status.DELAYED and train.delay_min >= DELAY_THRESHOLD_MIN:
         if last is None:
             return AlertKind.DELAYED
         if (
