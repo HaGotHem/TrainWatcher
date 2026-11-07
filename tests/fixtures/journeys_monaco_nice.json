@@ -1,0 +1,4069 @@
+{
+  "feed_publishers": [
+    {
+      "id": "sncf",
+      "name": "SNCF PIV Production",
+      "url": "",
+      "license": "Private (unspecified)"
+    },
+    {
+      "id": "SNCF:sncf-piv",
+      "name": "SNCF PIV Production",
+      "url": "",
+      "license": "Private (unspecified)"
+    }
+  ],
+  "links": [
+    {
+      "href": "https://api.sncf.com/v1/coverage/sncf/journeys?from=stop_area:SNCF:87756403&to=stop_area:SNCF:87756056&datetime=20261107T060410&datetime_represents=departure&data_freshness=realtime&max_nb_transfers=0&direct_path=none&count=8",
+      "templated": false,
+      "rel": "next",
+      "type": "next"
+    },
+    {
+      "href": "https://api.sncf.com/v1/coverage/sncf/journeys?from=stop_area:SNCF:87756403&to=stop_area:SNCF:87756056&datetime=20261107T062650&datetime_represents=arrival&data_freshness=realtime&max_nb_transfers=0&direct_path=none&count=8",
+      "templated": false,
+      "rel": "prev",
+      "type": "prev"
+    },
+    {
+      "href": "https://api.sncf.com/v1/coverage/sncf/journeys?from=stop_area:SNCF:87756403&to=stop_area:SNCF:87756056&datetime=20261107T000000&datetime_represents=departure&data_freshness=realtime&max_nb_transfers=0&direct_path=none&count=8",
+      "templated": false,
+      "rel": "first",
+      "type": "first"
+    },
+    {
+      "href": "https://api.sncf.com/v1/coverage/sncf/journeys?from=stop_area:SNCF:87756403&to=stop_area:SNCF:87756056&datetime=20261107T235959&datetime_represents=arrival&data_freshness=realtime&max_nb_transfers=0&direct_path=none&count=8",
+      "templated": false,
+      "rel": "last",
+      "type": "last"
+    },
+    {
+      "href": "https://api.sncf.com/v1/coverage/sncf/vehicle_journeys/{vehicle_journey.id}",
+      "templated": true,
+      "rel": "vehicle_journeys",
+      "type": "vehicle_journey"
+    },
+    {
+      "href": "https://api.sncf.com/v1/coverage/sncf/networks/{network.id}",
+      "templated": true,
+      "rel": "networks",
+      "type": "network"
+    },
+    {
+      "href": "https://api.sncf.com/v1/coverage/sncf/companies/{company.id}",
+      "templated": true,
+      "rel": "companies",
+      "type": "company"
+    },
+    {
+      "href": "https://api.sncf.com/v1/coverage/sncf/physical_modes/{physical_modes.id}",
+      "templated": true,
+      "rel": "physical_modes",
+      "type": "physical_modes"
+    },
+    {
+      "href": "https://api.sncf.com/v1/coverage/sncf/lines/{line.id}",
+      "templated": true,
+      "rel": "lines",
+      "type": "line"
+    },
+    {
+      "href": "https://api.sncf.com/v1/coverage/sncf/stop_points/{stop_point.id}",
+      "templated": true,
+      "rel": "stop_points",
+      "type": "stop_point"
+    },
+    {
+      "href": "https://api.sncf.com/v1/coverage/sncf/routes/{route.id}",
+      "templated": true,
+      "rel": "routes",
+      "type": "route"
+    },
+    {
+      "href": "https://api.sncf.com/v1/coverage/sncf/commercial_modes/{commercial_modes.id}",
+      "templated": true,
+      "rel": "commercial_modes",
+      "type": "commercial_modes"
+    },
+    {
+      "href": "https://api.sncf.com/v1/coverage/sncf/stop_areas/{stop_area.id}",
+      "templated": true,
+      "rel": "stop_areas",
+      "type": "stop_area"
+    },
+    {
+      "href": "https://api.sncf.com/v1/coverage/sncf/physical_modes/{physical_mode.id}",
+      "templated": true,
+      "rel": "physical_modes",
+      "type": "physical_mode"
+    },
+    {
+      "href": "https://api.sncf.com/v1/coverage/sncf/lines/{lines.id}",
+      "templated": true,
+      "rel": "lines",
+      "type": "lines"
+    },
+    {
+      "href": "https://api.sncf.com/v1/coverage/sncf/commercial_modes/{commercial_mode.id}",
+      "templated": true,
+      "rel": "commercial_modes",
+      "type": "commercial_mode"
+    }
+  ],
+  "journeys": [
+    {
+      "duration": 1380,
+      "nb_transfers": 0,
+      "departure_date_time": "20261107T060400",
+      "arrival_date_time": "20261107T062700",
+      "requested_date_time": "20261107T014519",
+      "type": "best",
+      "status": "",
+      "tags": [
+        "walking",
+        "reliable",
+        "ecologic"
+      ],
+      "co2_emission": {
+        "value": 168.4088,
+        "unit": "gEC"
+      },
+      "air_pollutants": {
+        "unit": "g",
+        "values": {
+          "nox": 0.0,
+          "pm": 0.0
+        }
+      },
+      "durations": {
+        "total": 1380,
+        "walking": 0,
+        "bike": 0,
+        "car": 0,
+        "ridesharing": 0,
+        "taxi": 0
+      },
+      "distances": {
+        "walking": 0,
+        "bike": 0,
+        "car": 0,
+        "ridesharing": 0,
+        "taxi": 0
+      },
+      "fare": {
+        "found": false,
+        "total": {
+          "value": "0.0"
+        },
+        "links": []
+      },
+      "calendars": [
+        {
+          "week_pattern": {
+            "monday": false,
+            "tuesday": false,
+            "wednesday": false,
+            "thursday": false,
+            "friday": false,
+            "saturday": true,
+            "sunday": false
+          },
+          "active_periods": [
+            {
+              "begin": "20261107",
+              "end": "20261108"
+            }
+          ]
+        }
+      ],
+      "sections": [
+        {
+          "id": "jDrcowAxSqvyrm85ED6CjH_0",
+          "duration": 0,
+          "co2_emission": {
+            "value": 0.0,
+            "unit": "gEC"
+          },
+          "departure_date_time": "20261107T060400",
+          "arrival_date_time": "20261107T060400",
+          "to": {
+            "id": "stop_point:SNCF:87756403:Train",
+            "name": "Monaco Monte Carlo (Monaco)",
+            "quality": 0,
+            "stop_point": {
+              "id": "stop_point:SNCF:87756403:Train",
+              "name": "Monaco Monte Carlo",
+              "label": "Monaco Monte Carlo (Monaco)",
+              "coord": {
+                "lon": "7.419747",
+                "lat": "43.738414"
+              },
+              "links": [],
+              "administrative_regions": [
+                {
+                  "id": "admin:osm:relation:2220322",
+                  "name": "Monaco",
+                  "level": 8,
+                  "zip_code": "",
+                  "label": "Monaco",
+                  "insee": "",
+                  "coord": {
+                    "lon": "7.4197576",
+                    "lat": "43.7311424"
+                  }
+                }
+              ],
+              "stop_area": {
+                "id": "stop_area:SNCF:87756403",
+                "name": "Monaco Monte Carlo",
+                "codes": [
+                  {
+                    "type": "source",
+                    "value": "87756403"
+                  },
+                  {
+                    "type": "uic",
+                    "value": "87756403"
+                  }
+                ],
+                "timezone": "Europe/Paris",
+                "label": "Monaco Monte Carlo (Monaco)",
+                "coord": {
+                  "lon": "7.419747",
+                  "lat": "43.738414"
+                },
+                "links": []
+              },
+              "equipments": []
+            },
+            "embedded_type": "stop_point"
+          },
+          "from": {
+            "id": "stop_area:SNCF:87756403",
+            "name": "Monaco Monte Carlo (Monaco)",
+            "quality": 0,
+            "embedded_type": "stop_area",
+            "stop_area": {
+              "id": "stop_area:SNCF:87756403",
+              "coord": {
+                "lat": "43.73841414",
+                "lon": "7.41974652"
+              },
+              "label": "Monaco Monte Carlo (Monaco)",
+              "name": "Monaco Monte Carlo",
+              "administrative_regions": [
+                {
+                  "id": "admin:osm:relation:5986475",
+                  "insee": "",
+                  "name": "Ravin de Sainte-Dévote",
+                  "label": "Ravin de Sainte-Dévote",
+                  "level": 10,
+                  "coord": {
+                    "lon": "7.4200588",
+                    "lat": "43.7378511"
+                  },
+                  "zip_code": null
+                },
+                {
+                  "id": "admin:osm:relation:2220322",
+                  "insee": "",
+                  "name": "Monaco",
+                  "label": "Monaco",
+                  "level": 8,
+                  "coord": {
+                    "lon": "7.4197576",
+                    "lat": "43.7311424"
+                  },
+                  "zip_code": null
+                },
+                {
+                  "id": "admin:osm:relation:1124039",
+                  "insee": "",
+                  "name": "Monaco",
+                  "label": "Monaco",
+                  "level": 2,
+                  "coord": {
+                    "lon": "7.4197576",
+                    "lat": "43.7311424"
+                  },
+                  "zip_code": null
+                }
+              ],
+              "timezone": "",
+              "commercial_modes": [
+                {
+                  "id": "commercial_mode:FR:Branding::6e0a3931-d3d3-4576-a37a-b133fac0dd44:",
+                  "name": "ZOU !"
+                }
+              ],
+              "physical_modes": [
+                {
+                  "id": "physical_mode:Train",
+                  "name": "TER / Intercités"
+                },
+                {
+                  "id": "physical_mode:Coach",
+                  "name": "Autocar"
+                }
+              ],
+              "comment": null,
+              "codes": [
+                {
+                  "type": "source",
+                  "value": "87756403"
+                },
+                {
+                  "type": "uic",
+                  "value": "87756403"
+                }
+              ],
+              "lines": [
+                {
+                  "id": "line:SNCF:FR:Line::0c436faa-ccd8-4cb5-9b79-1c8a701364c4:",
+                  "name": "C3",
+                  "code": "C3",
+                  "commercial_mode": {
+                    "id": "commercial_mode:FR:Branding::6e0a3931-d3d3-4576-a37a-b133fac0dd44:",
+                    "name": "ZOU !"
+                  },
+                  "physical_modes": [
+                    {
+                      "id": "physical_mode:Train",
+                      "name": "TER / Intercités"
+                    },
+                    {
+                      "id": "physical_mode:Coach",
+                      "name": "Autocar"
+                    }
+                  ],
+                  "network": {
+                    "id": "network:SNCF:FR:Branding::6e0a3931-d3d3-4576-a37a-b133fac0dd44:",
+                    "name": "ZOU !"
+                  }
+                },
+                {
+                  "id": "line:SNCF:FR:Line::96809d68-f37d-4e68-ac3c-3c0540f4e2f2:",
+                  "name": "C13",
+                  "code": "C13",
+                  "commercial_mode": {
+                    "id": "commercial_mode:FR:Branding::6e0a3931-d3d3-4576-a37a-b133fac0dd44:",
+                    "name": "ZOU !"
+                  },
+                  "physical_modes": [
+                    {
+                      "id": "physical_mode:Train",
+                      "name": "TER / Intercités"
+                    }
+                  ],
+                  "network": {
+                    "id": "network:SNCF:FR:Branding::6e0a3931-d3d3-4576-a37a-b133fac0dd44:",
+                    "name": "ZOU !"
+                  }
+                }
+              ]
+            }
+          },
+          "mode": "walking",
+          "type": "crow_fly",
+          "links": []
+        },
+        {
+          "id": "section_7_0",
+          "duration": 1380,
+          "co2_emission": {
+            "value": 168.4088,
+            "unit": "gEC"
+          },
+          "departure_date_time": "20261107T060400",
+          "arrival_date_time": "20261107T062700",
+          "base_departure_date_time": "20261107T060400",
+          "base_arrival_date_time": "20261107T062700",
+          "data_freshness": "base_schedule",
+          "to": {
+            "id": "stop_point:SNCF:87756056:Train",
+            "name": "Nice (Nice)",
+            "quality": 0,
+            "stop_point": {
+              "id": "stop_point:SNCF:87756056:Train",
+              "name": "Nice",
+              "label": "Nice (Nice)",
+              "coord": {
+                "lon": "7.261904",
+                "lat": "43.704556"
+              },
+              "links": [],
+              "administrative_regions": [
+                {
+                  "id": "admin:fr:06088",
+                  "name": "Nice",
+                  "level": 8,
+                  "zip_code": "06000;06300",
+                  "label": "Nice (06000-06300)",
+                  "insee": "06088",
+                  "coord": {
+                    "lon": "7.2683912",
+                    "lat": "43.7009358"
+                  }
+                }
+              ],
+              "stop_area": {
+                "id": "stop_area:SNCF:87756056",
+                "name": "Nice",
+                "codes": [
+                  {
+                    "type": "source",
+                    "value": "87756056"
+                  },
+                  {
+                    "type": "uic",
+                    "value": "87756056"
+                  }
+                ],
+                "timezone": "Europe/Paris",
+                "label": "Nice (Nice)",
+                "coord": {
+                  "lon": "7.261904",
+                  "lat": "43.704556"
+                },
+                "links": []
+              },
+              "equipments": []
+            },
+            "embedded_type": "stop_point"
+          },
+          "from": {
+            "id": "stop_point:SNCF:87756403:Train",
+            "name": "Monaco Monte Carlo (Monaco)",
+            "quality": 0,
+            "stop_point": {
+              "id": "stop_point:SNCF:87756403:Train",
+              "name": "Monaco Monte Carlo",
+              "label": "Monaco Monte Carlo (Monaco)",
+              "coord": {
+                "lon": "7.419747",
+                "lat": "43.738414"
+              },
+              "links": [],
+              "administrative_regions": [
+                {
+                  "id": "admin:osm:relation:2220322",
+                  "name": "Monaco",
+                  "level": 8,
+                  "zip_code": "",
+                  "label": "Monaco",
+                  "insee": "",
+                  "coord": {
+                    "lon": "7.4197576",
+                    "lat": "43.7311424"
+                  }
+                }
+              ],
+              "stop_area": {
+                "id": "stop_area:SNCF:87756403",
+                "name": "Monaco Monte Carlo",
+                "codes": [
+                  {
+                    "type": "source",
+                    "value": "87756403"
+                  },
+                  {
+                    "type": "uic",
+                    "value": "87756403"
+                  }
+                ],
+                "timezone": "Europe/Paris",
+                "label": "Monaco Monte Carlo (Monaco)",
+                "coord": {
+                  "lon": "7.419747",
+                  "lat": "43.738414"
+                },
+                "links": []
+              },
+              "equipments": []
+            },
+            "embedded_type": "stop_point"
+          },
+          "additional_informations": [
+            "regular"
+          ],
+          "type": "public_transport",
+          "display_informations": {
+            "commercial_mode": "ZOU !",
+            "network": "ZOU !",
+            "direction": "Les Arcs - Draguignan (Les Arcs-sur-Argens)",
+            "label": "C13",
+            "color": "",
+            "code": "C13",
+            "headsign": "881202",
+            "name": "C13",
+            "links": [
+              {
+                "templated": false,
+                "rel": "terminus",
+                "internal": true,
+                "type": "stop_area",
+                "id": "stop_area:SNCF:87756486"
+              }
+            ],
+            "text_color": "",
+            "trip_short_name": "881202",
+            "company": "SNCF Voyageurs SA",
+            "description": "",
+            "physical_mode": "TER / Intercités",
+            "equipments": []
+          },
+          "links": [
+            {
+              "type": "company",
+              "id": "company:SNCF:5111"
+            },
+            {
+              "type": "vehicle_journey",
+              "id": "vehicle_journey:SNCF:2026-11-07:881202:5111:Train"
+            },
+            {
+              "type": "line",
+              "id": "line:SNCF:FR:Line::96809d68-f37d-4e68-ac3c-3c0540f4e2f2:"
+            },
+            {
+              "type": "route",
+              "id": "route:SNCF:FR:Line::96809d68-f37d-4e68-ac3c-3c0540f4e2f2:"
+            },
+            {
+              "type": "commercial_mode",
+              "id": "commercial_mode:FR:Branding::6e0a3931-d3d3-4576-a37a-b133fac0dd44:"
+            },
+            {
+              "type": "physical_mode",
+              "id": "physical_mode:Train"
+            },
+            {
+              "type": "network",
+              "id": "network:SNCF:FR:Branding::6e0a3931-d3d3-4576-a37a-b133fac0dd44:"
+            }
+          ],
+          "stop_date_times": [
+            {
+              "departure_date_time": "20261107T060400",
+              "base_departure_date_time": "20261107T060400",
+              "arrival_date_time": "20261107T060100",
+              "base_arrival_date_time": "20261107T060100",
+              "stop_point": {
+                "id": "stop_point:SNCF:87756403:Train",
+                "name": "Monaco Monte Carlo",
+                "label": "Monaco Monte Carlo (Monaco)",
+                "coord": {
+                  "lon": "7.419747",
+                  "lat": "43.738414"
+                },
+                "links": [],
+                "equipments": []
+              },
+              "additional_informations": [],
+              "links": []
+            },
+            {
+              "departure_date_time": "20261107T060700",
+              "base_departure_date_time": "20261107T060700",
+              "arrival_date_time": "20261107T060600",
+              "base_arrival_date_time": "20261107T060600",
+              "stop_point": {
+                "id": "stop_point:SNCF:87756395:Train",
+                "name": "Cap-d'Ail",
+                "label": "Cap-d'Ail (Cap-d'Ail)",
+                "coord": {
+                  "lon": "7.394384",
+                  "lat": "43.7206"
+                },
+                "links": [],
+                "equipments": []
+              },
+              "additional_informations": [],
+              "links": []
+            },
+            {
+              "departure_date_time": "20261107T061200",
+              "base_departure_date_time": "20261107T061200",
+              "arrival_date_time": "20261107T061100",
+              "base_arrival_date_time": "20261107T061100",
+              "stop_point": {
+                "id": "stop_point:SNCF:87756387:Train",
+                "name": "Èze",
+                "label": "Èze (Èze)",
+                "coord": {
+                  "lon": "7.356948",
+                  "lat": "43.722327"
+                },
+                "links": [],
+                "equipments": []
+              },
+              "additional_informations": [],
+              "links": []
+            },
+            {
+              "departure_date_time": "20261107T061600",
+              "base_departure_date_time": "20261107T061600",
+              "arrival_date_time": "20261107T061500",
+              "base_arrival_date_time": "20261107T061500",
+              "stop_point": {
+                "id": "stop_point:SNCF:87756379:Train",
+                "name": "Beaulieu-sur-Mer",
+                "label": "Beaulieu-sur-Mer (Beaulieu-sur-Mer)",
+                "coord": {
+                  "lon": "7.331631",
+                  "lat": "43.706692"
+                },
+                "links": [],
+                "equipments": []
+              },
+              "additional_informations": [],
+              "links": []
+            },
+            {
+              "departure_date_time": "20261107T061900",
+              "base_departure_date_time": "20261107T061900",
+              "arrival_date_time": "20261107T061800",
+              "base_arrival_date_time": "20261107T061800",
+              "stop_point": {
+                "id": "stop_point:SNCF:87756361:Train",
+                "name": "Villefranche-sur-Mer",
+                "label": "Villefranche-sur-Mer (Villefranche-sur-Mer)",
+                "coord": {
+                  "lon": "7.314245",
+                  "lat": "43.707047"
+                },
+                "links": [],
+                "equipments": []
+              },
+              "additional_informations": [],
+              "links": []
+            },
+            {
+              "departure_date_time": "20261107T062400",
+              "base_departure_date_time": "20261107T062400",
+              "arrival_date_time": "20261107T062200",
+              "base_arrival_date_time": "20261107T062200",
+              "stop_point": {
+                "id": "stop_point:SNCF:87756353:Train",
+                "name": "Nice Riquier",
+                "label": "Nice Riquier (Nice)",
+                "coord": {
+                  "lon": "7.290175",
+                  "lat": "43.705554"
+                },
+                "links": [],
+                "equipments": []
+              },
+              "additional_informations": [],
+              "links": []
+            },
+            {
+              "departure_date_time": "20261107T063000",
+              "base_departure_date_time": "20261107T063000",
+              "arrival_date_time": "20261107T062700",
+              "base_arrival_date_time": "20261107T062700",
+              "stop_point": {
+                "id": "stop_point:SNCF:87756056:Train",
+                "name": "Nice",
+                "label": "Nice (Nice)",
+                "coord": {
+                  "lon": "7.261904",
+                  "lat": "43.704556"
+                },
+                "links": [],
+                "equipments": []
+              },
+              "additional_informations": [],
+              "links": []
+            }
+          ]
+        },
+        {
+          "id": "76EEEpH847aGZaZbAWMSzi_0",
+          "duration": 0,
+          "co2_emission": {
+            "value": 0.0,
+            "unit": "gEC"
+          },
+          "departure_date_time": "20261107T062700",
+          "arrival_date_time": "20261107T062700",
+          "to": {
+            "id": "stop_area:SNCF:87756056",
+            "name": "Nice (Nice)",
+            "quality": 0,
+            "embedded_type": "stop_area",
+            "stop_area": {
+              "id": "stop_area:SNCF:87756056",
+              "coord": {
+                "lat": "43.704556",
+                "lon": "7.261904"
+              },
+              "label": "Nice (Nice)",
+              "name": "Nice",
+              "administrative_regions": [
+                {
+                  "id": "admin:fr:06088",
+                  "insee": "06088",
+                  "name": "Nice",
+                  "label": "Nice (06000-06300)",
+                  "level": 8,
+                  "coord": {
+                    "lon": "7.2683912",
+                    "lat": "43.7009358"
+                  },
+                  "zip_code": "06000-06300"
+                },
+                {
+                  "id": "admin:osm:relation:7385",
+                  "insee": "06",
+                  "name": "Alpes-Maritimes",
+                  "label": "Alpes-Maritimes",
+                  "level": 6,
+                  "coord": {
+                    "lon": "7.2683912",
+                    "lat": "43.7009358"
+                  },
+                  "zip_code": null
+                },
+                {
+                  "id": "admin:osm:relation:8654",
+                  "insee": "93",
+                  "name": "Provence-Alpes-Côte d'Azur",
+                  "label": "Provence-Alpes-Côte d'Azur",
+                  "level": 4,
+                  "coord": {
+                    "lon": "5.3699525",
+                    "lat": "43.2961743"
+                  },
+                  "zip_code": null
+                },
+                {
+                  "id": "admin:osm:relation:2202162",
+                  "insee": "",
+                  "name": "France",
+                  "label": "France",
+                  "level": 2,
+                  "coord": {
+                    "lon": "2.3483915",
+                    "lat": "48.8534951"
+                  },
+                  "zip_code": null
+                }
+              ],
+              "timezone": "",
+              "commercial_modes": [
+                {
+                  "id": "commercial_mode:FR:Branding::6e0a3931-d3d3-4576-a37a-b133fac0dd44:",
+                  "name": "ZOU !"
+                },
+                {
+                  "id": "commercial_mode:OUI",
+                  "name": "TGV INOUI"
+                },
+                {
+                  "id": "commercial_mode:ICN",
+                  "name": "Intercités de nuit"
+                },
+                {
+                  "id": "commercial_mode:TER",
+                  "name": "TER"
+                },
+                {
+                  "id": "commercial_mode:TGVOUIGO",
+                  "name": "OUIGO"
+                }
+              ],
+              "physical_modes": [
+                {
+                  "id": "physical_mode:LongDistanceTrain",
+                  "name": "Train grande vitesse"
+                },
+                {
+                  "id": "physical_mode:Train",
+                  "name": "TER / Intercités"
+                },
+                {
+                  "id": "physical_mode:Coach",
+                  "name": "Autocar"
+                }
+              ],
+              "comment": null,
+              "codes": [
+                {
+                  "type": "source",
+                  "value": "87756056"
+                },
+                {
+                  "type": "uic",
+                  "value": "87756056"
+                }
+              ],
+              "lines": [
+                {
+                  "id": "line:SNCF:FR:Line::0c436faa-ccd8-4cb5-9b79-1c8a701364c4:",
+                  "name": "C3",
+                  "code": "C3",
+                  "commercial_mode": {
+                    "id": "commercial_mode:FR:Branding::6e0a3931-d3d3-4576-a37a-b133fac0dd44:",
+                    "name": "ZOU !"
+                  },
+                  "physical_modes": [
+                    {
+                      "id": "physical_mode:Train",
+                      "name": "TER / Intercités"
+                    },
+                    {
+                      "id": "physical_mode:Coach",
+                      "name": "Autocar"
+                    }
+                  ],
+                  "network": {
+                    "id": "network:SNCF:FR:Branding::6e0a3931-d3d3-4576-a37a-b133fac0dd44:",
+                    "name": "ZOU !"
+                  }
+                },
+                {
+                  "id": "line:SNCF:FR:Line::96809d68-f37d-4e68-ac3c-3c0540f4e2f2:",
+                  "name": "C13",
+                  "code": "C13",
+                  "commercial_mode": {
+                    "id": "commercial_mode:FR:Branding::6e0a3931-d3d3-4576-a37a-b133fac0dd44:",
+                    "name": "ZOU !"
+                  },
+                  "physical_modes": [
+                    {
+                      "id": "physical_mode:Train",
+                      "name": "TER / Intercités"
+                    }
+                  ],
+                  "network": {
+                    "id": "network:SNCF:FR:Branding::6e0a3931-d3d3-4576-a37a-b133fac0dd44:",
+                    "name": "ZOU !"
+                  }
+                },
+                {
+                  "id": "line:SNCF:FR:Line::1f77c095-1e8b-4abb-a437-36f56063d197:",
+                  "name": "P1",
+                  "code": "P1",
+                  "commercial_mode": {
+                    "id": "commercial_mode:FR:Branding::6e0a3931-d3d3-4576-a37a-b133fac0dd44:",
+                    "name": "ZOU !"
+                  },
+                  "physical_modes": [
+                    {
+                      "id": "physical_mode:Train",
+                      "name": "TER / Intercités"
+                    },
+                    {
+                      "id": "physical_mode:Coach",
+                      "name": "Autocar"
+                    }
+                  ],
+                  "network": {
+                    "id": "network:SNCF:FR:Branding::6e0a3931-d3d3-4576-a37a-b133fac0dd44:",
+                    "name": "ZOU !"
+                  }
+                },
+                {
+                  "id": "line:SNCF:5111-87757625-87756056",
+                  "name": "Cannes - Nice",
+                  "commercial_mode": {
+                    "id": "commercial_mode:TER",
+                    "name": "TER"
+                  },
+                  "physical_modes": [
+                    {
+                      "id": "physical_mode:Train",
+                      "name": "TER / Intercités"
+                    }
+                  ],
+                  "network": {
+                    "id": "network:SNCF:TER",
+                    "name": "TER"
+                  }
+                },
+                {
+                  "id": "line:SNCF:CSR:041600",
+                  "name": "Lyon Part Dieu - Marseille Saint-Charles",
+                  "commercial_mode": {
+                    "id": "commercial_mode:OUI",
+                    "name": "TGV INOUI"
+                  },
+                  "physical_modes": [
+                    {
+                      "id": "physical_mode:LongDistanceTrain",
+                      "name": "Train grande vitesse"
+                    }
+                  ],
+                  "network": {
+                    "id": "network:SNCF:OUI",
+                    "name": "TGV INOUI"
+                  }
+                },
+                {
+                  "id": "line:SNCF:CSR:631100",
+                  "name": "Nice - Paris - Gare de Lyon - Hall 1 & 2",
+                  "commercial_mode": {
+                    "id": "commercial_mode:OUI",
+                    "name": "TGV INOUI"
+                  },
+                  "physical_modes": [
+                    {
+                      "id": "physical_mode:LongDistanceTrain",
+                      "name": "Train grande vitesse"
+                    }
+                  ],
+                  "network": {
+                    "id": "network:SNCF:OUI",
+                    "name": "TGV INOUI"
+                  }
+                },
+                {
+                  "id": "line:SNCF:1187-87756056-87547000",
+                  "name": "Nice - Paris Austerlitz",
+                  "commercial_mode": {
+                    "id": "commercial_mode:ICN",
+                    "name": "Intercités de nuit"
+                  },
+                  "physical_modes": [
+                    {
+                      "id": "physical_mode:LongDistanceTrain",
+                      "name": "Train grande vitesse"
+                    }
+                  ],
+                  "network": {
+                    "id": "network:SNCF:ICN",
+                    "name": "Intercités de nuit"
+                  }
+                },
+                {
+                  "id": "line:SNCF:CSR:770200",
+                  "name": "Nice - Paris Austerlitz",
+                  "commercial_mode": {
+                    "id": "commercial_mode:ICN",
+                    "name": "Intercités de nuit"
+                  },
+                  "physical_modes": [
+                    {
+                      "id": "physical_mode:LongDistanceTrain",
+                      "name": "Train grande vitesse"
+                    }
+                  ],
+                  "network": {
+                    "id": "network:SNCF:ICN",
+                    "name": "Intercités de nuit"
+                  }
+                },
+                {
+                  "id": "line:SNCF:CSR:071100",
+                  "name": "Nice - Strasbourg",
+                  "commercial_mode": {
+                    "id": "commercial_mode:OUI",
+                    "name": "TGV INOUI"
+                  },
+                  "physical_modes": [
+                    {
+                      "id": "physical_mode:LongDistanceTrain",
+                      "name": "Train grande vitesse"
+                    }
+                  ],
+                  "network": {
+                    "id": "network:SNCF:OUI",
+                    "name": "TGV INOUI"
+                  }
+                },
+                {
+                  "id": "line:SNCF:CSR:633200",
+                  "name": "Paris - Gare de Lyon - Hall 1 & 2 - Nice",
+                  "commercial_mode": {
+                    "id": "commercial_mode:TGVOUIGO",
+                    "name": "OUIGO"
+                  },
+                  "physical_modes": [
+                    {
+                      "id": "physical_mode:LongDistanceTrain",
+                      "name": "Train grande vitesse"
+                    }
+                  ],
+                  "network": {
+                    "id": "network:SNCF:TGVOUIGO",
+                    "name": "OUIGO"
+                  }
+                },
+                {
+                  "id": "line:SNCF:1187-87547000-87756056",
+                  "name": "Paris Austerlitz - Nice",
+                  "commercial_mode": {
+                    "id": "commercial_mode:ICN",
+                    "name": "Intercités de nuit"
+                  },
+                  "physical_modes": [
+                    {
+                      "id": "physical_mode:LongDistanceTrain",
+                      "name": "Train grande vitesse"
+                    }
+                  ],
+                  "network": {
+                    "id": "network:SNCF:ICN",
+                    "name": "Intercités de nuit"
+                  }
+                }
+              ]
+            }
+          },
+          "from": {
+            "id": "stop_point:SNCF:87756056:Train",
+            "name": "Nice (Nice)",
+            "quality": 0,
+            "stop_point": {
+              "id": "stop_point:SNCF:87756056:Train",
+              "name": "Nice",
+              "label": "Nice (Nice)",
+              "coord": {
+                "lon": "7.261904",
+                "lat": "43.704556"
+              },
+              "links": [],
+              "administrative_regions": [
+                {
+                  "id": "admin:fr:06088",
+                  "name": "Nice",
+                  "level": 8,
+                  "zip_code": "06000;06300",
+                  "label": "Nice (06000-06300)",
+                  "insee": "06088",
+                  "coord": {
+                    "lon": "7.2683912",
+                    "lat": "43.7009358"
+                  }
+                }
+              ],
+              "stop_area": {
+                "id": "stop_area:SNCF:87756056",
+                "name": "Nice",
+                "codes": [
+                  {
+                    "type": "source",
+                    "value": "87756056"
+                  },
+                  {
+                    "type": "uic",
+                    "value": "87756056"
+                  }
+                ],
+                "timezone": "Europe/Paris",
+                "label": "Nice (Nice)",
+                "coord": {
+                  "lon": "7.261904",
+                  "lat": "43.704556"
+                },
+                "links": []
+              },
+              "equipments": []
+            },
+            "embedded_type": "stop_point"
+          },
+          "mode": "walking",
+          "type": "crow_fly",
+          "links": []
+        }
+      ],
+      "links": [
+        {
+          "href": "https://api.sncf.com/v1/coverage/sncf/journeys?from=stop_area:SNCF:87756403&to=stop_area:SNCF:87756056&datetime=20261107T060400&datetime_represents=departure&data_freshness=realtime&max_nb_transfers=0&direct_path=none&count=8&first_section_mode%5B%5D=walking&last_section_mode%5B%5D=walking&min_nb_transfers=0&min_nb_journeys=5&is_journey_schedules=True&allowed_id%5B%5D=stop_point:SNCF:87756056:Train&allowed_id%5B%5D=stop_point:SNCF:87756403:Train&_pt_planner=kraken",
+          "templated": false,
+          "rel": "same_journey_schedules",
+          "type": "journeys"
+        },
+        {
+          "href": "https://api.sncf.com/v1/coverage/sncf/journeys?from=stop_area:SNCF:87756403&to=stop_area:SNCF:87756056&datetime=20261107T060400&datetime_represents=departure&data_freshness=realtime&max_nb_transfers=0&direct_path=none&count=1&first_section_mode%5B%5D=walking&last_section_mode%5B%5D=walking&min_nb_transfers=0&min_nb_journeys=1&is_journey_schedules=True&allowed_id%5B%5D=stop_point:SNCF:87756056:Train&allowed_id%5B%5D=stop_point:SNCF:87756403:Train",
+          "templated": false,
+          "rel": "this_journey",
+          "type": "journeys"
+        }
+      ]
+    },
+    {
+      "duration": 1440,
+      "nb_transfers": 0,
+      "departure_date_time": "20261107T061700",
+      "arrival_date_time": "20261107T064100",
+      "requested_date_time": "20261107T014519",
+      "type": "rapid",
+      "status": "",
+      "tags": [
+        "walking",
+        "reliable",
+        "ecologic"
+      ],
+      "co2_emission": {
+        "value": 168.4088,
+        "unit": "gEC"
+      },
+      "air_pollutants": {
+        "unit": "g",
+        "values": {
+          "nox": 0.0,
+          "pm": 0.0
+        }
+      },
+      "durations": {
+        "total": 1440,
+        "walking": 0,
+        "bike": 0,
+        "car": 0,
+        "ridesharing": 0,
+        "taxi": 0
+      },
+      "distances": {
+        "walking": 0,
+        "bike": 0,
+        "car": 0,
+        "ridesharing": 0,
+        "taxi": 0
+      },
+      "fare": {
+        "found": false,
+        "total": {
+          "value": "0.0"
+        },
+        "links": []
+      },
+      "calendars": [
+        {
+          "week_pattern": {
+            "monday": false,
+            "tuesday": false,
+            "wednesday": false,
+            "thursday": false,
+            "friday": false,
+            "saturday": true,
+            "sunday": false
+          },
+          "active_periods": [
+            {
+              "begin": "20261107",
+              "end": "20261108"
+            }
+          ]
+        }
+      ],
+      "sections": [
+        {
+          "id": "fZpZc6zd9bc2DvJ2cKVAhH_0",
+          "duration": 0,
+          "co2_emission": {
+            "value": 0.0,
+            "unit": "gEC"
+          },
+          "departure_date_time": "20261107T061700",
+          "arrival_date_time": "20261107T061700",
+          "to": {
+            "id": "stop_point:SNCF:87756403:Train",
+            "name": "Monaco Monte Carlo (Monaco)",
+            "quality": 0,
+            "stop_point": {
+              "id": "stop_point:SNCF:87756403:Train",
+              "name": "Monaco Monte Carlo",
+              "label": "Monaco Monte Carlo (Monaco)",
+              "coord": {
+                "lon": "7.419747",
+                "lat": "43.738414"
+              },
+              "links": [],
+              "administrative_regions": [
+                {
+                  "id": "admin:osm:relation:2220322",
+                  "name": "Monaco",
+                  "level": 8,
+                  "zip_code": "",
+                  "label": "Monaco",
+                  "insee": "",
+                  "coord": {
+                    "lon": "7.4197576",
+                    "lat": "43.7311424"
+                  }
+                }
+              ],
+              "stop_area": {
+                "id": "stop_area:SNCF:87756403",
+                "name": "Monaco Monte Carlo",
+                "codes": [
+                  {
+                    "type": "source",
+                    "value": "87756403"
+                  },
+                  {
+                    "type": "uic",
+                    "value": "87756403"
+                  }
+                ],
+                "timezone": "Europe/Paris",
+                "label": "Monaco Monte Carlo (Monaco)",
+                "coord": {
+                  "lon": "7.419747",
+                  "lat": "43.738414"
+                },
+                "links": []
+              },
+              "equipments": []
+            },
+            "embedded_type": "stop_point"
+          },
+          "from": {
+            "id": "stop_area:SNCF:87756403",
+            "name": "Monaco Monte Carlo (Monaco)",
+            "quality": 0,
+            "embedded_type": "stop_area",
+            "stop_area": {
+              "id": "stop_area:SNCF:87756403",
+              "coord": {
+                "lat": "43.73841414",
+                "lon": "7.41974652"
+              },
+              "label": "Monaco Monte Carlo (Monaco)",
+              "name": "Monaco Monte Carlo",
+              "administrative_regions": [
+                {
+                  "id": "admin:osm:relation:5986475",
+                  "insee": "",
+                  "name": "Ravin de Sainte-Dévote",
+                  "label": "Ravin de Sainte-Dévote",
+                  "level": 10,
+                  "coord": {
+                    "lon": "7.4200588",
+                    "lat": "43.7378511"
+                  },
+                  "zip_code": null
+                },
+                {
+                  "id": "admin:osm:relation:2220322",
+                  "insee": "",
+                  "name": "Monaco",
+                  "label": "Monaco",
+                  "level": 8,
+                  "coord": {
+                    "lon": "7.4197576",
+                    "lat": "43.7311424"
+                  },
+                  "zip_code": null
+                },
+                {
+                  "id": "admin:osm:relation:1124039",
+                  "insee": "",
+                  "name": "Monaco",
+                  "label": "Monaco",
+                  "level": 2,
+                  "coord": {
+                    "lon": "7.4197576",
+                    "lat": "43.7311424"
+                  },
+                  "zip_code": null
+                }
+              ],
+              "timezone": "",
+              "commercial_modes": [
+                {
+                  "id": "commercial_mode:FR:Branding::6e0a3931-d3d3-4576-a37a-b133fac0dd44:",
+                  "name": "ZOU !"
+                }
+              ],
+              "physical_modes": [
+                {
+                  "id": "physical_mode:Train",
+                  "name": "TER / Intercités"
+                },
+                {
+                  "id": "physical_mode:Coach",
+                  "name": "Autocar"
+                }
+              ],
+              "comment": null,
+              "codes": [
+                {
+                  "type": "source",
+                  "value": "87756403"
+                },
+                {
+                  "type": "uic",
+                  "value": "87756403"
+                }
+              ],
+              "lines": [
+                {
+                  "id": "line:SNCF:FR:Line::0c436faa-ccd8-4cb5-9b79-1c8a701364c4:",
+                  "name": "C3",
+                  "code": "C3",
+                  "commercial_mode": {
+                    "id": "commercial_mode:FR:Branding::6e0a3931-d3d3-4576-a37a-b133fac0dd44:",
+                    "name": "ZOU !"
+                  },
+                  "physical_modes": [
+                    {
+                      "id": "physical_mode:Train",
+                      "name": "TER / Intercités"
+                    },
+                    {
+                      "id": "physical_mode:Coach",
+                      "name": "Autocar"
+                    }
+                  ],
+                  "network": {
+                    "id": "network:SNCF:FR:Branding::6e0a3931-d3d3-4576-a37a-b133fac0dd44:",
+                    "name": "ZOU !"
+                  }
+                },
+                {
+                  "id": "line:SNCF:FR:Line::96809d68-f37d-4e68-ac3c-3c0540f4e2f2:",
+                  "name": "C13",
+                  "code": "C13",
+                  "commercial_mode": {
+                    "id": "commercial_mode:FR:Branding::6e0a3931-d3d3-4576-a37a-b133fac0dd44:",
+                    "name": "ZOU !"
+                  },
+                  "physical_modes": [
+                    {
+                      "id": "physical_mode:Train",
+                      "name": "TER / Intercités"
+                    }
+                  ],
+                  "network": {
+                    "id": "network:SNCF:FR:Branding::6e0a3931-d3d3-4576-a37a-b133fac0dd44:",
+                    "name": "ZOU !"
+                  }
+                }
+              ]
+            }
+          },
+          "mode": "walking",
+          "type": "crow_fly",
+          "links": []
+        },
+        {
+          "id": "section_6_0",
+          "duration": 1440,
+          "co2_emission": {
+            "value": 168.4088,
+            "unit": "gEC"
+          },
+          "departure_date_time": "20261107T061700",
+          "arrival_date_time": "20261107T064100",
+          "base_departure_date_time": "20261107T061700",
+          "base_arrival_date_time": "20261107T064100",
+          "data_freshness": "base_schedule",
+          "to": {
+            "id": "stop_point:SNCF:87756056:Train",
+            "name": "Nice (Nice)",
+            "quality": 0,
+            "stop_point": {
+              "id": "stop_point:SNCF:87756056:Train",
+              "name": "Nice",
+              "label": "Nice (Nice)",
+              "coord": {
+                "lon": "7.261904",
+                "lat": "43.704556"
+              },
+              "links": [],
+              "administrative_regions": [
+                {
+                  "id": "admin:fr:06088",
+                  "name": "Nice",
+                  "level": 8,
+                  "zip_code": "06000;06300",
+                  "label": "Nice (06000-06300)",
+                  "insee": "06088",
+                  "coord": {
+                    "lon": "7.2683912",
+                    "lat": "43.7009358"
+                  }
+                }
+              ],
+              "stop_area": {
+                "id": "stop_area:SNCF:87756056",
+                "name": "Nice",
+                "codes": [
+                  {
+                    "type": "source",
+                    "value": "87756056"
+                  },
+                  {
+                    "type": "uic",
+                    "value": "87756056"
+                  }
+                ],
+                "timezone": "Europe/Paris",
+                "label": "Nice (Nice)",
+                "coord": {
+                  "lon": "7.261904",
+                  "lat": "43.704556"
+                },
+                "links": []
+              },
+              "equipments": []
+            },
+            "embedded_type": "stop_point"
+          },
+          "from": {
+            "id": "stop_point:SNCF:87756403:Train",
+            "name": "Monaco Monte Carlo (Monaco)",
+            "quality": 0,
+            "stop_point": {
+              "id": "stop_point:SNCF:87756403:Train",
+              "name": "Monaco Monte Carlo",
+              "label": "Monaco Monte Carlo (Monaco)",
+              "coord": {
+                "lon": "7.419747",
+                "lat": "43.738414"
+              },
+              "links": [],
+              "administrative_regions": [
+                {
+                  "id": "admin:osm:relation:2220322",
+                  "name": "Monaco",
+                  "level": 8,
+                  "zip_code": "",
+                  "label": "Monaco",
+                  "insee": "",
+                  "coord": {
+                    "lon": "7.4197576",
+                    "lat": "43.7311424"
+                  }
+                }
+              ],
+              "stop_area": {
+                "id": "stop_area:SNCF:87756403",
+                "name": "Monaco Monte Carlo",
+                "codes": [
+                  {
+                    "type": "source",
+                    "value": "87756403"
+                  },
+                  {
+                    "type": "uic",
+                    "value": "87756403"
+                  }
+                ],
+                "timezone": "Europe/Paris",
+                "label": "Monaco Monte Carlo (Monaco)",
+                "coord": {
+                  "lon": "7.419747",
+                  "lat": "43.738414"
+                },
+                "links": []
+              },
+              "equipments": []
+            },
+            "embedded_type": "stop_point"
+          },
+          "additional_informations": [
+            "regular"
+          ],
+          "type": "public_transport",
+          "display_informations": {
+            "commercial_mode": "ZOU !",
+            "network": "ZOU !",
+            "direction": "Grasse (Grasse)",
+            "label": "C3",
+            "color": "",
+            "code": "C3",
+            "headsign": "86004",
+            "name": "C3",
+            "links": [
+              {
+                "templated": false,
+                "rel": "terminus",
+                "internal": true,
+                "type": "stop_area",
+                "id": "stop_area:SNCF:83045013"
+              }
+            ],
+            "text_color": "",
+            "trip_short_name": "86004",
+            "company": "SNCF Voyageurs SA",
+            "description": "",
+            "physical_mode": "TER / Intercités",
+            "equipments": []
+          },
+          "links": [
+            {
+              "type": "company",
+              "id": "company:SNCF:5111"
+            },
+            {
+              "type": "vehicle_journey",
+              "id": "vehicle_journey:SNCF:2026-11-07:86004:5111:Train"
+            },
+            {
+              "type": "line",
+              "id": "line:SNCF:FR:Line::0c436faa-ccd8-4cb5-9b79-1c8a701364c4:"
+            },
+            {
+              "type": "route",
+              "id": "route:SNCF:FR:Line::0c436faa-ccd8-4cb5-9b79-1c8a701364c4:"
+            },
+            {
+              "type": "commercial_mode",
+              "id": "commercial_mode:FR:Branding::6e0a3931-d3d3-4576-a37a-b133fac0dd44:"
+            },
+            {
+              "type": "physical_mode",
+              "id": "physical_mode:Train"
+            },
+            {
+              "type": "network",
+              "id": "network:SNCF:FR:Branding::6e0a3931-d3d3-4576-a37a-b133fac0dd44:"
+            }
+          ],
+          "stop_date_times": [
+            {
+              "departure_date_time": "20261107T061700",
+              "base_departure_date_time": "20261107T061700",
+              "arrival_date_time": "20261107T061400",
+              "base_arrival_date_time": "20261107T061400",
+              "stop_point": {
+                "id": "stop_point:SNCF:87756403:Train",
+                "name": "Monaco Monte Carlo",
+                "label": "Monaco Monte Carlo (Monaco)",
+                "coord": {
+                  "lon": "7.419747",
+                  "lat": "43.738414"
+                },
+                "links": [],
+                "equipments": []
+              },
+              "additional_informations": [],
+              "links": []
+            },
+            {
+              "departure_date_time": "20261107T062100",
+              "base_departure_date_time": "20261107T062100",
+              "arrival_date_time": "20261107T062000",
+              "base_arrival_date_time": "20261107T062000",
+              "stop_point": {
+                "id": "stop_point:SNCF:87756395:Train",
+                "name": "Cap-d'Ail",
+                "label": "Cap-d'Ail (Cap-d'Ail)",
+                "coord": {
+                  "lon": "7.394384",
+                  "lat": "43.7206"
+                },
+                "links": [],
+                "equipments": []
+              },
+              "additional_informations": [],
+              "links": []
+            },
+            {
+              "departure_date_time": "20261107T062500",
+              "base_departure_date_time": "20261107T062500",
+              "arrival_date_time": "20261107T062400",
+              "base_arrival_date_time": "20261107T062400",
+              "stop_point": {
+                "id": "stop_point:SNCF:87756387:Train",
+                "name": "Èze",
+                "label": "Èze (Èze)",
+                "coord": {
+                  "lon": "7.356948",
+                  "lat": "43.722327"
+                },
+                "links": [],
+                "equipments": []
+              },
+              "additional_informations": [],
+              "links": []
+            },
+            {
+              "departure_date_time": "20261107T062900",
+              "base_departure_date_time": "20261107T062900",
+              "arrival_date_time": "20261107T062800",
+              "base_arrival_date_time": "20261107T062800",
+              "stop_point": {
+                "id": "stop_point:SNCF:87756379:Train",
+                "name": "Beaulieu-sur-Mer",
+                "label": "Beaulieu-sur-Mer (Beaulieu-sur-Mer)",
+                "coord": {
+                  "lon": "7.331631",
+                  "lat": "43.706692"
+                },
+                "links": [],
+                "equipments": []
+              },
+              "additional_informations": [],
+              "links": []
+            },
+            {
+              "departure_date_time": "20261107T063300",
+              "base_departure_date_time": "20261107T063300",
+              "arrival_date_time": "20261107T063200",
+              "base_arrival_date_time": "20261107T063200",
+              "stop_point": {
+                "id": "stop_point:SNCF:87756361:Train",
+                "name": "Villefranche-sur-Mer",
+                "label": "Villefranche-sur-Mer (Villefranche-sur-Mer)",
+                "coord": {
+                  "lon": "7.314245",
+                  "lat": "43.707047"
+                },
+                "links": [],
+                "equipments": []
+              },
+              "additional_informations": [],
+              "links": []
+            },
+            {
+              "departure_date_time": "20261107T063700",
+              "base_departure_date_time": "20261107T063700",
+              "arrival_date_time": "20261107T063500",
+              "base_arrival_date_time": "20261107T063500",
+              "stop_point": {
+                "id": "stop_point:SNCF:87756353:Train",
+                "name": "Nice Riquier",
+                "label": "Nice Riquier (Nice)",
+                "coord": {
+                  "lon": "7.290175",
+                  "lat": "43.705554"
+                },
+                "links": [],
+                "equipments": []
+              },
+              "additional_informations": [],
+              "links": []
+            },
+            {
+              "departure_date_time": "20261107T064300",
+              "base_departure_date_time": "20261107T064300",
+              "arrival_date_time": "20261107T064100",
+              "base_arrival_date_time": "20261107T064100",
+              "stop_point": {
+                "id": "stop_point:SNCF:87756056:Train",
+                "name": "Nice",
+                "label": "Nice (Nice)",
+                "coord": {
+                  "lon": "7.261904",
+                  "lat": "43.704556"
+                },
+                "links": [],
+                "equipments": []
+              },
+              "additional_informations": [],
+              "links": []
+            }
+          ]
+        },
+        {
+          "id": "GhM9zpusn8ERF2epfUsNcW_0",
+          "duration": 0,
+          "co2_emission": {
+            "value": 0.0,
+            "unit": "gEC"
+          },
+          "departure_date_time": "20261107T064100",
+          "arrival_date_time": "20261107T064100",
+          "to": {
+            "id": "stop_area:SNCF:87756056",
+            "name": "Nice (Nice)",
+            "quality": 0,
+            "embedded_type": "stop_area",
+            "stop_area": {
+              "id": "stop_area:SNCF:87756056",
+              "coord": {
+                "lat": "43.704556",
+                "lon": "7.261904"
+              },
+              "label": "Nice (Nice)",
+              "name": "Nice",
+              "administrative_regions": [
+                {
+                  "id": "admin:fr:06088",
+                  "insee": "06088",
+                  "name": "Nice",
+                  "label": "Nice (06000-06300)",
+                  "level": 8,
+                  "coord": {
+                    "lon": "7.2683912",
+                    "lat": "43.7009358"
+                  },
+                  "zip_code": "06000-06300"
+                },
+                {
+                  "id": "admin:osm:relation:7385",
+                  "insee": "06",
+                  "name": "Alpes-Maritimes",
+                  "label": "Alpes-Maritimes",
+                  "level": 6,
+                  "coord": {
+                    "lon": "7.2683912",
+                    "lat": "43.7009358"
+                  },
+                  "zip_code": null
+                },
+                {
+                  "id": "admin:osm:relation:8654",
+                  "insee": "93",
+                  "name": "Provence-Alpes-Côte d'Azur",
+                  "label": "Provence-Alpes-Côte d'Azur",
+                  "level": 4,
+                  "coord": {
+                    "lon": "5.3699525",
+                    "lat": "43.2961743"
+                  },
+                  "zip_code": null
+                },
+                {
+                  "id": "admin:osm:relation:2202162",
+                  "insee": "",
+                  "name": "France",
+                  "label": "France",
+                  "level": 2,
+                  "coord": {
+                    "lon": "2.3483915",
+                    "lat": "48.8534951"
+                  },
+                  "zip_code": null
+                }
+              ],
+              "timezone": "",
+              "commercial_modes": [
+                {
+                  "id": "commercial_mode:FR:Branding::6e0a3931-d3d3-4576-a37a-b133fac0dd44:",
+                  "name": "ZOU !"
+                },
+                {
+                  "id": "commercial_mode:OUI",
+                  "name": "TGV INOUI"
+                },
+                {
+                  "id": "commercial_mode:ICN",
+                  "name": "Intercités de nuit"
+                },
+                {
+                  "id": "commercial_mode:TER",
+                  "name": "TER"
+                },
+                {
+                  "id": "commercial_mode:TGVOUIGO",
+                  "name": "OUIGO"
+                }
+              ],
+              "physical_modes": [
+                {
+                  "id": "physical_mode:LongDistanceTrain",
+                  "name": "Train grande vitesse"
+                },
+                {
+                  "id": "physical_mode:Train",
+                  "name": "TER / Intercités"
+                },
+                {
+                  "id": "physical_mode:Coach",
+                  "name": "Autocar"
+                }
+              ],
+              "comment": null,
+              "codes": [
+                {
+                  "type": "source",
+                  "value": "87756056"
+                },
+                {
+                  "type": "uic",
+                  "value": "87756056"
+                }
+              ],
+              "lines": [
+                {
+                  "id": "line:SNCF:FR:Line::0c436faa-ccd8-4cb5-9b79-1c8a701364c4:",
+                  "name": "C3",
+                  "code": "C3",
+                  "commercial_mode": {
+                    "id": "commercial_mode:FR:Branding::6e0a3931-d3d3-4576-a37a-b133fac0dd44:",
+                    "name": "ZOU !"
+                  },
+                  "physical_modes": [
+                    {
+                      "id": "physical_mode:Train",
+                      "name": "TER / Intercités"
+                    },
+                    {
+                      "id": "physical_mode:Coach",
+                      "name": "Autocar"
+                    }
+                  ],
+                  "network": {
+                    "id": "network:SNCF:FR:Branding::6e0a3931-d3d3-4576-a37a-b133fac0dd44:",
+                    "name": "ZOU !"
+                  }
+                },
+                {
+                  "id": "line:SNCF:FR:Line::96809d68-f37d-4e68-ac3c-3c0540f4e2f2:",
+                  "name": "C13",
+                  "code": "C13",
+                  "commercial_mode": {
+                    "id": "commercial_mode:FR:Branding::6e0a3931-d3d3-4576-a37a-b133fac0dd44:",
+                    "name": "ZOU !"
+                  },
+                  "physical_modes": [
+                    {
+                      "id": "physical_mode:Train",
+                      "name": "TER / Intercités"
+                    }
+                  ],
+                  "network": {
+                    "id": "network:SNCF:FR:Branding::6e0a3931-d3d3-4576-a37a-b133fac0dd44:",
+                    "name": "ZOU !"
+                  }
+                },
+                {
+                  "id": "line:SNCF:FR:Line::1f77c095-1e8b-4abb-a437-36f56063d197:",
+                  "name": "P1",
+                  "code": "P1",
+                  "commercial_mode": {
+                    "id": "commercial_mode:FR:Branding::6e0a3931-d3d3-4576-a37a-b133fac0dd44:",
+                    "name": "ZOU !"
+                  },
+                  "physical_modes": [
+                    {
+                      "id": "physical_mode:Train",
+                      "name": "TER / Intercités"
+                    },
+                    {
+                      "id": "physical_mode:Coach",
+                      "name": "Autocar"
+                    }
+                  ],
+                  "network": {
+                    "id": "network:SNCF:FR:Branding::6e0a3931-d3d3-4576-a37a-b133fac0dd44:",
+                    "name": "ZOU !"
+                  }
+                },
+                {
+                  "id": "line:SNCF:5111-87757625-87756056",
+                  "name": "Cannes - Nice",
+                  "commercial_mode": {
+                    "id": "commercial_mode:TER",
+                    "name": "TER"
+                  },
+                  "physical_modes": [
+                    {
+                      "id": "physical_mode:Train",
+                      "name": "TER / Intercités"
+                    }
+                  ],
+                  "network": {
+                    "id": "network:SNCF:TER",
+                    "name": "TER"
+                  }
+                },
+                {
+                  "id": "line:SNCF:CSR:041600",
+                  "name": "Lyon Part Dieu - Marseille Saint-Charles",
+                  "commercial_mode": {
+                    "id": "commercial_mode:OUI",
+                    "name": "TGV INOUI"
+                  },
+                  "physical_modes": [
+                    {
+                      "id": "physical_mode:LongDistanceTrain",
+                      "name": "Train grande vitesse"
+                    }
+                  ],
+                  "network": {
+                    "id": "network:SNCF:OUI",
+                    "name": "TGV INOUI"
+                  }
+                },
+                {
+                  "id": "line:SNCF:CSR:631100",
+                  "name": "Nice - Paris - Gare de Lyon - Hall 1 & 2",
+                  "commercial_mode": {
+                    "id": "commercial_mode:OUI",
+                    "name": "TGV INOUI"
+                  },
+                  "physical_modes": [
+                    {
+                      "id": "physical_mode:LongDistanceTrain",
+                      "name": "Train grande vitesse"
+                    }
+                  ],
+                  "network": {
+                    "id": "network:SNCF:OUI",
+                    "name": "TGV INOUI"
+                  }
+                },
+                {
+                  "id": "line:SNCF:1187-87756056-87547000",
+                  "name": "Nice - Paris Austerlitz",
+                  "commercial_mode": {
+                    "id": "commercial_mode:ICN",
+                    "name": "Intercités de nuit"
+                  },
+                  "physical_modes": [
+                    {
+                      "id": "physical_mode:LongDistanceTrain",
+                      "name": "Train grande vitesse"
+                    }
+                  ],
+                  "network": {
+                    "id": "network:SNCF:ICN",
+                    "name": "Intercités de nuit"
+                  }
+                },
+                {
+                  "id": "line:SNCF:CSR:770200",
+                  "name": "Nice - Paris Austerlitz",
+                  "commercial_mode": {
+                    "id": "commercial_mode:ICN",
+                    "name": "Intercités de nuit"
+                  },
+                  "physical_modes": [
+                    {
+                      "id": "physical_mode:LongDistanceTrain",
+                      "name": "Train grande vitesse"
+                    }
+                  ],
+                  "network": {
+                    "id": "network:SNCF:ICN",
+                    "name": "Intercités de nuit"
+                  }
+                },
+                {
+                  "id": "line:SNCF:CSR:071100",
+                  "name": "Nice - Strasbourg",
+                  "commercial_mode": {
+                    "id": "commercial_mode:OUI",
+                    "name": "TGV INOUI"
+                  },
+                  "physical_modes": [
+                    {
+                      "id": "physical_mode:LongDistanceTrain",
+                      "name": "Train grande vitesse"
+                    }
+                  ],
+                  "network": {
+                    "id": "network:SNCF:OUI",
+                    "name": "TGV INOUI"
+                  }
+                },
+                {
+                  "id": "line:SNCF:CSR:633200",
+                  "name": "Paris - Gare de Lyon - Hall 1 & 2 - Nice",
+                  "commercial_mode": {
+                    "id": "commercial_mode:TGVOUIGO",
+                    "name": "OUIGO"
+                  },
+                  "physical_modes": [
+                    {
+                      "id": "physical_mode:LongDistanceTrain",
+                      "name": "Train grande vitesse"
+                    }
+                  ],
+                  "network": {
+                    "id": "network:SNCF:TGVOUIGO",
+                    "name": "OUIGO"
+                  }
+                },
+                {
+                  "id": "line:SNCF:1187-87547000-87756056",
+                  "name": "Paris Austerlitz - Nice",
+                  "commercial_mode": {
+                    "id": "commercial_mode:ICN",
+                    "name": "Intercités de nuit"
+                  },
+                  "physical_modes": [
+                    {
+                      "id": "physical_mode:LongDistanceTrain",
+                      "name": "Train grande vitesse"
+                    }
+                  ],
+                  "network": {
+                    "id": "network:SNCF:ICN",
+                    "name": "Intercités de nuit"
+                  }
+                }
+              ]
+            }
+          },
+          "from": {
+            "id": "stop_point:SNCF:87756056:Train",
+            "name": "Nice (Nice)",
+            "quality": 0,
+            "stop_point": {
+              "id": "stop_point:SNCF:87756056:Train",
+              "name": "Nice",
+              "label": "Nice (Nice)",
+              "coord": {
+                "lon": "7.261904",
+                "lat": "43.704556"
+              },
+              "links": [],
+              "administrative_regions": [
+                {
+                  "id": "admin:fr:06088",
+                  "name": "Nice",
+                  "level": 8,
+                  "zip_code": "06000;06300",
+                  "label": "Nice (06000-06300)",
+                  "insee": "06088",
+                  "coord": {
+                    "lon": "7.2683912",
+                    "lat": "43.7009358"
+                  }
+                }
+              ],
+              "stop_area": {
+                "id": "stop_area:SNCF:87756056",
+                "name": "Nice",
+                "codes": [
+                  {
+                    "type": "source",
+                    "value": "87756056"
+                  },
+                  {
+                    "type": "uic",
+                    "value": "87756056"
+                  }
+                ],
+                "timezone": "Europe/Paris",
+                "label": "Nice (Nice)",
+                "coord": {
+                  "lon": "7.261904",
+                  "lat": "43.704556"
+                },
+                "links": []
+              },
+              "equipments": []
+            },
+            "embedded_type": "stop_point"
+          },
+          "mode": "walking",
+          "type": "crow_fly",
+          "links": []
+        }
+      ],
+      "links": [
+        {
+          "href": "https://api.sncf.com/v1/coverage/sncf/journeys?from=stop_area:SNCF:87756403&to=stop_area:SNCF:87756056&datetime=20261107T061700&datetime_represents=departure&data_freshness=realtime&max_nb_transfers=0&direct_path=none&count=8&first_section_mode%5B%5D=walking&last_section_mode%5B%5D=walking&min_nb_transfers=0&min_nb_journeys=5&is_journey_schedules=True&allowed_id%5B%5D=stop_point:SNCF:87756056:Train&allowed_id%5B%5D=stop_point:SNCF:87756403:Train&_pt_planner=kraken",
+          "templated": false,
+          "rel": "same_journey_schedules",
+          "type": "journeys"
+        },
+        {
+          "href": "https://api.sncf.com/v1/coverage/sncf/journeys?from=stop_area:SNCF:87756403&to=stop_area:SNCF:87756056&datetime=20261107T061700&datetime_represents=departure&data_freshness=realtime&max_nb_transfers=0&direct_path=none&count=1&first_section_mode%5B%5D=walking&last_section_mode%5B%5D=walking&min_nb_transfers=0&min_nb_journeys=1&is_journey_schedules=True&allowed_id%5B%5D=stop_point:SNCF:87756056:Train&allowed_id%5B%5D=stop_point:SNCF:87756403:Train",
+          "templated": false,
+          "rel": "this_journey",
+          "type": "journeys"
+        }
+      ]
+    },
+    {
+      "duration": 1440,
+      "nb_transfers": 0,
+      "departure_date_time": "20261107T063500",
+      "arrival_date_time": "20261107T065900",
+      "requested_date_time": "20261107T014519",
+      "type": "rapid",
+      "status": "",
+      "tags": [
+        "walking",
+        "reliable",
+        "ecologic"
+      ],
+      "co2_emission": {
+        "value": 168.4088,
+        "unit": "gEC"
+      },
+      "air_pollutants": {
+        "unit": "g",
+        "values": {
+          "nox": 0.0,
+          "pm": 0.0
+        }
+      },
+      "durations": {
+        "total": 1440,
+        "walking": 0,
+        "bike": 0,
+        "car": 0,
+        "ridesharing": 0,
+        "taxi": 0
+      },
+      "distances": {
+        "walking": 0,
+        "bike": 0,
+        "car": 0,
+        "ridesharing": 0,
+        "taxi": 0
+      },
+      "fare": {
+        "found": false,
+        "total": {
+          "value": "0.0"
+        },
+        "links": []
+      },
+      "calendars": [
+        {
+          "week_pattern": {
+            "monday": false,
+            "tuesday": false,
+            "wednesday": false,
+            "thursday": false,
+            "friday": false,
+            "saturday": true,
+            "sunday": false
+          },
+          "active_periods": [
+            {
+              "begin": "20261107",
+              "end": "20261108"
+            }
+          ]
+        }
+      ],
+      "sections": [
+        {
+          "id": "JMUPaBKqL8z9u2Pqmv5yt7_0",
+          "duration": 0,
+          "co2_emission": {
+            "value": 0.0,
+            "unit": "gEC"
+          },
+          "departure_date_time": "20261107T063500",
+          "arrival_date_time": "20261107T063500",
+          "to": {
+            "id": "stop_point:SNCF:87756403:Train",
+            "name": "Monaco Monte Carlo (Monaco)",
+            "quality": 0,
+            "stop_point": {
+              "id": "stop_point:SNCF:87756403:Train",
+              "name": "Monaco Monte Carlo",
+              "label": "Monaco Monte Carlo (Monaco)",
+              "coord": {
+                "lon": "7.419747",
+                "lat": "43.738414"
+              },
+              "links": [],
+              "administrative_regions": [
+                {
+                  "id": "admin:osm:relation:2220322",
+                  "name": "Monaco",
+                  "level": 8,
+                  "zip_code": "",
+                  "label": "Monaco",
+                  "insee": "",
+                  "coord": {
+                    "lon": "7.4197576",
+                    "lat": "43.7311424"
+                  }
+                }
+              ],
+              "stop_area": {
+                "id": "stop_area:SNCF:87756403",
+                "name": "Monaco Monte Carlo",
+                "codes": [
+                  {
+                    "type": "source",
+                    "value": "87756403"
+                  },
+                  {
+                    "type": "uic",
+                    "value": "87756403"
+                  }
+                ],
+                "timezone": "Europe/Paris",
+                "label": "Monaco Monte Carlo (Monaco)",
+                "coord": {
+                  "lon": "7.419747",
+                  "lat": "43.738414"
+                },
+                "links": []
+              },
+              "equipments": []
+            },
+            "embedded_type": "stop_point"
+          },
+          "from": {
+            "id": "stop_area:SNCF:87756403",
+            "name": "Monaco Monte Carlo (Monaco)",
+            "quality": 0,
+            "embedded_type": "stop_area",
+            "stop_area": {
+              "id": "stop_area:SNCF:87756403",
+              "coord": {
+                "lat": "43.73841414",
+                "lon": "7.41974652"
+              },
+              "label": "Monaco Monte Carlo (Monaco)",
+              "name": "Monaco Monte Carlo",
+              "administrative_regions": [
+                {
+                  "id": "admin:osm:relation:5986475",
+                  "insee": "",
+                  "name": "Ravin de Sainte-Dévote",
+                  "label": "Ravin de Sainte-Dévote",
+                  "level": 10,
+                  "coord": {
+                    "lon": "7.4200588",
+                    "lat": "43.7378511"
+                  },
+                  "zip_code": null
+                },
+                {
+                  "id": "admin:osm:relation:2220322",
+                  "insee": "",
+                  "name": "Monaco",
+                  "label": "Monaco",
+                  "level": 8,
+                  "coord": {
+                    "lon": "7.4197576",
+                    "lat": "43.7311424"
+                  },
+                  "zip_code": null
+                },
+                {
+                  "id": "admin:osm:relation:1124039",
+                  "insee": "",
+                  "name": "Monaco",
+                  "label": "Monaco",
+                  "level": 2,
+                  "coord": {
+                    "lon": "7.4197576",
+                    "lat": "43.7311424"
+                  },
+                  "zip_code": null
+                }
+              ],
+              "timezone": "",
+              "commercial_modes": [
+                {
+                  "id": "commercial_mode:FR:Branding::6e0a3931-d3d3-4576-a37a-b133fac0dd44:",
+                  "name": "ZOU !"
+                }
+              ],
+              "physical_modes": [
+                {
+                  "id": "physical_mode:Train",
+                  "name": "TER / Intercités"
+                },
+                {
+                  "id": "physical_mode:Coach",
+                  "name": "Autocar"
+                }
+              ],
+              "comment": null,
+              "codes": [
+                {
+                  "type": "source",
+                  "value": "87756403"
+                },
+                {
+                  "type": "uic",
+                  "value": "87756403"
+                }
+              ],
+              "lines": [
+                {
+                  "id": "line:SNCF:FR:Line::0c436faa-ccd8-4cb5-9b79-1c8a701364c4:",
+                  "name": "C3",
+                  "code": "C3",
+                  "commercial_mode": {
+                    "id": "commercial_mode:FR:Branding::6e0a3931-d3d3-4576-a37a-b133fac0dd44:",
+                    "name": "ZOU !"
+                  },
+                  "physical_modes": [
+                    {
+                      "id": "physical_mode:Train",
+                      "name": "TER / Intercités"
+                    },
+                    {
+                      "id": "physical_mode:Coach",
+                      "name": "Autocar"
+                    }
+                  ],
+                  "network": {
+                    "id": "network:SNCF:FR:Branding::6e0a3931-d3d3-4576-a37a-b133fac0dd44:",
+                    "name": "ZOU !"
+                  }
+                },
+                {
+                  "id": "line:SNCF:FR:Line::96809d68-f37d-4e68-ac3c-3c0540f4e2f2:",
+                  "name": "C13",
+                  "code": "C13",
+                  "commercial_mode": {
+                    "id": "commercial_mode:FR:Branding::6e0a3931-d3d3-4576-a37a-b133fac0dd44:",
+                    "name": "ZOU !"
+                  },
+                  "physical_modes": [
+                    {
+                      "id": "physical_mode:Train",
+                      "name": "TER / Intercités"
+                    }
+                  ],
+                  "network": {
+                    "id": "network:SNCF:FR:Branding::6e0a3931-d3d3-4576-a37a-b133fac0dd44:",
+                    "name": "ZOU !"
+                  }
+                }
+              ]
+            }
+          },
+          "mode": "walking",
+          "type": "crow_fly",
+          "links": []
+        },
+        {
+          "id": "section_5_0",
+          "duration": 1440,
+          "co2_emission": {
+            "value": 168.4088,
+            "unit": "gEC"
+          },
+          "departure_date_time": "20261107T063500",
+          "arrival_date_time": "20261107T065900",
+          "base_departure_date_time": "20261107T063500",
+          "base_arrival_date_time": "20261107T065900",
+          "data_freshness": "base_schedule",
+          "to": {
+            "id": "stop_point:SNCF:87756056:Train",
+            "name": "Nice (Nice)",
+            "quality": 0,
+            "stop_point": {
+              "id": "stop_point:SNCF:87756056:Train",
+              "name": "Nice",
+              "label": "Nice (Nice)",
+              "coord": {
+                "lon": "7.261904",
+                "lat": "43.704556"
+              },
+              "links": [],
+              "administrative_regions": [
+                {
+                  "id": "admin:fr:06088",
+                  "name": "Nice",
+                  "level": 8,
+                  "zip_code": "06000;06300",
+                  "label": "Nice (06000-06300)",
+                  "insee": "06088",
+                  "coord": {
+                    "lon": "7.2683912",
+                    "lat": "43.7009358"
+                  }
+                }
+              ],
+              "stop_area": {
+                "id": "stop_area:SNCF:87756056",
+                "name": "Nice",
+                "codes": [
+                  {
+                    "type": "source",
+                    "value": "87756056"
+                  },
+                  {
+                    "type": "uic",
+                    "value": "87756056"
+                  }
+                ],
+                "timezone": "Europe/Paris",
+                "label": "Nice (Nice)",
+                "coord": {
+                  "lon": "7.261904",
+                  "lat": "43.704556"
+                },
+                "links": []
+              },
+              "equipments": []
+            },
+            "embedded_type": "stop_point"
+          },
+          "from": {
+            "id": "stop_point:SNCF:87756403:Train",
+            "name": "Monaco Monte Carlo (Monaco)",
+            "quality": 0,
+            "stop_point": {
+              "id": "stop_point:SNCF:87756403:Train",
+              "name": "Monaco Monte Carlo",
+              "label": "Monaco Monte Carlo (Monaco)",
+              "coord": {
+                "lon": "7.419747",
+                "lat": "43.738414"
+              },
+              "links": [],
+              "administrative_regions": [
+                {
+                  "id": "admin:osm:relation:2220322",
+                  "name": "Monaco",
+                  "level": 8,
+                  "zip_code": "",
+                  "label": "Monaco",
+                  "insee": "",
+                  "coord": {
+                    "lon": "7.4197576",
+                    "lat": "43.7311424"
+                  }
+                }
+              ],
+              "stop_area": {
+                "id": "stop_area:SNCF:87756403",
+                "name": "Monaco Monte Carlo",
+                "codes": [
+                  {
+                    "type": "source",
+                    "value": "87756403"
+                  },
+                  {
+                    "type": "uic",
+                    "value": "87756403"
+                  }
+                ],
+                "timezone": "Europe/Paris",
+                "label": "Monaco Monte Carlo (Monaco)",
+                "coord": {
+                  "lon": "7.419747",
+                  "lat": "43.738414"
+                },
+                "links": []
+              },
+              "equipments": []
+            },
+            "embedded_type": "stop_point"
+          },
+          "additional_informations": [
+            "regular"
+          ],
+          "type": "public_transport",
+          "display_informations": {
+            "commercial_mode": "ZOU !",
+            "network": "ZOU !",
+            "direction": "Cannes (Cannes)",
+            "label": "C13",
+            "color": "",
+            "code": "C13",
+            "headsign": "881106",
+            "name": "C13",
+            "links": [
+              {
+                "templated": false,
+                "rel": "terminus",
+                "internal": true,
+                "type": "stop_area",
+                "id": "stop_area:SNCF:87756486"
+              }
+            ],
+            "text_color": "",
+            "trip_short_name": "881106",
+            "company": "SNCF Voyageurs SA",
+            "description": "",
+            "physical_mode": "TER / Intercités",
+            "equipments": []
+          },
+          "links": [
+            {
+              "type": "company",
+              "id": "company:SNCF:5111"
+            },
+            {
+              "type": "vehicle_journey",
+              "id": "vehicle_journey:SNCF:2026-11-07:881106:5111:Train"
+            },
+            {
+              "type": "line",
+              "id": "line:SNCF:FR:Line::96809d68-f37d-4e68-ac3c-3c0540f4e2f2:"
+            },
+            {
+              "type": "route",
+              "id": "route:SNCF:FR:Line::96809d68-f37d-4e68-ac3c-3c0540f4e2f2:"
+            },
+            {
+              "type": "commercial_mode",
+              "id": "commercial_mode:FR:Branding::6e0a3931-d3d3-4576-a37a-b133fac0dd44:"
+            },
+            {
+              "type": "physical_mode",
+              "id": "physical_mode:Train"
+            },
+            {
+              "type": "network",
+              "id": "network:SNCF:FR:Branding::6e0a3931-d3d3-4576-a37a-b133fac0dd44:"
+            }
+          ],
+          "stop_date_times": [
+            {
+              "departure_date_time": "20261107T063500",
+              "base_departure_date_time": "20261107T063500",
+              "arrival_date_time": "20261107T063200",
+              "base_arrival_date_time": "20261107T063200",
+              "stop_point": {
+                "id": "stop_point:SNCF:87756403:Train",
+                "name": "Monaco Monte Carlo",
+                "label": "Monaco Monte Carlo (Monaco)",
+                "coord": {
+                  "lon": "7.419747",
+                  "lat": "43.738414"
+                },
+                "links": [],
+                "equipments": []
+              },
+              "additional_informations": [],
+              "links": []
+            },
+            {
+              "departure_date_time": "20261107T063900",
+              "base_departure_date_time": "20261107T063900",
+              "arrival_date_time": "20261107T063800",
+              "base_arrival_date_time": "20261107T063800",
+              "stop_point": {
+                "id": "stop_point:SNCF:87756395:Train",
+                "name": "Cap-d'Ail",
+                "label": "Cap-d'Ail (Cap-d'Ail)",
+                "coord": {
+                  "lon": "7.394384",
+                  "lat": "43.7206"
+                },
+                "links": [],
+                "equipments": []
+              },
+              "additional_informations": [],
+              "links": []
+            },
+            {
+              "departure_date_time": "20261107T064300",
+              "base_departure_date_time": "20261107T064300",
+              "arrival_date_time": "20261107T064200",
+              "base_arrival_date_time": "20261107T064200",
+              "stop_point": {
+                "id": "stop_point:SNCF:87756387:Train",
+                "name": "Èze",
+                "label": "Èze (Èze)",
+                "coord": {
+                  "lon": "7.356948",
+                  "lat": "43.722327"
+                },
+                "links": [],
+                "equipments": []
+              },
+              "additional_informations": [],
+              "links": []
+            },
+            {
+              "departure_date_time": "20261107T064700",
+              "base_departure_date_time": "20261107T064700",
+              "arrival_date_time": "20261107T064600",
+              "base_arrival_date_time": "20261107T064600",
+              "stop_point": {
+                "id": "stop_point:SNCF:87756379:Train",
+                "name": "Beaulieu-sur-Mer",
+                "label": "Beaulieu-sur-Mer (Beaulieu-sur-Mer)",
+                "coord": {
+                  "lon": "7.331631",
+                  "lat": "43.706692"
+                },
+                "links": [],
+                "equipments": []
+              },
+              "additional_informations": [],
+              "links": []
+            },
+            {
+              "departure_date_time": "20261107T065100",
+              "base_departure_date_time": "20261107T065100",
+              "arrival_date_time": "20261107T065000",
+              "base_arrival_date_time": "20261107T065000",
+              "stop_point": {
+                "id": "stop_point:SNCF:87756361:Train",
+                "name": "Villefranche-sur-Mer",
+                "label": "Villefranche-sur-Mer (Villefranche-sur-Mer)",
+                "coord": {
+                  "lon": "7.314245",
+                  "lat": "43.707047"
+                },
+                "links": [],
+                "equipments": []
+              },
+              "additional_informations": [],
+              "links": []
+            },
+            {
+              "departure_date_time": "20261107T065500",
+              "base_departure_date_time": "20261107T065500",
+              "arrival_date_time": "20261107T065300",
+              "base_arrival_date_time": "20261107T065300",
+              "stop_point": {
+                "id": "stop_point:SNCF:87756353:Train",
+                "name": "Nice Riquier",
+                "label": "Nice Riquier (Nice)",
+                "coord": {
+                  "lon": "7.290175",
+                  "lat": "43.705554"
+                },
+                "links": [],
+                "equipments": []
+              },
+              "additional_informations": [],
+              "links": []
+            },
+            {
+              "departure_date_time": "20261107T070200",
+              "base_departure_date_time": "20261107T070200",
+              "arrival_date_time": "20261107T065900",
+              "base_arrival_date_time": "20261107T065900",
+              "stop_point": {
+                "id": "stop_point:SNCF:87756056:Train",
+                "name": "Nice",
+                "label": "Nice (Nice)",
+                "coord": {
+                  "lon": "7.261904",
+                  "lat": "43.704556"
+                },
+                "links": [],
+                "equipments": []
+              },
+              "additional_informations": [],
+              "links": []
+            }
+          ]
+        },
+        {
+          "id": "yabSGQbfKHHArQXFkPiXe2_0",
+          "duration": 0,
+          "co2_emission": {
+            "value": 0.0,
+            "unit": "gEC"
+          },
+          "departure_date_time": "20261107T065900",
+          "arrival_date_time": "20261107T065900",
+          "to": {
+            "id": "stop_area:SNCF:87756056",
+            "name": "Nice (Nice)",
+            "quality": 0,
+            "embedded_type": "stop_area",
+            "stop_area": {
+              "id": "stop_area:SNCF:87756056",
+              "coord": {
+                "lat": "43.704556",
+                "lon": "7.261904"
+              },
+              "label": "Nice (Nice)",
+              "name": "Nice",
+              "administrative_regions": [
+                {
+                  "id": "admin:fr:06088",
+                  "insee": "06088",
+                  "name": "Nice",
+                  "label": "Nice (06000-06300)",
+                  "level": 8,
+                  "coord": {
+                    "lon": "7.2683912",
+                    "lat": "43.7009358"
+                  },
+                  "zip_code": "06000-06300"
+                },
+                {
+                  "id": "admin:osm:relation:7385",
+                  "insee": "06",
+                  "name": "Alpes-Maritimes",
+                  "label": "Alpes-Maritimes",
+                  "level": 6,
+                  "coord": {
+                    "lon": "7.2683912",
+                    "lat": "43.7009358"
+                  },
+                  "zip_code": null
+                },
+                {
+                  "id": "admin:osm:relation:8654",
+                  "insee": "93",
+                  "name": "Provence-Alpes-Côte d'Azur",
+                  "label": "Provence-Alpes-Côte d'Azur",
+                  "level": 4,
+                  "coord": {
+                    "lon": "5.3699525",
+                    "lat": "43.2961743"
+                  },
+                  "zip_code": null
+                },
+                {
+                  "id": "admin:osm:relation:2202162",
+                  "insee": "",
+                  "name": "France",
+                  "label": "France",
+                  "level": 2,
+                  "coord": {
+                    "lon": "2.3483915",
+                    "lat": "48.8534951"
+                  },
+                  "zip_code": null
+                }
+              ],
+              "timezone": "",
+              "commercial_modes": [
+                {
+                  "id": "commercial_mode:FR:Branding::6e0a3931-d3d3-4576-a37a-b133fac0dd44:",
+                  "name": "ZOU !"
+                },
+                {
+                  "id": "commercial_mode:OUI",
+                  "name": "TGV INOUI"
+                },
+                {
+                  "id": "commercial_mode:ICN",
+                  "name": "Intercités de nuit"
+                },
+                {
+                  "id": "commercial_mode:TER",
+                  "name": "TER"
+                },
+                {
+                  "id": "commercial_mode:TGVOUIGO",
+                  "name": "OUIGO"
+                }
+              ],
+              "physical_modes": [
+                {
+                  "id": "physical_mode:LongDistanceTrain",
+                  "name": "Train grande vitesse"
+                },
+                {
+                  "id": "physical_mode:Train",
+                  "name": "TER / Intercités"
+                },
+                {
+                  "id": "physical_mode:Coach",
+                  "name": "Autocar"
+                }
+              ],
+              "comment": null,
+              "codes": [
+                {
+                  "type": "source",
+                  "value": "87756056"
+                },
+                {
+                  "type": "uic",
+                  "value": "87756056"
+                }
+              ],
+              "lines": [
+                {
+                  "id": "line:SNCF:FR:Line::0c436faa-ccd8-4cb5-9b79-1c8a701364c4:",
+                  "name": "C3",
+                  "code": "C3",
+                  "commercial_mode": {
+                    "id": "commercial_mode:FR:Branding::6e0a3931-d3d3-4576-a37a-b133fac0dd44:",
+                    "name": "ZOU !"
+                  },
+                  "physical_modes": [
+                    {
+                      "id": "physical_mode:Train",
+                      "name": "TER / Intercités"
+                    },
+                    {
+                      "id": "physical_mode:Coach",
+                      "name": "Autocar"
+                    }
+                  ],
+                  "network": {
+                    "id": "network:SNCF:FR:Branding::6e0a3931-d3d3-4576-a37a-b133fac0dd44:",
+                    "name": "ZOU !"
+                  }
+                },
+                {
+                  "id": "line:SNCF:FR:Line::96809d68-f37d-4e68-ac3c-3c0540f4e2f2:",
+                  "name": "C13",
+                  "code": "C13",
+                  "commercial_mode": {
+                    "id": "commercial_mode:FR:Branding::6e0a3931-d3d3-4576-a37a-b133fac0dd44:",
+                    "name": "ZOU !"
+                  },
+                  "physical_modes": [
+                    {
+                      "id": "physical_mode:Train",
+                      "name": "TER / Intercités"
+                    }
+                  ],
+                  "network": {
+                    "id": "network:SNCF:FR:Branding::6e0a3931-d3d3-4576-a37a-b133fac0dd44:",
+                    "name": "ZOU !"
+                  }
+                },
+                {
+                  "id": "line:SNCF:FR:Line::1f77c095-1e8b-4abb-a437-36f56063d197:",
+                  "name": "P1",
+                  "code": "P1",
+                  "commercial_mode": {
+                    "id": "commercial_mode:FR:Branding::6e0a3931-d3d3-4576-a37a-b133fac0dd44:",
+                    "name": "ZOU !"
+                  },
+                  "physical_modes": [
+                    {
+                      "id": "physical_mode:Train",
+                      "name": "TER / Intercités"
+                    },
+                    {
+                      "id": "physical_mode:Coach",
+                      "name": "Autocar"
+                    }
+                  ],
+                  "network": {
+                    "id": "network:SNCF:FR:Branding::6e0a3931-d3d3-4576-a37a-b133fac0dd44:",
+                    "name": "ZOU !"
+                  }
+                },
+                {
+                  "id": "line:SNCF:5111-87757625-87756056",
+                  "name": "Cannes - Nice",
+                  "commercial_mode": {
+                    "id": "commercial_mode:TER",
+                    "name": "TER"
+                  },
+                  "physical_modes": [
+                    {
+                      "id": "physical_mode:Train",
+                      "name": "TER / Intercités"
+                    }
+                  ],
+                  "network": {
+                    "id": "network:SNCF:TER",
+                    "name": "TER"
+                  }
+                },
+                {
+                  "id": "line:SNCF:CSR:041600",
+                  "name": "Lyon Part Dieu - Marseille Saint-Charles",
+                  "commercial_mode": {
+                    "id": "commercial_mode:OUI",
+                    "name": "TGV INOUI"
+                  },
+                  "physical_modes": [
+                    {
+                      "id": "physical_mode:LongDistanceTrain",
+                      "name": "Train grande vitesse"
+                    }
+                  ],
+                  "network": {
+                    "id": "network:SNCF:OUI",
+                    "name": "TGV INOUI"
+                  }
+                },
+                {
+                  "id": "line:SNCF:CSR:631100",
+                  "name": "Nice - Paris - Gare de Lyon - Hall 1 & 2",
+                  "commercial_mode": {
+                    "id": "commercial_mode:OUI",
+                    "name": "TGV INOUI"
+                  },
+                  "physical_modes": [
+                    {
+                      "id": "physical_mode:LongDistanceTrain",
+                      "name": "Train grande vitesse"
+                    }
+                  ],
+                  "network": {
+                    "id": "network:SNCF:OUI",
+                    "name": "TGV INOUI"
+                  }
+                },
+                {
+                  "id": "line:SNCF:1187-87756056-87547000",
+                  "name": "Nice - Paris Austerlitz",
+                  "commercial_mode": {
+                    "id": "commercial_mode:ICN",
+                    "name": "Intercités de nuit"
+                  },
+                  "physical_modes": [
+                    {
+                      "id": "physical_mode:LongDistanceTrain",
+                      "name": "Train grande vitesse"
+                    }
+                  ],
+                  "network": {
+                    "id": "network:SNCF:ICN",
+                    "name": "Intercités de nuit"
+                  }
+                },
+                {
+                  "id": "line:SNCF:CSR:770200",
+                  "name": "Nice - Paris Austerlitz",
+                  "commercial_mode": {
+                    "id": "commercial_mode:ICN",
+                    "name": "Intercités de nuit"
+                  },
+                  "physical_modes": [
+                    {
+                      "id": "physical_mode:LongDistanceTrain",
+                      "name": "Train grande vitesse"
+                    }
+                  ],
+                  "network": {
+                    "id": "network:SNCF:ICN",
+                    "name": "Intercités de nuit"
+                  }
+                },
+                {
+                  "id": "line:SNCF:CSR:071100",
+                  "name": "Nice - Strasbourg",
+                  "commercial_mode": {
+                    "id": "commercial_mode:OUI",
+                    "name": "TGV INOUI"
+                  },
+                  "physical_modes": [
+                    {
+                      "id": "physical_mode:LongDistanceTrain",
+                      "name": "Train grande vitesse"
+                    }
+                  ],
+                  "network": {
+                    "id": "network:SNCF:OUI",
+                    "name": "TGV INOUI"
+                  }
+                },
+                {
+                  "id": "line:SNCF:CSR:633200",
+                  "name": "Paris - Gare de Lyon - Hall 1 & 2 - Nice",
+                  "commercial_mode": {
+                    "id": "commercial_mode:TGVOUIGO",
+                    "name": "OUIGO"
+                  },
+                  "physical_modes": [
+                    {
+                      "id": "physical_mode:LongDistanceTrain",
+                      "name": "Train grande vitesse"
+                    }
+                  ],
+                  "network": {
+                    "id": "network:SNCF:TGVOUIGO",
+                    "name": "OUIGO"
+                  }
+                },
+                {
+                  "id": "line:SNCF:1187-87547000-87756056",
+                  "name": "Paris Austerlitz - Nice",
+                  "commercial_mode": {
+                    "id": "commercial_mode:ICN",
+                    "name": "Intercités de nuit"
+                  },
+                  "physical_modes": [
+                    {
+                      "id": "physical_mode:LongDistanceTrain",
+                      "name": "Train grande vitesse"
+                    }
+                  ],
+                  "network": {
+                    "id": "network:SNCF:ICN",
+                    "name": "Intercités de nuit"
+                  }
+                }
+              ]
+            }
+          },
+          "from": {
+            "id": "stop_point:SNCF:87756056:Train",
+            "name": "Nice (Nice)",
+            "quality": 0,
+            "stop_point": {
+              "id": "stop_point:SNCF:87756056:Train",
+              "name": "Nice",
+              "label": "Nice (Nice)",
+              "coord": {
+                "lon": "7.261904",
+                "lat": "43.704556"
+              },
+              "links": [],
+              "administrative_regions": [
+                {
+                  "id": "admin:fr:06088",
+                  "name": "Nice",
+                  "level": 8,
+                  "zip_code": "06000;06300",
+                  "label": "Nice (06000-06300)",
+                  "insee": "06088",
+                  "coord": {
+                    "lon": "7.2683912",
+                    "lat": "43.7009358"
+                  }
+                }
+              ],
+              "stop_area": {
+                "id": "stop_area:SNCF:87756056",
+                "name": "Nice",
+                "codes": [
+                  {
+                    "type": "source",
+                    "value": "87756056"
+                  },
+                  {
+                    "type": "uic",
+                    "value": "87756056"
+                  }
+                ],
+                "timezone": "Europe/Paris",
+                "label": "Nice (Nice)",
+                "coord": {
+                  "lon": "7.261904",
+                  "lat": "43.704556"
+                },
+                "links": []
+              },
+              "equipments": []
+            },
+            "embedded_type": "stop_point"
+          },
+          "mode": "walking",
+          "type": "crow_fly",
+          "links": []
+        }
+      ],
+      "links": [
+        {
+          "href": "https://api.sncf.com/v1/coverage/sncf/journeys?from=stop_area:SNCF:87756403&to=stop_area:SNCF:87756056&datetime=20261107T063500&datetime_represents=departure&data_freshness=realtime&max_nb_transfers=0&direct_path=none&count=8&first_section_mode%5B%5D=walking&last_section_mode%5B%5D=walking&min_nb_transfers=0&min_nb_journeys=5&is_journey_schedules=True&allowed_id%5B%5D=stop_point:SNCF:87756056:Train&allowed_id%5B%5D=stop_point:SNCF:87756403:Train&_pt_planner=kraken",
+          "templated": false,
+          "rel": "same_journey_schedules",
+          "type": "journeys"
+        },
+        {
+          "href": "https://api.sncf.com/v1/coverage/sncf/journeys?from=stop_area:SNCF:87756403&to=stop_area:SNCF:87756056&datetime=20261107T063500&datetime_represents=departure&data_freshness=realtime&max_nb_transfers=0&direct_path=none&count=1&first_section_mode%5B%5D=walking&last_section_mode%5B%5D=walking&min_nb_transfers=0&min_nb_journeys=1&is_journey_schedules=True&allowed_id%5B%5D=stop_point:SNCF:87756056:Train&allowed_id%5B%5D=stop_point:SNCF:87756403:Train",
+          "templated": false,
+          "rel": "this_journey",
+          "type": "journeys"
+        }
+      ]
+    },
+    {
+      "duration": 1440,
+      "nb_transfers": 0,
+      "departure_date_time": "20261107T064700",
+      "arrival_date_time": "20261107T071100",
+      "requested_date_time": "20261107T014519",
+      "type": "rapid",
+      "status": "",
+      "tags": [
+        "walking",
+        "reliable",
+        "ecologic"
+      ],
+      "co2_emission": {
+        "value": 168.4088,
+        "unit": "gEC"
+      },
+      "air_pollutants": {
+        "unit": "g",
+        "values": {
+          "nox": 0.0,
+          "pm": 0.0
+        }
+      },
+      "durations": {
+        "total": 1440,
+        "walking": 0,
+        "bike": 0,
+        "car": 0,
+        "ridesharing": 0,
+        "taxi": 0
+      },
+      "distances": {
+        "walking": 0,
+        "bike": 0,
+        "car": 0,
+        "ridesharing": 0,
+        "taxi": 0
+      },
+      "fare": {
+        "found": false,
+        "total": {
+          "value": "0.0"
+        },
+        "links": []
+      },
+      "calendars": [
+        {
+          "week_pattern": {
+            "monday": false,
+            "tuesday": false,
+            "wednesday": false,
+            "thursday": false,
+            "friday": false,
+            "saturday": true,
+            "sunday": false
+          },
+          "active_periods": [
+            {
+              "begin": "20261107",
+              "end": "20261108"
+            }
+          ]
+        }
+      ],
+      "sections": [
+        {
+          "id": "pecfTcqt2o6hLGq2EyenQg_0",
+          "duration": 0,
+          "co2_emission": {
+            "value": 0.0,
+            "unit": "gEC"
+          },
+          "departure_date_time": "20261107T064700",
+          "arrival_date_time": "20261107T064700",
+          "to": {
+            "id": "stop_point:SNCF:87756403:Train",
+            "name": "Monaco Monte Carlo (Monaco)",
+            "quality": 0,
+            "stop_point": {
+              "id": "stop_point:SNCF:87756403:Train",
+              "name": "Monaco Monte Carlo",
+              "label": "Monaco Monte Carlo (Monaco)",
+              "coord": {
+                "lon": "7.419747",
+                "lat": "43.738414"
+              },
+              "links": [],
+              "administrative_regions": [
+                {
+                  "id": "admin:osm:relation:2220322",
+                  "name": "Monaco",
+                  "level": 8,
+                  "zip_code": "",
+                  "label": "Monaco",
+                  "insee": "",
+                  "coord": {
+                    "lon": "7.4197576",
+                    "lat": "43.7311424"
+                  }
+                }
+              ],
+              "stop_area": {
+                "id": "stop_area:SNCF:87756403",
+                "name": "Monaco Monte Carlo",
+                "codes": [
+                  {
+                    "type": "source",
+                    "value": "87756403"
+                  },
+                  {
+                    "type": "uic",
+                    "value": "87756403"
+                  }
+                ],
+                "timezone": "Europe/Paris",
+                "label": "Monaco Monte Carlo (Monaco)",
+                "coord": {
+                  "lon": "7.419747",
+                  "lat": "43.738414"
+                },
+                "links": []
+              },
+              "equipments": []
+            },
+            "embedded_type": "stop_point"
+          },
+          "from": {
+            "id": "stop_area:SNCF:87756403",
+            "name": "Monaco Monte Carlo (Monaco)",
+            "quality": 0,
+            "embedded_type": "stop_area",
+            "stop_area": {
+              "id": "stop_area:SNCF:87756403",
+              "coord": {
+                "lat": "43.73841414",
+                "lon": "7.41974652"
+              },
+              "label": "Monaco Monte Carlo (Monaco)",
+              "name": "Monaco Monte Carlo",
+              "administrative_regions": [
+                {
+                  "id": "admin:osm:relation:5986475",
+                  "insee": "",
+                  "name": "Ravin de Sainte-Dévote",
+                  "label": "Ravin de Sainte-Dévote",
+                  "level": 10,
+                  "coord": {
+                    "lon": "7.4200588",
+                    "lat": "43.7378511"
+                  },
+                  "zip_code": null
+                },
+                {
+                  "id": "admin:osm:relation:2220322",
+                  "insee": "",
+                  "name": "Monaco",
+                  "label": "Monaco",
+                  "level": 8,
+                  "coord": {
+                    "lon": "7.4197576",
+                    "lat": "43.7311424"
+                  },
+                  "zip_code": null
+                },
+                {
+                  "id": "admin:osm:relation:1124039",
+                  "insee": "",
+                  "name": "Monaco",
+                  "label": "Monaco",
+                  "level": 2,
+                  "coord": {
+                    "lon": "7.4197576",
+                    "lat": "43.7311424"
+                  },
+                  "zip_code": null
+                }
+              ],
+              "timezone": "",
+              "commercial_modes": [
+                {
+                  "id": "commercial_mode:FR:Branding::6e0a3931-d3d3-4576-a37a-b133fac0dd44:",
+                  "name": "ZOU !"
+                }
+              ],
+              "physical_modes": [
+                {
+                  "id": "physical_mode:Train",
+                  "name": "TER / Intercités"
+                },
+                {
+                  "id": "physical_mode:Coach",
+                  "name": "Autocar"
+                }
+              ],
+              "comment": null,
+              "codes": [
+                {
+                  "type": "source",
+                  "value": "87756403"
+                },
+                {
+                  "type": "uic",
+                  "value": "87756403"
+                }
+              ],
+              "lines": [
+                {
+                  "id": "line:SNCF:FR:Line::0c436faa-ccd8-4cb5-9b79-1c8a701364c4:",
+                  "name": "C3",
+                  "code": "C3",
+                  "commercial_mode": {
+                    "id": "commercial_mode:FR:Branding::6e0a3931-d3d3-4576-a37a-b133fac0dd44:",
+                    "name": "ZOU !"
+                  },
+                  "physical_modes": [
+                    {
+                      "id": "physical_mode:Train",
+                      "name": "TER / Intercités"
+                    },
+                    {
+                      "id": "physical_mode:Coach",
+                      "name": "Autocar"
+                    }
+                  ],
+                  "network": {
+                    "id": "network:SNCF:FR:Branding::6e0a3931-d3d3-4576-a37a-b133fac0dd44:",
+                    "name": "ZOU !"
+                  }
+                },
+                {
+                  "id": "line:SNCF:FR:Line::96809d68-f37d-4e68-ac3c-3c0540f4e2f2:",
+                  "name": "C13",
+                  "code": "C13",
+                  "commercial_mode": {
+                    "id": "commercial_mode:FR:Branding::6e0a3931-d3d3-4576-a37a-b133fac0dd44:",
+                    "name": "ZOU !"
+                  },
+                  "physical_modes": [
+                    {
+                      "id": "physical_mode:Train",
+                      "name": "TER / Intercités"
+                    }
+                  ],
+                  "network": {
+                    "id": "network:SNCF:FR:Branding::6e0a3931-d3d3-4576-a37a-b133fac0dd44:",
+                    "name": "ZOU !"
+                  }
+                }
+              ]
+            }
+          },
+          "mode": "walking",
+          "type": "crow_fly",
+          "links": []
+        },
+        {
+          "id": "section_3_0",
+          "duration": 1440,
+          "co2_emission": {
+            "value": 168.4088,
+            "unit": "gEC"
+          },
+          "departure_date_time": "20261107T064700",
+          "arrival_date_time": "20261107T071100",
+          "base_departure_date_time": "20261107T064700",
+          "base_arrival_date_time": "20261107T071100",
+          "data_freshness": "base_schedule",
+          "to": {
+            "id": "stop_point:SNCF:87756056:Train",
+            "name": "Nice (Nice)",
+            "quality": 0,
+            "stop_point": {
+              "id": "stop_point:SNCF:87756056:Train",
+              "name": "Nice",
+              "label": "Nice (Nice)",
+              "coord": {
+                "lon": "7.261904",
+                "lat": "43.704556"
+              },
+              "links": [],
+              "administrative_regions": [
+                {
+                  "id": "admin:fr:06088",
+                  "name": "Nice",
+                  "level": 8,
+                  "zip_code": "06000;06300",
+                  "label": "Nice (06000-06300)",
+                  "insee": "06088",
+                  "coord": {
+                    "lon": "7.2683912",
+                    "lat": "43.7009358"
+                  }
+                }
+              ],
+              "stop_area": {
+                "id": "stop_area:SNCF:87756056",
+                "name": "Nice",
+                "codes": [
+                  {
+                    "type": "source",
+                    "value": "87756056"
+                  },
+                  {
+                    "type": "uic",
+                    "value": "87756056"
+                  }
+                ],
+                "timezone": "Europe/Paris",
+                "label": "Nice (Nice)",
+                "coord": {
+                  "lon": "7.261904",
+                  "lat": "43.704556"
+                },
+                "links": []
+              },
+              "equipments": []
+            },
+            "embedded_type": "stop_point"
+          },
+          "from": {
+            "id": "stop_point:SNCF:87756403:Train",
+            "name": "Monaco Monte Carlo (Monaco)",
+            "quality": 0,
+            "stop_point": {
+              "id": "stop_point:SNCF:87756403:Train",
+              "name": "Monaco Monte Carlo",
+              "label": "Monaco Monte Carlo (Monaco)",
+              "coord": {
+                "lon": "7.419747",
+                "lat": "43.738414"
+              },
+              "links": [],
+              "administrative_regions": [
+                {
+                  "id": "admin:osm:relation:2220322",
+                  "name": "Monaco",
+                  "level": 8,
+                  "zip_code": "",
+                  "label": "Monaco",
+                  "insee": "",
+                  "coord": {
+                    "lon": "7.4197576",
+                    "lat": "43.7311424"
+                  }
+                }
+              ],
+              "stop_area": {
+                "id": "stop_area:SNCF:87756403",
+                "name": "Monaco Monte Carlo",
+                "codes": [
+                  {
+                    "type": "source",
+                    "value": "87756403"
+                  },
+                  {
+                    "type": "uic",
+                    "value": "87756403"
+                  }
+                ],
+                "timezone": "Europe/Paris",
+                "label": "Monaco Monte Carlo (Monaco)",
+                "coord": {
+                  "lon": "7.419747",
+                  "lat": "43.738414"
+                },
+                "links": []
+              },
+              "equipments": []
+            },
+            "embedded_type": "stop_point"
+          },
+          "additional_informations": [
+            "regular"
+          ],
+          "type": "public_transport",
+          "display_informations": {
+            "commercial_mode": "ZOU !",
+            "network": "ZOU !",
+            "direction": "Grasse (Grasse)",
+            "label": "C3",
+            "color": "",
+            "code": "C3",
+            "headsign": "86006",
+            "name": "C3",
+            "links": [
+              {
+                "templated": false,
+                "rel": "terminus",
+                "internal": true,
+                "type": "stop_area",
+                "id": "stop_area:SNCF:83045013"
+              }
+            ],
+            "text_color": "",
+            "trip_short_name": "86006",
+            "company": "SNCF Voyageurs SA",
+            "description": "",
+            "physical_mode": "TER / Intercités",
+            "equipments": []
+          },
+          "links": [
+            {
+              "type": "company",
+              "id": "company:SNCF:5111"
+            },
+            {
+              "type": "vehicle_journey",
+              "id": "vehicle_journey:SNCF:2026-11-07:86006:5111:Train"
+            },
+            {
+              "type": "line",
+              "id": "line:SNCF:FR:Line::0c436faa-ccd8-4cb5-9b79-1c8a701364c4:"
+            },
+            {
+              "type": "route",
+              "id": "route:SNCF:FR:Line::0c436faa-ccd8-4cb5-9b79-1c8a701364c4:"
+            },
+            {
+              "type": "commercial_mode",
+              "id": "commercial_mode:FR:Branding::6e0a3931-d3d3-4576-a37a-b133fac0dd44:"
+            },
+            {
+              "type": "physical_mode",
+              "id": "physical_mode:Train"
+            },
+            {
+              "type": "network",
+              "id": "network:SNCF:FR:Branding::6e0a3931-d3d3-4576-a37a-b133fac0dd44:"
+            }
+          ],
+          "stop_date_times": [
+            {
+              "departure_date_time": "20261107T064700",
+              "base_departure_date_time": "20261107T064700",
+              "arrival_date_time": "20261107T064400",
+              "base_arrival_date_time": "20261107T064400",
+              "stop_point": {
+                "id": "stop_point:SNCF:87756403:Train",
+                "name": "Monaco Monte Carlo",
+                "label": "Monaco Monte Carlo (Monaco)",
+                "coord": {
+                  "lon": "7.419747",
+                  "lat": "43.738414"
+                },
+                "links": [],
+                "equipments": []
+              },
+              "additional_informations": [],
+              "links": []
+            },
+            {
+              "departure_date_time": "20261107T065100",
+              "base_departure_date_time": "20261107T065100",
+              "arrival_date_time": "20261107T065000",
+              "base_arrival_date_time": "20261107T065000",
+              "stop_point": {
+                "id": "stop_point:SNCF:87756395:Train",
+                "name": "Cap-d'Ail",
+                "label": "Cap-d'Ail (Cap-d'Ail)",
+                "coord": {
+                  "lon": "7.394384",
+                  "lat": "43.7206"
+                },
+                "links": [],
+                "equipments": []
+              },
+              "additional_informations": [],
+              "links": []
+            },
+            {
+              "departure_date_time": "20261107T065500",
+              "base_departure_date_time": "20261107T065500",
+              "arrival_date_time": "20261107T065400",
+              "base_arrival_date_time": "20261107T065400",
+              "stop_point": {
+                "id": "stop_point:SNCF:87756387:Train",
+                "name": "Èze",
+                "label": "Èze (Èze)",
+                "coord": {
+                  "lon": "7.356948",
+                  "lat": "43.722327"
+                },
+                "links": [],
+                "equipments": []
+              },
+              "additional_informations": [],
+              "links": []
+            },
+            {
+              "departure_date_time": "20261107T065900",
+              "base_departure_date_time": "20261107T065900",
+              "arrival_date_time": "20261107T065800",
+              "base_arrival_date_time": "20261107T065800",
+              "stop_point": {
+                "id": "stop_point:SNCF:87756379:Train",
+                "name": "Beaulieu-sur-Mer",
+                "label": "Beaulieu-sur-Mer (Beaulieu-sur-Mer)",
+                "coord": {
+                  "lon": "7.331631",
+                  "lat": "43.706692"
+                },
+                "links": [],
+                "equipments": []
+              },
+              "additional_informations": [],
+              "links": []
+            },
+            {
+              "departure_date_time": "20261107T070300",
+              "base_departure_date_time": "20261107T070300",
+              "arrival_date_time": "20261107T070200",
+              "base_arrival_date_time": "20261107T070200",
+              "stop_point": {
+                "id": "stop_point:SNCF:87756361:Train",
+                "name": "Villefranche-sur-Mer",
+                "label": "Villefranche-sur-Mer (Villefranche-sur-Mer)",
+                "coord": {
+                  "lon": "7.314245",
+                  "lat": "43.707047"
+                },
+                "links": [],
+                "equipments": []
+              },
+              "additional_informations": [],
+              "links": []
+            },
+            {
+              "departure_date_time": "20261107T070700",
+              "base_departure_date_time": "20261107T070700",
+              "arrival_date_time": "20261107T070500",
+              "base_arrival_date_time": "20261107T070500",
+              "stop_point": {
+                "id": "stop_point:SNCF:87756353:Train",
+                "name": "Nice Riquier",
+                "label": "Nice Riquier (Nice)",
+                "coord": {
+                  "lon": "7.290175",
+                  "lat": "43.705554"
+                },
+                "links": [],
+                "equipments": []
+              },
+              "additional_informations": [],
+              "links": []
+            },
+            {
+              "departure_date_time": "20261107T071400",
+              "base_departure_date_time": "20261107T071400",
+              "arrival_date_time": "20261107T071100",
+              "base_arrival_date_time": "20261107T071100",
+              "stop_point": {
+                "id": "stop_point:SNCF:87756056:Train",
+                "name": "Nice",
+                "label": "Nice (Nice)",
+                "coord": {
+                  "lon": "7.261904",
+                  "lat": "43.704556"
+                },
+                "links": [],
+                "equipments": []
+              },
+              "additional_informations": [],
+              "links": []
+            }
+          ]
+        },
+        {
+          "id": "WkYxn7cvE9WY66v8hSKuHY_0",
+          "duration": 0,
+          "co2_emission": {
+            "value": 0.0,
+            "unit": "gEC"
+          },
+          "departure_date_time": "20261107T071100",
+          "arrival_date_time": "20261107T071100",
+          "to": {
+            "id": "stop_area:SNCF:87756056",
+            "name": "Nice (Nice)",
+            "quality": 0,
+            "embedded_type": "stop_area",
+            "stop_area": {
+              "id": "stop_area:SNCF:87756056",
+              "coord": {
+                "lat": "43.704556",
+                "lon": "7.261904"
+              },
+              "label": "Nice (Nice)",
+              "name": "Nice",
+              "administrative_regions": [
+                {
+                  "id": "admin:fr:06088",
+                  "insee": "06088",
+                  "name": "Nice",
+                  "label": "Nice (06000-06300)",
+                  "level": 8,
+                  "coord": {
+                    "lon": "7.2683912",
+                    "lat": "43.7009358"
+                  },
+                  "zip_code": "06000-06300"
+                },
+                {
+                  "id": "admin:osm:relation:7385",
+                  "insee": "06",
+                  "name": "Alpes-Maritimes",
+                  "label": "Alpes-Maritimes",
+                  "level": 6,
+                  "coord": {
+                    "lon": "7.2683912",
+                    "lat": "43.7009358"
+                  },
+                  "zip_code": null
+                },
+                {
+                  "id": "admin:osm:relation:8654",
+                  "insee": "93",
+                  "name": "Provence-Alpes-Côte d'Azur",
+                  "label": "Provence-Alpes-Côte d'Azur",
+                  "level": 4,
+                  "coord": {
+                    "lon": "5.3699525",
+                    "lat": "43.2961743"
+                  },
+                  "zip_code": null
+                },
+                {
+                  "id": "admin:osm:relation:2202162",
+                  "insee": "",
+                  "name": "France",
+                  "label": "France",
+                  "level": 2,
+                  "coord": {
+                    "lon": "2.3483915",
+                    "lat": "48.8534951"
+                  },
+                  "zip_code": null
+                }
+              ],
+              "timezone": "",
+              "commercial_modes": [
+                {
+                  "id": "commercial_mode:FR:Branding::6e0a3931-d3d3-4576-a37a-b133fac0dd44:",
+                  "name": "ZOU !"
+                },
+                {
+                  "id": "commercial_mode:OUI",
+                  "name": "TGV INOUI"
+                },
+                {
+                  "id": "commercial_mode:ICN",
+                  "name": "Intercités de nuit"
+                },
+                {
+                  "id": "commercial_mode:TER",
+                  "name": "TER"
+                },
+                {
+                  "id": "commercial_mode:TGVOUIGO",
+                  "name": "OUIGO"
+                }
+              ],
+              "physical_modes": [
+                {
+                  "id": "physical_mode:LongDistanceTrain",
+                  "name": "Train grande vitesse"
+                },
+                {
+                  "id": "physical_mode:Train",
+                  "name": "TER / Intercités"
+                },
+                {
+                  "id": "physical_mode:Coach",
+                  "name": "Autocar"
+                }
+              ],
+              "comment": null,
+              "codes": [
+                {
+                  "type": "source",
+                  "value": "87756056"
+                },
+                {
+                  "type": "uic",
+                  "value": "87756056"
+                }
+              ],
+              "lines": [
+                {
+                  "id": "line:SNCF:FR:Line::0c436faa-ccd8-4cb5-9b79-1c8a701364c4:",
+                  "name": "C3",
+                  "code": "C3",
+                  "commercial_mode": {
+                    "id": "commercial_mode:FR:Branding::6e0a3931-d3d3-4576-a37a-b133fac0dd44:",
+                    "name": "ZOU !"
+                  },
+                  "physical_modes": [
+                    {
+                      "id": "physical_mode:Train",
+                      "name": "TER / Intercités"
+                    },
+                    {
+                      "id": "physical_mode:Coach",
+                      "name": "Autocar"
+                    }
+                  ],
+                  "network": {
+                    "id": "network:SNCF:FR:Branding::6e0a3931-d3d3-4576-a37a-b133fac0dd44:",
+                    "name": "ZOU !"
+                  }
+                },
+                {
+                  "id": "line:SNCF:FR:Line::96809d68-f37d-4e68-ac3c-3c0540f4e2f2:",
+                  "name": "C13",
+                  "code": "C13",
+                  "commercial_mode": {
+                    "id": "commercial_mode:FR:Branding::6e0a3931-d3d3-4576-a37a-b133fac0dd44:",
+                    "name": "ZOU !"
+                  },
+                  "physical_modes": [
+                    {
+                      "id": "physical_mode:Train",
+                      "name": "TER / Intercités"
+                    }
+                  ],
+                  "network": {
+                    "id": "network:SNCF:FR:Branding::6e0a3931-d3d3-4576-a37a-b133fac0dd44:",
+                    "name": "ZOU !"
+                  }
+                },
+                {
+                  "id": "line:SNCF:FR:Line::1f77c095-1e8b-4abb-a437-36f56063d197:",
+                  "name": "P1",
+                  "code": "P1",
+                  "commercial_mode": {
+                    "id": "commercial_mode:FR:Branding::6e0a3931-d3d3-4576-a37a-b133fac0dd44:",
+                    "name": "ZOU !"
+                  },
+                  "physical_modes": [
+                    {
+                      "id": "physical_mode:Train",
+                      "name": "TER / Intercités"
+                    },
+                    {
+                      "id": "physical_mode:Coach",
+                      "name": "Autocar"
+                    }
+                  ],
+                  "network": {
+                    "id": "network:SNCF:FR:Branding::6e0a3931-d3d3-4576-a37a-b133fac0dd44:",
+                    "name": "ZOU !"
+                  }
+                },
+                {
+                  "id": "line:SNCF:5111-87757625-87756056",
+                  "name": "Cannes - Nice",
+                  "commercial_mode": {
+                    "id": "commercial_mode:TER",
+                    "name": "TER"
+                  },
+                  "physical_modes": [
+                    {
+                      "id": "physical_mode:Train",
+                      "name": "TER / Intercités"
+                    }
+                  ],
+                  "network": {
+                    "id": "network:SNCF:TER",
+                    "name": "TER"
+                  }
+                },
+                {
+                  "id": "line:SNCF:CSR:041600",
+                  "name": "Lyon Part Dieu - Marseille Saint-Charles",
+                  "commercial_mode": {
+                    "id": "commercial_mode:OUI",
+                    "name": "TGV INOUI"
+                  },
+                  "physical_modes": [
+                    {
+                      "id": "physical_mode:LongDistanceTrain",
+                      "name": "Train grande vitesse"
+                    }
+                  ],
+                  "network": {
+                    "id": "network:SNCF:OUI",
+                    "name": "TGV INOUI"
+                  }
+                },
+                {
+                  "id": "line:SNCF:CSR:631100",
+                  "name": "Nice - Paris - Gare de Lyon - Hall 1 & 2",
+                  "commercial_mode": {
+                    "id": "commercial_mode:OUI",
+                    "name": "TGV INOUI"
+                  },
+                  "physical_modes": [
+                    {
+                      "id": "physical_mode:LongDistanceTrain",
+                      "name": "Train grande vitesse"
+                    }
+                  ],
+                  "network": {
+                    "id": "network:SNCF:OUI",
+                    "name": "TGV INOUI"
+                  }
+                },
+                {
+                  "id": "line:SNCF:1187-87756056-87547000",
+                  "name": "Nice - Paris Austerlitz",
+                  "commercial_mode": {
+                    "id": "commercial_mode:ICN",
+                    "name": "Intercités de nuit"
+                  },
+                  "physical_modes": [
+                    {
+                      "id": "physical_mode:LongDistanceTrain",
+                      "name": "Train grande vitesse"
+                    }
+                  ],
+                  "network": {
+                    "id": "network:SNCF:ICN",
+                    "name": "Intercités de nuit"
+                  }
+                },
+                {
+                  "id": "line:SNCF:CSR:770200",
+                  "name": "Nice - Paris Austerlitz",
+                  "commercial_mode": {
+                    "id": "commercial_mode:ICN",
+                    "name": "Intercités de nuit"
+                  },
+                  "physical_modes": [
+                    {
+                      "id": "physical_mode:LongDistanceTrain",
+                      "name": "Train grande vitesse"
+                    }
+                  ],
+                  "network": {
+                    "id": "network:SNCF:ICN",
+                    "name": "Intercités de nuit"
+                  }
+                },
+                {
+                  "id": "line:SNCF:CSR:071100",
+                  "name": "Nice - Strasbourg",
+                  "commercial_mode": {
+                    "id": "commercial_mode:OUI",
+                    "name": "TGV INOUI"
+                  },
+                  "physical_modes": [
+                    {
+                      "id": "physical_mode:LongDistanceTrain",
+                      "name": "Train grande vitesse"
+                    }
+                  ],
+                  "network": {
+                    "id": "network:SNCF:OUI",
+                    "name": "TGV INOUI"
+                  }
+                },
+                {
+                  "id": "line:SNCF:CSR:633200",
+                  "name": "Paris - Gare de Lyon - Hall 1 & 2 - Nice",
+                  "commercial_mode": {
+                    "id": "commercial_mode:TGVOUIGO",
+                    "name": "OUIGO"
+                  },
+                  "physical_modes": [
+                    {
+                      "id": "physical_mode:LongDistanceTrain",
+                      "name": "Train grande vitesse"
+                    }
+                  ],
+                  "network": {
+                    "id": "network:SNCF:TGVOUIGO",
+                    "name": "OUIGO"
+                  }
+                },
+                {
+                  "id": "line:SNCF:1187-87547000-87756056",
+                  "name": "Paris Austerlitz - Nice",
+                  "commercial_mode": {
+                    "id": "commercial_mode:ICN",
+                    "name": "Intercités de nuit"
+                  },
+                  "physical_modes": [
+                    {
+                      "id": "physical_mode:LongDistanceTrain",
+                      "name": "Train grande vitesse"
+                    }
+                  ],
+                  "network": {
+                    "id": "network:SNCF:ICN",
+                    "name": "Intercités de nuit"
+                  }
+                }
+              ]
+            }
+          },
+          "from": {
+            "id": "stop_point:SNCF:87756056:Train",
+            "name": "Nice (Nice)",
+            "quality": 0,
+            "stop_point": {
+              "id": "stop_point:SNCF:87756056:Train",
+              "name": "Nice",
+              "label": "Nice (Nice)",
+              "coord": {
+                "lon": "7.261904",
+                "lat": "43.704556"
+              },
+              "links": [],
+              "administrative_regions": [
+                {
+                  "id": "admin:fr:06088",
+                  "name": "Nice",
+                  "level": 8,
+                  "zip_code": "06000;06300",
+                  "label": "Nice (06000-06300)",
+                  "insee": "06088",
+                  "coord": {
+                    "lon": "7.2683912",
+                    "lat": "43.7009358"
+                  }
+                }
+              ],
+              "stop_area": {
+                "id": "stop_area:SNCF:87756056",
+                "name": "Nice",
+                "codes": [
+                  {
+                    "type": "source",
+                    "value": "87756056"
+                  },
+                  {
+                    "type": "uic",
+                    "value": "87756056"
+                  }
+                ],
+                "timezone": "Europe/Paris",
+                "label": "Nice (Nice)",
+                "coord": {
+                  "lon": "7.261904",
+                  "lat": "43.704556"
+                },
+                "links": []
+              },
+              "equipments": []
+            },
+            "embedded_type": "stop_point"
+          },
+          "mode": "walking",
+          "type": "crow_fly",
+          "links": []
+        }
+      ],
+      "links": [
+        {
+          "href": "https://api.sncf.com/v1/coverage/sncf/journeys?from=stop_area:SNCF:87756403&to=stop_area:SNCF:87756056&datetime=20261107T064700&datetime_represents=departure&data_freshness=realtime&max_nb_transfers=0&direct_path=none&count=8&first_section_mode%5B%5D=walking&last_section_mode%5B%5D=walking&min_nb_transfers=0&min_nb_journeys=5&is_journey_schedules=True&allowed_id%5B%5D=stop_point:SNCF:87756056:Train&allowed_id%5B%5D=stop_point:SNCF:87756403:Train&_pt_planner=kraken",
+          "templated": false,
+          "rel": "same_journey_schedules",
+          "type": "journeys"
+        },
+        {
+          "href": "https://api.sncf.com/v1/coverage/sncf/journeys?from=stop_area:SNCF:87756403&to=stop_area:SNCF:87756056&datetime=20261107T064700&datetime_represents=departure&data_freshness=realtime&max_nb_transfers=0&direct_path=none&count=1&first_section_mode%5B%5D=walking&last_section_mode%5B%5D=walking&min_nb_transfers=0&min_nb_journeys=1&is_journey_schedules=True&allowed_id%5B%5D=stop_point:SNCF:87756056:Train&allowed_id%5B%5D=stop_point:SNCF:87756403:Train",
+          "templated": false,
+          "rel": "this_journey",
+          "type": "journeys"
+        }
+      ]
+    }
+  ],
+  "tickets": [],
+  "disruptions": [],
+  "terminus": [
+    {
+      "id": "stop_area:SNCF:87756486",
+      "name": "Menton",
+      "codes": [
+        {
+          "type": "source",
+          "value": "87756486"
+        },
+        {
+          "type": "uic",
+          "value": "87756486"
+        }
+      ],
+      "timezone": "Europe/Paris",
+      "label": "Menton (Menton)",
+      "coord": {
+        "lon": "7.493212",
+        "lat": "43.774435"
+      },
+      "links": []
+    },
+    {
+      "id": "stop_area:SNCF:83045013",
+      "name": "Ventimiglia",
+      "codes": [
+        {
+          "type": "source",
+          "value": "83045013"
+        },
+        {
+          "type": "uic",
+          "value": "83045013"
+        }
+      ],
+      "timezone": "Europe/Paris",
+      "label": "Ventimiglia (Ventimiglia)",
+      "coord": {
+        "lon": "7.610233",
+        "lat": "43.792569"
+      },
+      "links": []
+    }
+  ],
+  "context": {
+    "car_direct_path": {
+      "co2_emission": {
+        "value": 3287.6027578468,
+        "unit": "gEC"
+      },
+      "air_pollutants": {
+        "unit": "g",
+        "values": {
+          "nox": 5.8235,
+          "pm": 0.7412
+        }
+      }
+    },
+    "current_datetime": "20261107T014519",
+    "timezone": "Europe/Paris"
+  },
+  "notes": [],
+  "exceptions": []
+}
