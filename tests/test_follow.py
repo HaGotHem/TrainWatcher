@@ -56,7 +56,9 @@ MON = date(2026, 11, 9)
 USER = "111"
 OTHER_USER = "222"
 
-MSG_SAME_OR_UNKNOWN = "Les gares de départ et d'arrivée doivent être différentes."
+MSG_SAME_STATION = "Les gares de départ et d'arrivée doivent être différentes."
+MSG_UNKNOWN_STATION = "Gare inconnue."
+MSG_BAD_TIME = "Heure invalide, utilise le format HH:MM."
 MSG_LIMIT = "Tu suis déjà 10 trains."
 MSG_DUPLICATE = "Tu suis déjà ce train."
 
@@ -305,11 +307,11 @@ async def test_follow_same_station_rejected(repo, fixed_now):
 
     with pytest.raises(FollowError) as exc_info:
         await resolve_train(source, NICE, NICE, "08:00", MONDAY, fixed_now)
-    assert str(exc_info.value) == MSG_SAME_OR_UNKNOWN
+    assert str(exc_info.value) == MSG_SAME_STATION
 
     with pytest.raises(FollowError) as exc_info:
         await add_follow(repo, source, USER, NICE, NICE, "08:00", MONDAY, fixed_now)
-    assert str(exc_info.value) == MSG_SAME_OR_UNKNOWN
+    assert str(exc_info.value) == MSG_SAME_STATION
 
     assert source.calls == []
     assert repo.list_follows(USER) == []
@@ -325,11 +327,11 @@ async def test_follow_unknown_station_rejected(repo, fixed_now, from_id, to_id):
 
     with pytest.raises(FollowError) as exc_info:
         await resolve_train(source, from_id, to_id, "08:00", MONDAY, fixed_now)
-    assert str(exc_info.value) == MSG_SAME_OR_UNKNOWN
+    assert str(exc_info.value) == MSG_UNKNOWN_STATION
 
     with pytest.raises(FollowError) as exc_info:
         await add_follow(repo, source, USER, from_id, to_id, "08:00", MONDAY, fixed_now)
-    assert str(exc_info.value) == MSG_SAME_OR_UNKNOWN
+    assert str(exc_info.value) == MSG_UNKNOWN_STATION
 
     assert source.calls == []
     assert repo.list_follows(USER) == []
@@ -712,3 +714,70 @@ async def test_nearest_alternative_tie_picks_earliest_scheduled():
     source = FakeSource([later, earlier])
 
     assert await nearest_alternative(source, _follow_obj("07:42"), MON) == earlier
+
+
+# --- Controller ruling R11 ---------------------------------------------------------------------
+
+SUN = date(2026, 11, 8)
+
+
+async def test_today_statuses_one_call_covers_wide_route_span(repo, fixed_now):
+    # now = Fri 08:00, live window [07:30, 11:00]: 07:50 and 10:50 are both live, 180 min apart.
+    _user(repo)
+    first = _follow(repo, "07:50", number="86049")
+    last = _follow(repo, "10:50", number="86079")
+    t_first = train(at(FRI, "07:50"), "86049")
+    t_last = train(at(FRI, "10:50"), "86079")
+    source = FakeSource([t_first, t_last])
+
+    items = await today_statuses(repo, source, USER, fixed_now)
+
+    assert len(source.calls) == 1
+    call = source.calls[0]
+    assert (call.from_id, call.to_id) == (MONACO, NICE)
+    assert call.when.date() == FRI
+    assert call.when <= at(FRI, "07:50")
+    assert call.count >= max(8, 180 // 10 + 2)  # 20
+    assert [item.follow for item in items] == [first, last]
+    assert [item.train for item in items] == [t_first, t_last]
+
+
+async def test_resolve_only_considers_the_service_date(fixed_now):
+    # Monday-only mask -> service date Mon 9 Nov. Sunday 23:59 is 6 min from 00:05 but on another date.
+    sunday = train(at(SUN, "23:59"), "86001")
+    monday = train(at(MON, "00:12"), "86003")
+    source = FakeSource([sunday, train(at(SUN, "23:55"), "86000"), monday])
+
+    assert await resolve_train(source, MONACO, NICE, "00:05", MONDAY, fixed_now) == monday
+
+
+async def test_nearest_alternative_only_considers_the_given_date():
+    sunday = train(at(SUN, "23:59"), "86001")
+    monday = train(at(MON, "00:12"), "86003")
+    source = FakeSource([sunday, monday])
+
+    assert await nearest_alternative(source, _follow_obj("00:05"), MON) == monday
+
+
+async def test_list_trains_around_drops_other_dates():
+    monday = train(at(MON, "00:12"), "86003")
+    source = FakeSource([train(at(SUN, "23:55"), "86000"), monday])
+
+    assert await list_trains_around(source, MONACO, NICE, "00:05", MON) == [monday]
+
+
+@pytest.mark.parametrize("hhmm", ["8h00", "25:00", ""])
+async def test_malformed_time_rejected(repo, fixed_now, hhmm):
+    _user(repo)
+    source = FakeSource([train(at(MON, "08:00"), "86053")])
+
+    with pytest.raises(FollowError) as exc_info:
+        await resolve_train(source, MONACO, NICE, hhmm, MONDAY, fixed_now)
+    assert str(exc_info.value) == MSG_BAD_TIME
+
+    with pytest.raises(FollowError) as exc_info:
+        await add_follow(repo, source, USER, MONACO, NICE, hhmm, MONDAY, fixed_now)
+    assert str(exc_info.value) == MSG_BAD_TIME
+
+    assert source.calls == []
+    assert repo.list_follows(USER) == []
