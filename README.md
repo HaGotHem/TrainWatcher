@@ -52,13 +52,29 @@ cp .env.example .env
 | `SESSION_SECRET` | oui | Clé de signature des sessions du site. |
 | `PUBLIC_URL` | oui en production | Adresse publique du site, **sans slash final** : `https://train.sbertacchi.dev`, ou `http://localhost:8000` en local. |
 | `CLOUDFLARE_TUNNEL_TOKEN` | oui en production | Token du tunnel Cloudflare. |
-| `DISCORD_DEV_GUILD_ID` | non | Identifiant d'un serveur Discord de test. Les commandes slash y apparaissent immédiatement ; laissé vide, elles sont globales et peuvent mettre jusqu'à une heure à apparaître. |
+| `DISCORD_DEV_GUILD_ID` | non | Identifiant d'un serveur Discord de test (voir ci-dessous). Laissé vide, les commandes slash sont globales et peuvent mettre jusqu'à une heure à apparaître. |
 
-Générer la valeur de `SESSION_SECRET` (PowerShell ou bash) :
+Générer la valeur de `SESSION_SECRET` (PowerShell sous Windows) :
 
 ```powershell
 python -c "import secrets; print(secrets.token_urlsafe(32))"
 ```
+
+Sur le serveur (bash) :
+
+```bash
+python3 -c "import secrets; print(secrets.token_urlsafe(32))"
+```
+
+### Serveur de développement Discord (facultatif)
+
+`DISCORD_DEV_GUILD_ID` est optionnel. Pour l'utiliser :
+
+1. Installer d'abord l'application sur ce serveur : dans le Developer Portal, **Installation → Guild Install**, ouvrir le lien généré et choisir le serveur.
+2. Activer le mode développeur de Discord : **Paramètres → Avancés → Mode développeur**.
+3. Faire un clic droit sur le serveur → **Copier l'identifiant du serveur**, et coller la valeur dans `DISCORD_DEV_GUILD_ID`.
+
+**Attention :** si l'application n'est pas installée sur ce serveur, le bot échoue au démarrage.
 
 **Attention :** `PUBLIC_URL` doit être exactement l'adresse du site, **sans slash final**. Avec `https://train.sbertacchi.dev/`, l'adresse de retour OAuth devient `https://train.sbertacchi.dev//auth/callback`, et la connexion Discord échoue.
 
@@ -77,6 +93,8 @@ Dans le [Developer Portal Discord](https://discord.com/developers/applications) 
 4. **Installation** :
    - cocher les deux contextes d'installation : **Guild Install** (serveurs) et **User Install** (utilisateurs) ;
    - scopes : `applications.commands`, et `bot` pour l'installation sur un serveur.
+
+Se connecter au site avec Discord, ou ouvrir le lien **User Install**, installe l'application sur ton compte : c'est ce qui active les commandes et les DM.
 
 ## Tunnel Cloudflare
 
@@ -119,13 +137,15 @@ git pull && docker compose --profile prod up -d --build
 
 ## Sauvegarde
 
-La base de données est le fichier `data/monatrain.db`. Pour une copie cohérente, arrêter le bot le temps de la copie :
+La base SQLite est `data/monatrain.db`. Elle est en mode WAL et le site écrit aussi dedans : arrêter `web` **et** `bot` avant la copie, sinon la sauvegarde peut être incohérente.
 
 ```bash
-docker compose stop bot
-cp data/monatrain.db ~/sauvegardes/monatrain-$(date +%F).db
-docker compose start bot
+docker compose stop web bot
+cp data/monatrain.db sauvegarde-$(date +%F).db
+docker compose start web bot
 ```
+
+Une fois `web` et `bot` arrêtés, les fichiers `data/monatrain.db-wal` et `data/monatrain.db-shm` disparaissent : leur absence est normale, et la copie `monatrain.db` contient alors toutes les données.
 
 ## Logs
 

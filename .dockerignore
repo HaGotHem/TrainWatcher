@@ -1,11 +1,11 @@
 .env
 data/
 .superpowers/
-__pycache__/
-*.pyc
+**/__pycache__/
+**/*.pyc
 .venv/
 .pytest_cache/
-*.egg-info/
+**/*.egg-info/
 .git
 tests/
 docs/
