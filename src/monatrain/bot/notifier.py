@@ -37,9 +37,10 @@ class ReplaceButton(
     async def callback(self, interaction: discord.Interaction) -> None:
         bot: MonatrainBot = interaction.client  # type: ignore[assignment]
         await interaction.response.defer()  # resolving the train may call the SNCF API
-        text = await bot.replace_follow(str(interaction.user.id), self.follow_id, self.hhmm)
-        await _drop_buttons(interaction)
-        await interaction.followup.send(text)
+        result = await bot.replace_follow(str(interaction.user.id), self.follow_id, self.hhmm)
+        if result.final:  # after a transient failure the buttons stay, so the user can try again
+            await _drop_buttons(interaction)
+        await interaction.followup.send(result.text)
 
 
 class KeepButton(discord.ui.DynamicItem[discord.ui.Button], template=r"keep:(?P<follow_id>\d+)"):

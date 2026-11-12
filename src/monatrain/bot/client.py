@@ -12,9 +12,11 @@ from monatrain.bot.handlers import (
     MSG_NOT_YOURS,
     MSG_RATE,
     Choices,
+    ReplaceResult,
     autocomplete_gare,
     autocomplete_heure,
     autocomplete_mes_trains,
+    autocomplete_needs_api,
     dm_warning,
     handle_departs,
     handle_mes_trains,
@@ -32,6 +34,8 @@ log = logging.getLogger(__name__)
 
 USER_RATE_LIMIT = 20  # interactions calling the API, per Discord user
 USER_RATE_WINDOW_S = 600
+AUTOCOMPLETE_RATE_LIMIT = 60  # hour autocompletes calling the API, per Discord user (they fire as one types)
+AUTOCOMPLETE_TIMEOUT_S = 2.5  # Discord drops an autocomplete answer after 3 s
 WELCOME_DM = "Tes alertes arriveront ici 🚆"
 MSG_ERROR = "Une erreur est survenue."
 INSTALL_URL = (
@@ -62,6 +66,7 @@ class MonatrainBot(discord.Client):
         self.repo = repo
         self.web_source = web_source
         self.limiter = SlidingWindowLimiter(USER_RATE_LIMIT, USER_RATE_WINDOW_S)
+        self.autocomplete_limiter = SlidingWindowLimiter(AUTOCOMPLETE_RATE_LIMIT, USER_RATE_WINDOW_S)
         self.notifier = DiscordNotifier(self)
         self.watcher = Watcher(repo, watcher_source, self.notifier)
         self._client_id = client_id
@@ -98,14 +103,23 @@ class MonatrainBot(discord.Client):
     def install_url(self) -> str:
         return INSTALL_URL.format(client_id=self._client_id or self.application_id)
 
-    async def replace_follow(self, user_id: str, follow_id: int, hhmm: str) -> str:
+    async def replace_follow(self, user_id: str, follow_id: int, hhmm: str) -> ReplaceResult:
         return await handle_remplacer(
             self.repo, self.web_source, self.limiter, user_id, follow_id, hhmm, self._clock()
         )
 
     async def _welcome(self, user_id: str, reply: str) -> str:
         """First follow of a user: check that DMs get through, remember it, and warn if not."""
-        sent = await self.notifier.send(user_id, WELCOME_DM)
+        try:
+            user = await self.fetch_user(int(user_id))
+            await user.send(WELCOME_DM)
+        except (discord.Forbidden, discord.NotFound):
+            sent = False
+        except Exception:  # unknown outcome: the follow is saved anyway, dm_ok stays as it was
+            log.exception("DM de bienvenue en échec pour l'utilisateur %s", user_id)
+            return reply
+        else:
+            sent = True
         self.repo.set_dm_ok(user_id, sent)
         warning = "\n" + dm_warning(self.install_url)
         if sent:
@@ -182,16 +196,20 @@ class MonatrainBot(discord.Client):
 
         @suivre.autocomplete("heure")
         async def suivre_heure(interaction: discord.Interaction, current: str) -> list[app_commands.Choice[str]]:
-            if not self._allowed(interaction):
+            depart = getattr(interaction.namespace, "depart", None)
+            arrivee = getattr(interaction.namespace, "arrivee", None)
+            # Autocompletes fire as the user types: only those that call the API use the (separate) bucket.
+            if not autocomplete_needs_api(depart, arrivee, current):
                 return []
-            namespace = interaction.namespace
-            pairs = await autocomplete_heure(
-                self.web_source,
-                getattr(namespace, "depart", None),
-                getattr(namespace, "arrivee", None),
-                current,
-                self._clock(),
-            )
+            if not self.autocomplete_limiter.hit(str(interaction.user.id)):
+                return []
+            try:
+                pairs = await asyncio.wait_for(
+                    autocomplete_heure(self.web_source, depart, arrivee, current, self._clock()),
+                    AUTOCOMPLETE_TIMEOUT_S,
+                )
+            except TimeoutError:
+                return []
             return _choices(pairs)
 
         @tree.command(name="mes-trains", description="Voir les trains que tu suis")

@@ -10,9 +10,9 @@ from fastapi import APIRouter, Depends, Form, HTTPException, Request
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
 
-from monatrain.follow import FollowError, TodayItem, add_follow, resolve_train, today_statuses
+from monatrain.display import hhmm, station_name, status_label, today_label
+from monatrain.follow import FollowError, TodayItem, add_follow, replace_follow_time, today_statuses
 from monatrain.models import Fetched, Status, TrainInfo
-from monatrain.repo import DuplicateFollowError
 from monatrain.stations import STATIONS, get_station
 from monatrain.timeutil import DAY_NAMES, PARIS, format_days, parse_days
 
@@ -28,15 +28,6 @@ class RateLimited(Exception):
 
 class LoginRequired(Exception):
     pass
-
-
-def hhmm(moment: datetime) -> str:
-    return moment.astimezone(PARIS).strftime("%H:%M")
-
-
-def station_name(stop_id: str | None) -> str:
-    station = get_station(stop_id) if stop_id else None
-    return station.name if station else (stop_id or "?")
 
 
 def with_query(path: str, **params: str) -> str:
@@ -76,18 +67,11 @@ class TrainsView:
     notice: str | None = None  # shown instead of the list (e.g. an unknown station)
 
 
-def _badge(train: TrainInfo) -> tuple[str, str]:
-    if train.status is Status.CANCELLED:
-        return "Supprimé", "cancel"
-    if train.status is Status.REPLACED_BY_BUS:
-        return "Remplacé par car", "cancel"
-    if train.status is Status.DELAYED:
-        return f"+{train.delay_min} min", "delay"
-    return "À l'heure", "ok"
+_BADGE_KINDS = {Status.CANCELLED: "cancel", Status.REPLACED_BY_BUS: "cancel", Status.DELAYED: "delay"}
 
 
 def train_row(train: TrainInfo, *, title: str, meta: str, suivre: str | None = None) -> Row:
-    badge, kind = _badge(train)
+    badge, kind = status_label(train), _BADGE_KINDS.get(train.status, "ok")
     scheduled, expected = hhmm(train.base_departure), hhmm(train.departure)
     return Row(badge, kind, scheduled, expected if expected != scheduled else None, title, meta, train.reason, suivre)
 
@@ -98,14 +82,7 @@ def today_row(item: TodayItem) -> Row:
     if train is not None:
         meta = f"Train {train.train_number}" + (f" · arrivée {hhmm(train.arrival)}" if train.arrival else "")
         return train_row(train, title=title, meta=meta)
-    if item.state == "past":
-        badge = "Parti"
-    elif item.state == "missing":
-        badge = "Introuvable"
-    elif item.state == "live" and item.stale:
-        badge = "Statut inconnu"  # the route could not be queried
-    else:
-        badge = "Prévu"
+    badge = today_label(item)
     return Row(badge, "neutral", follow.dep_time, None, title, f"Train {follow.train_number}")
 
 
@@ -369,20 +346,12 @@ async def delete_follow(request: Request, follow_id: int):
 async def replace_follow(request: Request, follow_id: int, heure: str = Form("")):
     user = require_user(request)
     state = request.app.state
-    follow = next((f for f in state.repo.list_follows(user["discord_id"]) if f.id == follow_id), None)
-    if follow is None:
-        request.session["flash"] = "Train introuvable."
-        return redirect("/")
     try:
-        found = await resolve_train(state.source, follow.from_id, follow.to_id, heure, follow.days, state.clock())
-        dep_time = hhmm(found.base_departure)
-        state.repo.replace_dep_time(user["discord_id"], follow_id, dep_time, found.train_number)
+        follow = await replace_follow_time(state.repo, state.source, user["discord_id"], follow_id, heure, state.clock())
     except FollowError as exc:
         request.session["flash"] = str(exc)
-    except DuplicateFollowError:
-        request.session["flash"] = "Tu suis déjà ce train."
     else:
-        request.session["flash"] = f"Remplacé : {dep_time} (train {found.train_number})"
+        request.session["flash"] = f"Remplacé : {follow.dep_time} (train {follow.train_number})"
     return redirect("/")
 
 

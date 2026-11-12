@@ -24,6 +24,10 @@ class FollowError(ValueError):
     """A user-facing (French) reason why a train cannot be followed."""
 
 
+class NoTrainFoundError(FollowError):
+    """No direct train around the requested time (it may appear later)."""
+
+
 @dataclass
 class TodayItem:
     follow: Follow
@@ -67,7 +71,7 @@ async def resolve_train(source, from_id: str, to_id: str, hhmm: str, days: int, 
     trains = await list_trains_around(source, from_id, to_id, hhmm, service_date)
     found = _closest(trains, _at(service_date, hhmm))
     if found is None:
-        raise FollowError(f"Aucun train direct trouvé autour de {hhmm}.")
+        raise NoTrainFoundError(f"Aucun train direct trouvé autour de {hhmm}.")
     return found
 
 
@@ -82,6 +86,22 @@ async def add_follow(
         raise FollowError("Tu suis déjà 10 trains.") from exc
     except DuplicateFollowError as exc:
         raise FollowError("Tu suis déjà ce train.") from exc
+
+
+async def replace_follow_time(
+    repo: Repo, source, user_id: str, follow_id: int, hhmm: str, now: datetime
+) -> Follow:
+    """Make a follow of the user watch the train found around `hhmm` on its route, instead of its own."""
+    follow = next((f for f in repo.list_follows(user_id) if f.id == follow_id), None)
+    if follow is None:
+        raise FollowError("Train introuvable dans ta liste.")
+    found = await resolve_train(source, follow.from_id, follow.to_id, hhmm, follow.days, now)
+    dep_time = found.base_departure.astimezone(PARIS).strftime("%H:%M")
+    try:
+        repo.replace_dep_time(user_id, follow_id, dep_time, found.train_number)
+    except DuplicateFollowError as exc:
+        raise FollowError("Tu suis déjà ce train.") from exc
+    return next(f for f in repo.list_follows(user_id) if f.id == follow_id)
 
 
 async def today_statuses(repo: Repo, source, user_id: str, now: datetime) -> list[TodayItem]:
