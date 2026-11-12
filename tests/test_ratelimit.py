@@ -5,8 +5,6 @@ returns True while the key has made at most `limit` hits within the last `window
 False beyond. A refused hit does not extend the window.
 """
 
-import time
-
 from monatrain.ratelimit import SlidingWindowLimiter
 
 
@@ -72,4 +70,3 @@ def test_default_clock_is_monotonic():
     limiter = SlidingWindowLimiter(1, 600)
     assert limiter.hit("x") is True
     assert limiter.hit("x") is False
-    assert time.monotonic  # the default clock exists; no sleep needed

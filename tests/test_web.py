@@ -177,6 +177,20 @@ def links(resp) -> list[tuple[str, dict[str, list[str]]]]:
     return out
 
 
+def selected_option(page: str, select_name: str) -> str | None:
+    """Value of the selected <option> of the <select name=select_name>, or None."""
+    m = re.search(
+        rf"""<select[^>]*\bname\s*=\s*["']{re.escape(select_name)}["'][^>]*>(.*?)</select>""", page, re.S
+    )
+    if m is None:
+        return None
+    for option in re.findall(r"<option\b[^>]*>", m.group(1)):
+        if re.search(r"\bselected\b", option):
+            value = re.search(r"""\bvalue\s*=\s*["']([^"']*)["']""", option)
+            return html.unescape(value.group(1)) if value else None
+    return None
+
+
 # --- home ----------------------------------------------------------------------------------------
 
 
@@ -222,7 +236,8 @@ def test_home_lists_today_trains_with_badges(make_web, repo):
     assert "Données d'il y a" not in page
     assert MSG_NO_DM not in page
     # the quick search is prefilled with the route of the first followed train
-    assert MONACO in resp.text and NICE in resp.text
+    assert selected_option(resp.text, "de") == MONACO
+    assert selected_option(resp.text, "vers") == NICE
 
 
 def test_home_dm_banner_when_bot_cannot_dm(make_web, repo):
@@ -331,6 +346,25 @@ def test_gare_filters_by_direction(make_web):
     assert "08:05" in page and "08:25" in page
     assert "08:10" not in page and "08:15" not in page
     assert "86502" not in page and "86503" not in page
+
+
+def test_gare_hides_departed_trains_from_stale_answer(make_web):
+    departed = train(at(FRI, "07:50"), "86499", from_id=NICE, to_id=None, direction="Vintimille")
+    late = train(
+        at(FRI, "07:56"), "86498", delay=10, status=Status.DELAYED, from_id=NICE, to_id=None, direction="Cannes"
+    )
+    later = train(at(FRI, "08:05"), "86501", from_id=NICE, to_id=None, direction="Vintimille")
+    source = FakeSource(departures=[departed, late, later], stale=True, fetched_at=at(FRI, "07:40"))
+    client = make_web(source)
+
+    resp = client.get("/gare", params={"id": NICE})
+
+    assert resp.status_code == 200
+    page = text(resp)
+    assert "Données d'il y a 20 min" in page
+    assert "86499" not in page and "07:50" not in page  # left at 07:50, before now (08:00)
+    assert "08:06" in page  # 07:56 +10 min: expected at 08:06, not gone yet
+    assert "08:05" in page
 
 
 # --- following trains ----------------------------------------------------------------------------
@@ -456,13 +490,11 @@ def test_rate_limit_31st_request_429_by_cf_ip(make_web):
     ip_a = {"CF-Connecting-IP": "203.0.113.7"}
     params = {"de": MONACO, "vers": NICE, "heure": "08:00"}
 
-    # one counter per IP across /trajet, /gare and /fragments/*
-    for _ in range(10):
+    # one search counter per IP across /trajet and /gare: 30 per 600 s
+    for _ in range(15):
         assert client.get("/trajet", params=params, headers=ip_a).status_code == 200
-    for _ in range(10):
+    for _ in range(15):
         assert client.get("/gare", params={"id": NICE}, headers=ip_a).status_code == 200
-    for _ in range(10):
-        assert client.get("/fragments/trajet", params=params, headers=ip_a).status_code == 200
 
     resp = client.get("/trajet", params=params, headers=ip_a)
     assert resp.status_code == 429
@@ -492,9 +524,10 @@ def test_rate_limit_applies_to_follow_post(make_web, repo):
     client = make_web(FakeSource([train(at(FRI, "08:04"), "86053")]))
     login(client, uid)
     ip = {"CF-Connecting-IP": "203.0.113.8"}
+    params = {"de": MONACO, "vers": NICE, "heure": "08:00"}
 
     for _ in range(30):
-        assert client.get("/fragments/trajet", params={"de": MONACO, "vers": NICE, "heure": "08:00"}, headers=ip).status_code == 200
+        assert client.get("/trajet", params=params, headers=ip).status_code == 200
     resp = client.post(
         "/suivis",
         data={"de": MONACO, "vers": NICE, "heure": "08:04", "jours": "semaine"},
@@ -505,6 +538,69 @@ def test_rate_limit_applies_to_follow_post(make_web, repo):
     assert resp.status_code == 429
     assert MSG_RATE in text(resp)
     assert repo.list_follows(uid) == []
+
+
+def test_rate_limit_applies_to_replace(make_web, repo):
+    uid = user(repo)
+    mine = repo.add_follow(uid, MONACO, NICE, "08:04", WEEKDAYS, "86053")
+    source = FakeSource([train(at(FRI, "08:04"), "86053"), train(at(FRI, "08:20"), "86055")], _nice_departures())
+    client = make_web(source)
+    login(client, uid)
+    ip = {"CF-Connecting-IP": "203.0.113.9"}
+
+    for _ in range(30):
+        assert client.get("/gare", params={"id": NICE}, headers=ip).status_code == 200
+    resp = client.post(f"/suivis/{mine.id}/remplacer", data={"heure": "08:20"}, headers=ip, follow_redirects=False)
+
+    assert resp.status_code == 429
+    assert MSG_RATE in text(resp)
+    [unchanged] = repo.list_follows(uid)
+    assert (unchanged.dep_time, unchanged.train_number) == ("08:04", "86053")
+
+
+def test_fragments_use_their_own_bucket(make_web):
+    client = make_web(FakeSource([train(at(FRI, "08:04"), "86053")], _nice_departures()))
+    params = {"de": MONACO, "vers": NICE, "heure": "08:00"}
+
+    # auto-refresh fragments do not consume the 30-search bucket
+    ip_a = {"CF-Connecting-IP": "203.0.113.20"}
+    for _ in range(31):
+        assert client.get("/fragments/trajet", params=params, headers=ip_a).status_code == 200
+    assert client.get("/trajet", params=params, headers=ip_a).status_code == 200
+
+    # and a full search bucket does not block fragments
+    ip_b = {"CF-Connecting-IP": "203.0.113.21"}
+    for _ in range(30):
+        assert client.get("/trajet", params=params, headers=ip_b).status_code == 200
+    assert client.get("/trajet", params=params, headers=ip_b).status_code == 429
+    assert client.get("/fragments/trajet", params=params, headers=ip_b).status_code == 200
+    assert client.get("/fragments/gare", params={"id": NICE}, headers=ip_b).status_code == 200
+
+
+def test_fragments_and_home_share_120_bucket(make_web, repo):
+    uid = user(repo)
+    repo.add_follow(uid, MONACO, NICE, "08:04", WEEKDAYS, "86053")
+    client = make_web(FakeSource([train(at(FRI, "08:04"), "86053")], _nice_departures()))
+    login(client, uid)
+    ip = {"CF-Connecting-IP": "203.0.113.30"}
+    params = {"de": MONACO, "vers": NICE, "heure": "08:00"}
+
+    for _ in range(40):
+        assert client.get("/", headers=ip).status_code == 200
+    for _ in range(40):
+        assert client.get("/fragments/mes-trains", headers=ip).status_code == 200
+    for _ in range(40):
+        assert client.get("/fragments/trajet", params=params, headers=ip).status_code == 200
+
+    resp = client.get("/fragments/gare", params={"id": NICE}, headers=ip)
+    assert resp.status_code == 429
+    assert MSG_RATE in text(resp)
+    resp = client.get("/", headers=ip)
+    assert resp.status_code == 429
+    assert MSG_RATE in text(resp)
+
+    # the search bucket is untouched
+    assert client.get("/trajet", params=params, headers=ip).status_code == 200
 
 
 # --- stale data / SNCF down ----------------------------------------------------------------------
