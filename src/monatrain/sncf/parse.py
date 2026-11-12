@@ -1,10 +1,13 @@
 """Parse Navitia /journeys and /departures responses into TrainInfo."""
 
+import logging
 from datetime import datetime
 
 from monatrain.models import Status, TrainInfo
 from monatrain.stations import uic_code
 from monatrain.timeutil import parse_navitia_dt
+
+log = logging.getLogger(__name__)
 
 _NO_SERVICE = "NO_SERVICE"
 _BUS_WORDS = ("autocar", "bus")
@@ -17,8 +20,8 @@ def parse_journeys(payload: dict, from_id: str, to_id: str) -> list[TrainInfo]:
         section = next((s for s in journey.get("sections", []) if s.get("type") == "public_transport"), None)
         if section is None:
             continue
-        trains.append(
-            _build(
+        try:
+            train = _build(
                 section,
                 section.get("display_informations", {}),
                 disruptions,
@@ -28,25 +31,37 @@ def parse_journeys(payload: dict, from_id: str, to_id: str) -> list[TrainInfo]:
                 no_service=journey.get("status") == _NO_SERVICE,
                 with_arrival=True,
             )
-        )
+        except _MalformedItem as exc:
+            log.warning("Trajet SNCF ignoré : %s", exc)
+            continue
+        trains.append(train)
     return trains
 
 
 def parse_departures(payload: dict, stop_id: str) -> list[TrainInfo]:
     disruptions = _disruptions_by_id(payload)
-    return [
-        _build(
-            departure.get("stop_date_time", {}),
-            departure.get("display_informations", {}),
-            disruptions,
-            from_id=stop_id,
-            to_id=None,
-            user_stops={uic_code(stop_id)},
-            no_service=False,
-            with_arrival=False,
-        )
-        for departure in payload.get("departures", [])
-    ]
+    trains = []
+    for departure in payload.get("departures", []):
+        try:
+            train = _build(
+                departure.get("stop_date_time", {}),
+                departure.get("display_informations", {}),
+                disruptions,
+                from_id=stop_id,
+                to_id=None,
+                user_stops={uic_code(stop_id)},
+                no_service=False,
+                with_arrival=False,
+            )
+        except _MalformedItem as exc:
+            log.warning("Départ SNCF ignoré : %s", exc)
+            continue
+        trains.append(train)
+    return trains
+
+
+class _MalformedItem(ValueError):
+    """An item of the SNCF answer lacks what a TrainInfo needs; it is skipped."""
 
 
 def _build(
@@ -63,7 +78,7 @@ def _build(
     base_departure = _dt(times.get("base_departure_date_time") or times.get("departure_date_time"))
     departure = _dt(times.get("departure_date_time")) or base_departure
     if base_departure is None or departure is None:
-        raise ValueError("Horaire de départ absent de la réponse SNCF")
+        raise _MalformedItem("horaire de départ absent")
 
     base_arrival = arrival = None
     if with_arrival:

@@ -46,7 +46,7 @@ class Settings:
             discord_client_id=_value(source, "DISCORD_CLIENT_ID"),
             discord_client_secret=_value(source, "DISCORD_CLIENT_SECRET"),
             session_secret=session_secret,
-            public_url=_value(source, "PUBLIC_URL") or DEFAULT_PUBLIC_URL,
+            public_url=(_value(source, "PUBLIC_URL") or DEFAULT_PUBLIC_URL).rstrip("/"),
         )
 
 

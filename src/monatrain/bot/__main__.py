@@ -3,6 +3,7 @@
 import asyncio
 import logging
 import os
+import signal
 import sys
 
 from monatrain.bot.client import MonatrainBot
@@ -28,6 +29,23 @@ def _dev_guild_id() -> int | None:
         sys.exit("DISCORD_DEV_GUILD_ID doit être l'identifiant numérique d'un serveur Discord.")
 
 
+def _close_on_sigterm(bot: MonatrainBot) -> None:
+    """Docker stops the container with SIGTERM: close the bot so that the cleanup in `run` happens."""
+    loop = asyncio.get_running_loop()
+
+    tasks: set[asyncio.Task] = set()  # keeps the task alive until it is done
+
+    def request_close() -> None:
+        task = loop.create_task(bot.close())
+        tasks.add(task)
+        task.add_done_callback(tasks.discard)
+
+    try:
+        loop.add_signal_handler(signal.SIGTERM, request_close)
+    except NotImplementedError:  # Windows event loops: fall back to a plain signal handler
+        signal.signal(signal.SIGTERM, lambda *_: loop.call_soon_threadsafe(request_close))
+
+
 async def run(settings: Settings, token: str) -> None:
     conn = connect(settings.db_path)
     init_schema(conn)
@@ -43,6 +61,7 @@ async def run(settings: Settings, token: str) -> None:
         client_id=settings.discord_client_id,
         dev_guild_id=_dev_guild_id(),
     )
+    _close_on_sigterm(bot)
     try:
         async with bot:
             await bot.start(token)

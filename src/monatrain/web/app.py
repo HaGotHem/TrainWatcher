@@ -2,6 +2,7 @@
 
 import logging
 import mimetypes
+import sqlite3
 from collections.abc import Callable
 from contextlib import asynccontextmanager
 from datetime import datetime
@@ -34,6 +35,7 @@ RATE_WINDOW_S = 600
 MSG_RATE = "Trop de recherches, réessaie dans quelques minutes."
 MSG_SNCF_DOWN = "Horaires SNCF momentanément indisponibles."
 MSG_NOT_FOUND = "Page introuvable."
+MSG_UNEXPECTED = "Une erreur est survenue."
 
 
 def create_app(
@@ -50,10 +52,11 @@ def create_app(
 
     settings = settings or Settings.from_env()
     clock = clock or now_paris
+    owned_conn: sqlite3.Connection | None = None
     if repo is None:
-        conn = connect(settings.db_path)
-        init_schema(conn)
-        repo = Repo(conn)
+        owned_conn = connect(settings.db_path)
+        init_schema(owned_conn)
+        repo = Repo(owned_conn)
     owned_http: httpx.AsyncClient | None = None
     if http is None:
         owned_http = http = httpx.AsyncClient(timeout=10.0)
@@ -69,6 +72,8 @@ def create_app(
             await owned_client.aclose()
         if owned_http is not None:
             await owned_http.aclose()
+        if owned_conn is not None:
+            owned_conn.close()
 
     app = FastAPI(lifespan=lifespan, docs_url=None, redoc_url=None, openapi_url=None)
     app.state.settings = settings
@@ -115,5 +120,10 @@ def create_app(
     async def on_http_error(request: Request, exc: StarletteHTTPException):
         message = MSG_NOT_FOUND if exc.status_code == 404 else "Une erreur est survenue."
         return error_page(request, exc.status_code, message)
+
+    @app.exception_handler(Exception)
+    async def on_unexpected_error(request: Request, exc: Exception):
+        # Starlette re-raises after this handler, so the server still logs the traceback.
+        return error_page(request, 500, MSG_UNEXPECTED)
 
     return app

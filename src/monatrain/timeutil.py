@@ -54,7 +54,7 @@ def parse_days(text: str) -> int:
         name = token.strip().lower()
         if name not in DAY_NAMES:
             raise ValueError(
-                f"Jour inconnu : {token.strip()!r}. Utilisez semaine, tous, week-end "
+                f"Jour inconnu : {token.strip()!r}. Utilise semaine, tous, week-end "
                 "ou une liste de jours comme lun,mer,ven."
             )
         mask |= 1 << DAY_NAMES.index(name)
