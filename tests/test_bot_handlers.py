@@ -527,3 +527,122 @@ def test_bot_client_module_imports():
 
     module = importlib.import_module("monatrain.bot.client")
     assert hasattr(module, "MonatrainBot")
+
+
+# --- "Suivre HH:MM" button: handle_remplacer (Task 9 review, ruling R20) -------------------------
+# `async handle_remplacer(repo, source, limiter, user_id, follow_id, hhmm, now) -> ReplaceResult`,
+# where `ReplaceResult` is a NamedTuple (final: bool, text: str) exported by monatrain.bot.handlers.
+# final=True: the answer is definitive, the client removes the buttons; final=False: the user may
+# click again later (rate limit, SNCF down, no train found right now).
+# Imported inside the tests so that the rest of this file keeps passing meanwhile.
+
+MSG_NO_TRAIN_0800 = "Aucun train direct trouvé autour de 08:00."
+
+
+async def _remplacer(repo, source, limiter, follow_id, hhmm="08:00", *, user_id=USER, now=None):
+    from monatrain.bot.handlers import handle_remplacer
+
+    return await handle_remplacer(
+        repo, source, limiter, user_id, follow_id, hhmm, now or datetime(2026, 11, 6, 8, 0, tzinfo=PARIS)
+    )
+
+
+def _replace_result(final: bool, text: str):
+    from monatrain.bot.handlers import ReplaceResult
+
+    assert ReplaceResult._fields == ("final", "text")
+    return ReplaceResult(final, text)
+
+
+async def test_remplacer_success(repo, limiter):
+    _user(repo)
+    follow = repo.add_follow(USER, MONACO, NICE, "08:30", WEEKDAYS, "86999")
+    repo.mark_suggestion_sent(follow.id)
+    source = FakeSource([train(at(FRI, "08:04"), "86053")])
+
+    result = await _remplacer(repo, source, limiter, follow.id)
+
+    assert result == _replace_result(True, "✅ C'est noté, je surveille maintenant le 08:04.")
+    assert (result.final, result.text) == (True, "✅ C'est noté, je surveille maintenant le 08:04.")
+    [stored] = repo.list_follows(USER)
+    assert (stored.dep_time, stored.train_number, stored.suggestion_sent) == ("08:04", "86053", False)
+
+
+async def test_remplacer_not_owned_is_final(repo, limiter):
+    _user(repo)
+    _user(repo, OTHER_USER)
+    theirs = repo.add_follow(OTHER_USER, MONACO, NICE, "08:30", WEEKDAYS, "86999")
+    source = FakeSource([train(at(FRI, "08:04"), "86053")])
+
+    assert await _remplacer(repo, source, limiter, theirs.id) == _replace_result(True, MSG_NOT_YOURS)
+    assert repo.list_follows(OTHER_USER) == [theirs]
+    assert await _remplacer(repo, source, limiter, 999_999) == _replace_result(True, MSG_NOT_YOURS)
+
+
+async def test_remplacer_duplicate_is_final(repo, limiter):
+    _user(repo)
+    repo.add_follow(USER, MONACO, NICE, "08:04", WEEKDAYS, "86053")
+    later = repo.add_follow(USER, MONACO, NICE, "08:30", WEEKDAYS, "86999")
+    source = FakeSource([train(at(FRI, "08:04"), "86053")])
+
+    assert await _remplacer(repo, source, limiter, later.id) == _replace_result(True, "Tu suis déjà ce train.")
+    assert later in repo.list_follows(USER)
+
+
+async def test_remplacer_sncf_down_is_not_final(repo, limiter):
+    _user(repo)
+    follow = repo.add_follow(USER, MONACO, NICE, "08:30", WEEKDAYS, "86999")
+    source = FakeSource(error=SncfUnavailable("boom"))
+
+    assert await _remplacer(repo, source, limiter, follow.id) == _replace_result(False, MSG_SNCF_DOWN)
+    assert repo.list_follows(USER) == [follow]
+
+
+async def test_remplacer_rate_limited_is_not_final(repo):
+    _user(repo)
+    follow = repo.add_follow(USER, MONACO, NICE, "08:30", WEEKDAYS, "86999")
+    source = FakeSource([train(at(FRI, "08:04"), "86053")])
+    exhausted = SlidingWindowLimiter(0, 600, clock=lambda: 0.0)
+
+    assert await _remplacer(repo, source, exhausted, follow.id) == _replace_result(False, MSG_RATE)
+    assert source.calls == []
+    assert repo.list_follows(USER) == [follow]
+
+
+async def test_remplacer_no_train_found_is_not_final(repo, limiter):
+    _user(repo)
+    follow = repo.add_follow(USER, MONACO, NICE, "08:30", WEEKDAYS, "86999")
+    source = FakeSource([])
+
+    assert await _remplacer(repo, source, limiter, follow.id) == _replace_result(False, MSG_NO_TRAIN_0800)
+    assert repo.list_follows(USER) == [follow]
+
+
+# --- autocomplete_needs_api (Task 9 review, ruling R20) -----------------------------------------
+# `autocomplete_needs_api(depart_id, arrivee_id, current) -> bool`: True only when both stations are
+# known and different, and `current` (stripped) is empty or an hour 0-23 / a prefix of HH:MM. The
+# client hits its separate autocomplete bucket only when this is True.
+
+
+def _needs_api(depart_id, arrivee_id, current):
+    from monatrain.bot.handlers import autocomplete_needs_api
+
+    return autocomplete_needs_api(depart_id, arrivee_id, current)
+
+
+@pytest.mark.parametrize("current", ["", "  ", "8", "08", "0", "23", "08:", "08:0", "08:04", "8:04"])
+def test_autocomplete_needs_api_true(current):
+    assert _needs_api(MONACO, NICE, current) is True
+
+
+@pytest.mark.parametrize("current", ["24", "99", "abc", "8h", "123", "08:045", "-1"])
+def test_autocomplete_needs_api_bad_text(current):
+    assert _needs_api(MONACO, NICE, current) is False
+
+
+@pytest.mark.parametrize(
+    ("depart", "arrivee"),
+    [(None, NICE), (MONACO, None), ("", NICE), (MONACO, ""), (UNKNOWN, NICE), (MONACO, UNKNOWN), (MONACO, MONACO)],
+)
+def test_autocomplete_needs_api_stations(depart, arrivee):
+    assert _needs_api(depart, arrivee, "8") is False

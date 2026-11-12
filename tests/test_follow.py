@@ -781,3 +781,90 @@ async def test_malformed_time_rejected(repo, fixed_now, hhmm):
 
     assert source.calls == []
     assert repo.list_follows(USER) == []
+
+
+# --- replace_follow_time (Task 9 review, ruling R20) ---------------------------------------------
+# `replace_follow_time(repo, source, user_id, follow_id, hhmm, now) -> Follow`: re-resolves the
+# follow's route at `hhmm` on next_service_date(follow.days, hhmm, now) and stores the EXACT time and
+# number of the train found (suggestion_sent reset). Imported inside the tests so that the rest of
+# this file keeps passing while the function does not exist yet.
+
+MSG_NOT_YOURS = "Train introuvable dans ta liste."
+
+
+async def _replace(repo, source, user_id, follow_id, hhmm, now):
+    from monatrain.follow import replace_follow_time
+
+    return await replace_follow_time(repo, source, user_id, follow_id, hhmm, now)
+
+
+async def test_replace_follow_time_success(repo, fixed_now):
+    _user(repo)
+    follow = _follow(repo, "08:30", number="86999")
+    repo.mark_suggestion_sent(follow.id)
+    source = FakeSource([train(at(FRI, "08:04"), "86053")])
+
+    updated = await _replace(repo, source, USER, follow.id, "08:00", fixed_now)
+
+    assert isinstance(updated, Follow)
+    assert (updated.id, updated.dep_time, updated.train_number, updated.suggestion_sent) == (
+        follow.id, "08:04", "86053", False,
+    )
+    [stored] = repo.list_follows(USER)
+    assert (stored.id, stored.dep_time, stored.train_number, stored.suggestion_sent) == (
+        follow.id, "08:04", "86053", False,
+    )
+    assert (stored.from_id, stored.to_id, stored.days) == (MONACO, NICE, WEEKDAYS)
+
+
+async def test_replace_follow_time_other_users_follow_refused(repo, fixed_now):
+    _user(repo)
+    _user(repo, OTHER_USER)
+    theirs = _follow(repo, "08:30", user_id=OTHER_USER, number="86999")
+    source = FakeSource([train(at(FRI, "08:04"), "86053")])
+
+    with pytest.raises(FollowError) as exc_info:
+        await _replace(repo, source, USER, theirs.id, "08:00", fixed_now)
+    assert str(exc_info.value) == MSG_NOT_YOURS
+    assert repo.list_follows(OTHER_USER) == [theirs]
+
+    with pytest.raises(FollowError) as exc_info:
+        await _replace(repo, source, USER, 999_999, "08:00", fixed_now)
+    assert str(exc_info.value) == MSG_NOT_YOURS
+
+
+async def test_replace_follow_time_duplicate(repo, fixed_now):
+    _user(repo)
+    _follow(repo, "08:04", number="86053")
+    later = _follow(repo, "08:30", number="86999")
+    source = FakeSource([train(at(FRI, "08:04"), "86053")])
+
+    with pytest.raises(FollowError) as exc_info:
+        await _replace(repo, source, USER, later.id, "08:00", fixed_now)
+
+    assert str(exc_info.value) == MSG_DUPLICATE
+    assert later in repo.list_follows(USER)
+
+
+async def test_replace_follow_time_sncf_error_propagates(repo, fixed_now):
+    _user(repo)
+    follow = _follow(repo, "08:30", number="86999")
+    source = FakeSource(error=SncfUnavailable("boom"))
+
+    with pytest.raises(SncfError):
+        await _replace(repo, source, USER, follow.id, "08:00", fixed_now)
+    assert repo.list_follows(USER) == [follow]
+
+
+@pytest.mark.parametrize("hhmm", ["8h", "8:00", "24:00"])
+async def test_replace_follow_time_malformed_time(repo, fixed_now, hhmm):
+    _user(repo)
+    follow = _follow(repo, "08:30", number="86999")
+    source = FakeSource([train(at(FRI, "08:04"), "86053")])
+
+    with pytest.raises(FollowError) as exc_info:
+        await _replace(repo, source, USER, follow.id, hhmm, fixed_now)
+
+    assert str(exc_info.value) == MSG_BAD_TIME
+    assert source.calls == []
+    assert repo.list_follows(USER) == [follow]
