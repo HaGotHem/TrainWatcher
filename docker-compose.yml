@@ -1,0 +1,37 @@
+services:
+  web:
+    build: .
+    image: monatrain:latest
+    init: true
+    restart: unless-stopped
+    env_file: .env
+    volumes:
+      - ./data:/app/data
+    ports:
+      - "127.0.0.1:8000:8000"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request;urllib.request.urlopen('http://localhost:8000/healthz')"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+  bot:
+    build: .
+    image: monatrain:latest
+    init: true
+    restart: unless-stopped
+    command: python -m monatrain.bot
+    env_file: .env
+    volumes:
+      - ./data:/app/data
+
+  cloudflared:
+    image: cloudflare/cloudflared:2025.10.0
+    init: true
+    restart: unless-stopped
+    command: tunnel --no-autoupdate run
+    environment:
+      TUNNEL_TOKEN: ${CLOUDFLARE_TUNNEL_TOKEN}
+    profiles: ["prod"]
+    depends_on:
+      - web
