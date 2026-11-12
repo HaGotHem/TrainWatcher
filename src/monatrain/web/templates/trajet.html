@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% from "_macros.html" import station_select %}
+{% block title %}Trajet · Monatrain{% endblock %}
+{% block content %}
+<h1>Trajet</h1>
+<form class="card form" method="get" action="/trajet">
+  {{ station_select("de", de, "Départ") }}
+  <div class="swap-row">
+    <a class="swap" href="{{ with_query('/trajet', de=vers, vers=de, heure=heure) }}" aria-label="Inverser départ et arrivée" title="Inverser">⇅</a>
+  </div>
+  {{ station_select("vers", vers, "Arrivée") }}
+  <label class="field">
+    <span>Heure</span>
+    <input type="time" name="heure" value="{{ heure }}" required>
+  </label>
+  <div class="actions">
+    <button type="submit" class="btn">Chercher</button>
+    {% if de and vers %}<a class="btn btn-ghost" href="{{ with_query('/trajet', de=de, vers=vers) }}">Maintenant</a>{% endif %}
+  </div>
+</form>
+
+{% if view is not none %}
+  <div id="trains" data-refresh="{{ with_query('/fragments/trajet', de=de, vers=vers, heure=heure_param) }}">
+    {% include "_trains.html" %}
+  </div>
+{% endif %}
+
+{% if user %}
+  <p><a class="btn btn-ghost" href="{{ with_query('/suivre', de=de, vers=vers) }}">+ Suivre un train</a></p>
+{% else %}
+  <p><a class="btn" href="/login">Se connecter avec Discord</a></p>
+{% endif %}
+{% endblock %}

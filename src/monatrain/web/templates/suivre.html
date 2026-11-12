@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% from "_macros.html" import station_select %}
+{% block title %}Suivre un train · Monatrain{% endblock %}
+{% block content %}
+<h1>Suivre un train</h1>
+{% if error %}<div class="banner banner-error" role="alert">{{ error }}</div>{% endif %}
+<form class="card form" method="post" action="/suivis">
+  {{ station_select("de", de, "Départ") }}
+  {{ station_select("vers", vers, "Arrivée") }}
+  <label class="field">
+    <span>Heure de départ</span>
+    <input type="time" name="heure" value="{{ heure }}" required>
+  </label>
+  <fieldset class="days">
+    <legend>Jours</legend>
+    <div class="presets">
+      {% for label, days in presets %}
+        <button type="button" class="chip" data-days="{{ days }}">{{ label }}</button>
+      {% endfor %}
+    </div>
+    <div class="day-boxes">
+      {% for name in ["lun", "mar", "mer", "jeu", "ven", "sam", "dim"] %}
+        <label class="day"><input type="checkbox" name="jours" value="{{ name }}" {% if name in checked %}checked{% endif %}><span>{{ name }}</span></label>
+      {% endfor %}
+    </div>
+  </fieldset>
+  <div class="actions">
+    <button type="submit" class="btn">Suivre</button>
+    <a class="btn btn-ghost" href="/">Annuler</a>
+  </div>
+</form>
+{% endblock %}

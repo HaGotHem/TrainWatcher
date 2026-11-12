@@ -1,0 +1,11 @@
+{% macro station_select(name, selected, label) %}
+<label class="field">
+  <span>{{ label }}</span>
+  <select name="{{ name }}" required>
+    <option value="">Choisir une gare</option>
+    {% for s in stations %}
+      <option value="{{ s.id }}" {% if s.id == selected %}selected{% endif %}>{{ s.name }}</option>
+    {% endfor %}
+  </select>
+</label>
+{% endmacro %}

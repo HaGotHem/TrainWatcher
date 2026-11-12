@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% from "_macros.html" import station_select %}
+{% block title %}Mes trains · Monatrain{% endblock %}
+{% block content %}
+{% if flash %}<div class="banner banner-ok" role="status">{{ flash }}</div>{% endif %}
+{% if user.dm_ok == 0 %}
+  <div class="banner banner-warn">
+    Le bot ne peut pas t'envoyer de DM.
+    {% if install_url %}<a class="link" href="{{ install_url }}">Installer l'application Discord</a>{% endif %}
+  </div>
+{% endif %}
+
+<h1>Mes trains aujourd'hui</h1>
+<div id="trains" data-refresh="/fragments/mes-trains">
+  {% include "_trains.html" %}
+</div>
+<p><a class="btn" href="/suivre">+ Suivre un train</a></p>
+
+<h2>Recherche rapide</h2>
+<form class="card form" method="get" action="/trajet">
+  {{ station_select("de", de, "Départ") }}
+  {{ station_select("vers", vers, "Arrivée") }}
+  <input type="hidden" name="heure" value="{{ heure }}">
+  <div class="actions"><button type="submit" class="btn">Chercher</button></div>
+</form>
+
+{% if follows %}
+  <h2>Tous mes trains suivis</h2>
+  <ul class="cards">
+    {% for f in follows %}
+      <li class="card follow">
+        <div class="train-title">{{ station_name(f.from_id) }} → {{ station_name(f.to_id) }}</div>
+        <div class="muted">{{ f.dep_time }} · {{ days[f.id] }} · train {{ f.train_number }}</div>
+        <div class="actions">
+          <details>
+            <summary>Changer l'heure</summary>
+            <form class="inline" method="post" action="/suivis/{{ f.id }}/remplacer">
+              <input type="time" name="heure" value="{{ f.dep_time }}" required aria-label="Nouvelle heure">
+              <button type="submit" class="btn btn-small">Remplacer</button>
+            </form>
+          </details>
+          <form method="post" action="/suivis/{{ f.id }}/supprimer">
+            <button type="submit" class="btn btn-small btn-danger">Retirer</button>
+          </form>
+        </div>
+      </li>
+    {% endfor %}
+  </ul>
+{% endif %}
+{% endblock %}
