@@ -67,10 +67,11 @@ class Watcher:
         self._poll_interval = timedelta(seconds=poll_interval_s)
         self._window_before = timedelta(minutes=window_before_min)
         self._last_poll: dict[GroupKey, datetime] = {}
-        # (follow id, service date) with at least one successful, fresh journeys call.
-        self._polled_ok: set[tuple[int, date]] = set()
-        # follow id -> earliest time of the next suggestion attempt, after a failed one.
-        self._suggest_retry_at: dict[int, datetime] = {}
+        # (follow id, dep_time, service date) with at least one successful, fresh journeys call.
+        # dep_time is part of every key so that a replaced follow never inherits the old train's state.
+        self._polled_ok: set[tuple[int, str, date]] = set()
+        # (follow id, dep_time) -> earliest time of the next suggestion attempt, after a failed one.
+        self._suggest_retry_at: dict[tuple[int, str], datetime] = {}
 
     async def tick(self, now: datetime) -> None:
         today = now.astimezone(PARIS).date()
@@ -97,7 +98,10 @@ class Watcher:
             if last is not None and now - last < self._poll_interval:
                 continue
             self._last_poll[key] = now
-            await self._poll_group(key, subscribers)
+            try:
+                await self._poll_group(key, subscribers)
+            except Exception:
+                log.exception("Interrogation du groupe %s en échec", key)
 
         for follow in follows:
             try:
@@ -123,7 +127,7 @@ class Watcher:
 
     def _forget_old(self, oldest_day: date) -> None:
         self._last_poll = {k: v for k, v in self._last_poll.items() if k[2] >= oldest_day}
-        self._polled_ok = {k for k in self._polled_ok if k[1] >= oldest_day}
+        self._polled_ok = {k for k in self._polled_ok if k[2] >= oldest_day}
 
     async def _poll_group(self, key: GroupKey, subscribers: list[Follow]) -> None:
         from_id, to_id, d, dep_time = key
@@ -139,7 +143,7 @@ class Watcher:
             return
 
         for follow in subscribers:
-            self._polled_ok.add((follow.id, d))
+            self._polled_ok.add((follow.id, follow.dep_time, d))
         train = next((t for t in fetched.items if t.base_departure == base), None)
         if train is None:
             return
@@ -167,7 +171,7 @@ class Watcher:
         for d in days:  # oldest first: the latest missing day ends up in missing_day
             if not runs_on(follow.days, d) or _base(d, follow.dep_time) >= now:
                 continue
-            if self._repo.get_daily(follow.id, d).found is None and (follow.id, d) in self._polled_ok:
+            if self._repo.get_daily(follow.id, d).found is None and (follow.id, follow.dep_time, d) in self._polled_ok:
                 self._repo.set_found(follow.id, d, False)
             if self._repo.get_daily(follow.id, d).found is False:
                 missing_day = d
@@ -175,7 +179,7 @@ class Watcher:
             return
         if self._repo.missing_streak(follow.id) < _MISSING_STREAK_FOR_SUGGESTION:
             return
-        retry_at = self._suggest_retry_at.get(follow.id)
+        retry_at = self._suggest_retry_at.get((follow.id, follow.dep_time))
         if retry_at is None or now >= retry_at:
             await self._suggest(follow, missing_day, now)
 
@@ -184,7 +188,7 @@ class Watcher:
             alt = await nearest_alternative(_StaleProbe(self._source), follow, d)
         except (SncfError, _StaleAnswer) as exc:
             log.warning("Train de remplacement indisponible pour le suivi %s : %r", follow.id, exc)
-            self._suggest_retry_at[follow.id] = now + _SUGGESTION_RETRY
+            self._suggest_retry_at[(follow.id, follow.dep_time)] = now + _SUGGESTION_RETRY
             return
         except Exception:
             log.exception("Échec de la recherche de remplacement pour le suivi %s", follow.id)

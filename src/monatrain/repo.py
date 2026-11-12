@@ -117,16 +117,25 @@ class Repo:
         return cur.rowcount > 0
 
     def replace_dep_time(self, user_id: str, follow_id: int, dep_time: str, train_number: str) -> bool:
+        """Point a follow at another train; its daily state described the old one, so it is cleared too."""
+        self._conn.execute("BEGIN")
         try:
             cur = self._conn.execute(
                 "UPDATE followed SET dep_time = ?, train_number = ?, suggestion_sent = 0 "
                 "WHERE id = ? AND user_id = ?",
                 (dep_time, train_number, follow_id, user_id),
             )
+            if cur.rowcount > 0:
+                self._conn.execute("DELETE FROM daily_state WHERE followed_id = ?", (follow_id,))
         except sqlite3.IntegrityError as exc:
+            self._conn.execute("ROLLBACK")
             if _is_unique_violation(exc):
                 raise DuplicateFollowError(f"Un train est déjà suivi à {dep_time}") from exc
             raise
+        except BaseException:
+            self._conn.execute("ROLLBACK")
+            raise
+        self._conn.execute("COMMIT")
         return cur.rowcount > 0
 
     def mark_suggestion_sent(self, follow_id: int) -> None:

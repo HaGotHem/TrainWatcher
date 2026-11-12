@@ -98,10 +98,13 @@ async def replace_follow_time(
     found = await resolve_train(source, follow.from_id, follow.to_id, hhmm, follow.days, now)
     dep_time = found.base_departure.astimezone(PARIS).strftime("%H:%M")
     try:
-        repo.replace_dep_time(user_id, follow_id, dep_time, found.train_number)
+        replaced = repo.replace_dep_time(user_id, follow_id, dep_time, found.train_number)
     except DuplicateFollowError as exc:
         raise FollowError("Tu suis déjà ce train.") from exc
-    return next(f for f in repo.list_follows(user_id) if f.id == follow_id)
+    updated = next((f for f in repo.list_follows(user_id) if f.id == follow_id), None) if replaced else None
+    if updated is None:
+        raise FollowError("Train introuvable dans ta liste.")
+    return updated
 
 
 async def today_statuses(repo: Repo, source, user_id: str, now: datetime) -> list[TodayItem]:
@@ -117,7 +120,8 @@ async def today_statuses(repo: Repo, source, user_id: str, now: datetime) -> lis
     for follow in follows:
         scheduled = _at(today, follow.dep_time)
         if scheduled < now - LIVE_BEFORE:
-            states[follow.id] = "past"
+            # A train the watcher found missing today stays "missing" after its departure.
+            states[follow.id] = "missing" if repo.get_daily(follow.id, today).found is False else "past"
         elif scheduled > now + LIVE_AFTER:
             states[follow.id] = "upcoming"
         else:
