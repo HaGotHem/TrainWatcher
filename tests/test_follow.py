@@ -868,3 +868,77 @@ async def test_replace_follow_time_malformed_time(repo, fixed_now, hhmm):
     assert str(exc_info.value) == MSG_BAD_TIME
     assert source.calls == []
     assert repo.list_follows(USER) == [follow]
+
+
+# --- Final review C1 / must-fix 1 (ruling R24): concurrent delete during replace -----------------
+
+
+class _DeletingSource(FakeSource):
+    """Deletes the follow while the journeys call is in flight (e.g. "Supprimer" clicked on the site)."""
+
+    def __init__(self, repo, user_id: str, follow_id: int, items: list[TrainInfo]) -> None:
+        super().__init__(items)
+        self._repo, self._user_id, self._follow_id = repo, user_id, follow_id
+
+    async def journeys(self, from_id, to_id, when, count=8):
+        self._repo.delete_follow(self._user_id, self._follow_id)
+        return await super().journeys(from_id, to_id, when, count)
+
+
+async def test_replace_follow_time_follow_deleted_concurrently(repo, fixed_now):
+    _user(repo)
+    follow = _follow(repo, "08:30", number="86999")
+    source = _DeletingSource(repo, USER, follow.id, [train(at(FRI, "08:04"), "86053")])
+
+    with pytest.raises(FollowError) as exc_info:  # never StopIteration / RuntimeError
+        await _replace(repo, source, USER, follow.id, "08:00", fixed_now)
+
+    assert str(exc_info.value) == MSG_NOT_YOURS
+    assert len(source.calls) == 1
+    assert repo.list_follows(USER) == []
+
+
+async def test_replace_follow_time_clears_daily_state(repo, fixed_now):
+    _user(repo)
+    follow = _follow(repo, "08:30", number="86999")
+    repo.set_found(follow.id, THU, False)
+    repo.set_found(follow.id, FRI, False)
+    source = FakeSource([train(at(FRI, "08:04"), "86053")])
+
+    await _replace(repo, source, USER, follow.id, "08:00", fixed_now)
+
+    assert repo.missing_streak(follow.id) == 0
+    assert repo.get_daily(follow.id, FRI).found is None
+
+
+# --- Final review I2 (ruling R24): "Introuvable" survives past departure ------------------------
+
+
+async def test_today_statuses_past_train_not_found_today_is_missing(repo):
+    _user(repo)
+    follow = _follow(repo, "07:00", number="86041")  # left 1 h 30 ago: outside the live window
+    repo.set_found(follow.id, FRI, False)
+    source = FakeSource([])
+
+    [item] = await today_statuses(repo, source, USER, NOW_0830)
+
+    assert item.follow == follow
+    assert item.state == "missing"
+    assert item.train is None
+    assert source.calls == []  # still no API call for a past train
+
+
+@pytest.mark.parametrize("found", [None, True], ids=["found-unknown", "found-true"])
+async def test_today_statuses_past_train_otherwise_stays_past(repo, found):
+    _user(repo)
+    follow = _follow(repo, "07:00", number="86041")
+    if found is not None:
+        repo.set_found(follow.id, FRI, found)
+    repo.set_found(follow.id, THU, False)  # yesterday's state does not count
+    source = FakeSource([])
+
+    [item] = await today_statuses(repo, source, USER, NOW_0830)
+
+    assert item.state == "past"
+    assert item.train is None
+    assert source.calls == []

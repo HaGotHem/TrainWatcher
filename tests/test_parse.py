@@ -244,3 +244,29 @@ def test_base_schedule_journey_with_shifted_departure_is_on_time():
     assert t.realtime is False
     assert t.status is Status.ON_TIME
     assert t.delay_min == 6
+
+
+# --- Final review M1 / must-fix 2 (ruling R24): one malformed item is skipped, not fatal ---------
+
+
+def test_journey_without_any_departure_time_is_skipped():
+    payload = load("journeys_monaco_nice.json")
+    bad = next(s for s in payload["journeys"][1]["sections"] if s["type"] == "public_transport")
+    for key in ("base_departure_date_time", "departure_date_time"):
+        bad.pop(key, None)
+
+    trains = parse_journeys(payload, MONACO, NICE)  # no exception
+
+    assert [t.train_number for t in trains] == ["881202", "881106", "86006"]
+
+
+def test_departure_without_any_departure_time_is_skipped():
+    payload = load("departures_nice.json")
+    sdt = payload["departures"][0]["stop_date_time"]
+    for key in ("base_departure_date_time", "departure_date_time"):
+        sdt.pop(key, None)
+
+    trains = parse_departures(payload, NICE)  # no exception
+
+    assert len(trains) == 3
+    assert "881303" not in [t.train_number for t in trains]

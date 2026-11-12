@@ -112,3 +112,10 @@ def test_settings_repr_does_not_leak_secrets():
     assert "tok-bot" not in text
     assert "client-secret" not in text
     assert "sess-secret" not in text
+
+
+# --- Final review (ruling R24): PUBLIC_URL trailing slash ------------------------------------------
+
+def test_settings_public_url_trailing_slash_stripped():
+    s = Settings.from_env({"SNCF_TOKEN": "a", "SESSION_SECRET": "b", "PUBLIC_URL": "https://train.sbertacchi.dev/"})
+    assert s.public_url == "https://train.sbertacchi.dev"

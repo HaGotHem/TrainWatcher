@@ -176,3 +176,14 @@ def test_next_service_date_from_saturday_with_weekdays():
 def test_next_service_date_crosses_year_boundary():
     now = datetime(2026, 12, 31, 23, 0, tzinfo=PARIS)  # Thursday
     assert next_service_date(ALL_DAYS, "08:00", now) == date(2027, 1, 1)
+
+
+# --- Final review (ruling R24): "tu" register everywhere -----------------------------------------
+
+
+def test_parse_days_error_uses_tu_form():
+    with pytest.raises(ValueError) as exc_info:
+        parse_days("lundi-bof")
+    message = str(exc_info.value)
+    assert "Jour inconnu" in message
+    assert "Utilisez" not in message

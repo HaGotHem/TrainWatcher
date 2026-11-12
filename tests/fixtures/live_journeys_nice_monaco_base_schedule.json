@@ -1,0 +1,3102 @@
+{
+ "links": [
+  {
+   "href": "https://api.sncf.com/v1/coverage/sncf/journeys?from=stop_area:SNCF:87756056&to=stop_area:SNCF:87756403&datetime=20261112T115500&datetime_represents=departure&data_freshness=realtime&max_nb_transfers=0&direct_path=none&count=8",
+   "templated": false,
+   "rel": "bypass_disruptions",
+   "type": "bypass_disruptions"
+  },
+  {
+   "href": "https://api.sncf.com/v1/coverage/sncf/journeys?from=stop_area:SNCF:87756056&to=stop_area:SNCF:87756403&datetime=20261112T122610&datetime_represents=departure&data_freshness=base_schedule&max_nb_transfers=0&direct_path=none&count=8",
+   "templated": false,
+   "rel": "next",
+   "type": "next"
+  },
+  {
+   "href": "https://api.sncf.com/v1/coverage/sncf/journeys?from=stop_area:SNCF:87756056&to=stop_area:SNCF:87756403&datetime=20261112T124950&datetime_represents=arrival&data_freshness=base_schedule&max_nb_transfers=0&direct_path=none&count=8",
+   "templated": false,
+   "rel": "prev",
+   "type": "prev"
+  },
+  {
+   "href": "https://api.sncf.com/v1/coverage/sncf/journeys?from=stop_area:SNCF:87756056&to=stop_area:SNCF:87756403&datetime=20261112T000000&datetime_represents=departure&data_freshness=base_schedule&max_nb_transfers=0&direct_path=none&count=8",
+   "templated": false,
+   "rel": "first",
+   "type": "first"
+  },
+  {
+   "href": "https://api.sncf.com/v1/coverage/sncf/journeys?from=stop_area:SNCF:87756056&to=stop_area:SNCF:87756403&datetime=20261112T235959&datetime_represents=arrival&data_freshness=base_schedule&max_nb_transfers=0&direct_path=none&count=8",
+   "templated": false,
+   "rel": "last",
+   "type": "last"
+  },
+  {
+   "href": "https://api.sncf.com/v1/coverage/sncf/vehicle_journeys/{vehicle_journey.id}",
+   "templated": true,
+   "rel": "vehicle_journeys",
+   "type": "vehicle_journey"
+  },
+  {
+   "href": "https://api.sncf.com/v1/coverage/sncf/stop_areas/{stop_area.id}",
+   "templated": true,
+   "rel": "stop_areas",
+   "type": "stop_area"
+  },
+  {
+   "href": "https://api.sncf.com/v1/coverage/sncf/disruptions/{disruptions.id}",
+   "templated": true,
+   "rel": "disruptions",
+   "type": "disruptions"
+  },
+  {
+   "href": "https://api.sncf.com/v1/coverage/sncf/commercial_modes/{commercial_modes.id}",
+   "templated": true,
+   "rel": "commercial_modes",
+   "type": "commercial_modes"
+  },
+  {
+   "href": "https://api.sncf.com/v1/coverage/sncf/physical_modes/{physical_mode.id}",
+   "templated": true,
+   "rel": "physical_modes",
+   "type": "physical_mode"
+  },
+  {
+   "href": "https://api.sncf.com/v1/coverage/sncf/commercial_modes/{commercial_mode.id}",
+   "templated": true,
+   "rel": "commercial_modes",
+   "type": "commercial_mode"
+  },
+  {
+   "href": "https://api.sncf.com/v1/coverage/sncf/physical_modes/{physical_modes.id}",
+   "templated": true,
+   "rel": "physical_modes",
+   "type": "physical_modes"
+  },
+  {
+   "href": "https://api.sncf.com/v1/coverage/sncf/companies/{company.id}",
+   "templated": true,
+   "rel": "companies",
+   "type": "company"
+  },
+  {
+   "href": "https://api.sncf.com/v1/coverage/sncf/networks/{network.id}",
+   "templated": true,
+   "rel": "networks",
+   "type": "network"
+  },
+  {
+   "href": "https://api.sncf.com/v1/coverage/sncf/disruptions/{disruption.id}",
+   "templated": true,
+   "rel": "disruptions",
+   "type": "disruption"
+  },
+  {
+   "href": "https://api.sncf.com/v1/coverage/sncf/trips/{trip.id}",
+   "templated": true,
+   "rel": "trips",
+   "type": "trip"
+  },
+  {
+   "href": "https://api.sncf.com/v1/coverage/sncf/routes/{route.id}",
+   "templated": true,
+   "rel": "routes",
+   "type": "route"
+  },
+  {
+   "href": "https://api.sncf.com/v1/coverage/sncf/stop_points/{stop_point.id}",
+   "templated": true,
+   "rel": "stop_points",
+   "type": "stop_point"
+  },
+  {
+   "href": "https://api.sncf.com/v1/coverage/sncf/lines/{line.id}",
+   "templated": true,
+   "rel": "lines",
+   "type": "line"
+  },
+  {
+   "href": "https://api.sncf.com/v1/coverage/sncf/lines/{lines.id}",
+   "templated": true,
+   "rel": "lines",
+   "type": "lines"
+  }
+ ],
+ "journeys": [
+  {
+   "duration": 1440,
+   "nb_transfers": 0,
+   "departure_date_time": "20261112T122600",
+   "arrival_date_time": "20261112T125000",
+   "requested_date_time": "20261112T115500",
+   "type": "best",
+   "status": "NO_SERVICE",
+   "air_pollutants": {
+    "unit": "g",
+    "values": {
+     "nox": 0.0,
+     "pm": 0.0
+    }
+   },
+   "sections": [
+    {
+     "id": "jMmWsy7d8RSPZaTq7QSBcL_0",
+     "duration": 0,
+     "departure_date_time": "20261112T122600",
+     "arrival_date_time": "20261112T122600",
+     "to": {
+      "id": "stop_point:SNCF:87756056:Train",
+      "name": "Nice (Nice)",
+      "quality": 0,
+      "stop_point": {
+       "id": "stop_point:SNCF:87756056:Train",
+       "name": "Nice",
+       "label": "Nice (Nice)",
+       "links": []
+      },
+      "embedded_type": "stop_point"
+     },
+     "from": {
+      "id": "stop_area:SNCF:87756056",
+      "name": "Nice (Nice)",
+      "quality": 0,
+      "embedded_type": "stop_area"
+     },
+     "mode": "walking",
+     "type": "crow_fly",
+     "links": []
+    },
+    {
+     "id": "section_7_0",
+     "duration": 1440,
+     "departure_date_time": "20261112T122600",
+     "arrival_date_time": "20261112T125000",
+     "base_departure_date_time": "20261112T122600",
+     "base_arrival_date_time": "20261112T125000",
+     "data_freshness": "base_schedule",
+     "to": {
+      "id": "stop_point:SNCF:87756403:Train",
+      "name": "Monaco Monte Carlo (Monaco)",
+      "quality": 0,
+      "stop_point": {
+       "id": "stop_point:SNCF:87756403:Train",
+       "name": "Monaco Monte Carlo",
+       "label": "Monaco Monte Carlo (Monaco)",
+       "links": []
+      },
+      "embedded_type": "stop_point"
+     },
+     "from": {
+      "id": "stop_point:SNCF:87756056:Train",
+      "name": "Nice (Nice)",
+      "quality": 0,
+      "stop_point": {
+       "id": "stop_point:SNCF:87756056:Train",
+       "name": "Nice",
+       "label": "Nice (Nice)",
+       "links": []
+      },
+      "embedded_type": "stop_point"
+     },
+     "additional_informations": [
+      "regular"
+     ],
+     "type": "public_transport",
+     "display_informations": {
+      "commercial_mode": "ZOU !",
+      "direction": "Ventimiglia (Ventimiglia)",
+      "label": "C3",
+      "color": "",
+      "code": "C3",
+      "headsign": "86033",
+      "name": "C3",
+      "links": [
+       {
+        "templated": false,
+        "rel": "disruptions",
+        "internal": true,
+        "type": "disruption",
+        "id": "d9eb511f-0d66-45ca-bbb8-9e7b21164deb"
+       },
+       {
+        "templated": false,
+        "rel": "terminus",
+        "internal": true,
+        "type": "stop_area",
+        "id": "stop_area:SNCF:83045013"
+       }
+      ],
+      "text_color": "",
+      "trip_short_name": "86033",
+      "company": "SNCF Voyageurs SA",
+      "description": "",
+      "physical_mode": "TER / Intercités"
+     },
+     "links": [
+      {
+       "type": "company",
+       "id": "company:SNCF:5111"
+      },
+      {
+       "type": "vehicle_journey",
+       "id": "vehicle_journey:SNCF:2026-11-12:86033:5111:Train"
+      },
+      {
+       "type": "line",
+       "id": "line:SNCF:FR:Line::0c436faa-ccd8-4cb5-9b79-1c8a701364c4:"
+      },
+      {
+       "type": "route",
+       "id": "route:SNCF:FR:Line::0c436faa-ccd8-4cb5-9b79-1c8a701364c4:"
+      },
+      {
+       "type": "commercial_mode",
+       "id": "commercial_mode:FR:Branding::6e0a3931-d3d3-4576-a37a-b133fac0dd44:"
+      },
+      {
+       "type": "physical_mode",
+       "id": "physical_mode:Train"
+      },
+      {
+       "type": "network",
+       "id": "network:SNCF:FR:Branding::6e0a3931-d3d3-4576-a37a-b133fac0dd44:"
+      }
+     ]
+    },
+    {
+     "id": "jvTUkZQmR3Lj7e7mcRKR7T_0",
+     "duration": 0,
+     "departure_date_time": "20261112T125000",
+     "arrival_date_time": "20261112T125000",
+     "to": {
+      "id": "stop_area:SNCF:87756403",
+      "name": "Monaco Monte Carlo (Monaco)",
+      "quality": 0,
+      "embedded_type": "stop_area"
+     },
+     "from": {
+      "id": "stop_point:SNCF:87756403:Train",
+      "name": "Monaco Monte Carlo (Monaco)",
+      "quality": 0,
+      "stop_point": {
+       "id": "stop_point:SNCF:87756403:Train",
+       "name": "Monaco Monte Carlo",
+       "label": "Monaco Monte Carlo (Monaco)",
+       "links": []
+      },
+      "embedded_type": "stop_point"
+     },
+     "mode": "walking",
+     "type": "crow_fly",
+     "links": []
+    }
+   ],
+   "links": [
+    {
+     "href": "https://api.sncf.com/v1/coverage/sncf/journeys?from=stop_area:SNCF:87756056&to=stop_area:SNCF:87756403&datetime=20261112T122600&datetime_represents=departure&data_freshness=base_schedule&max_nb_transfers=0&direct_path=none&count=8&first_section_mode%5B%5D=walking&last_section_mode%5B%5D=walking&min_nb_transfers=0&min_nb_journeys=5&is_journey_schedules=True&allowed_id%5B%5D=stop_point:SNCF:87756403:Train&allowed_id%5B%5D=stop_point:SNCF:87756056:Train&_pt_planner=kraken",
+     "templated": false,
+     "rel": "same_journey_schedules",
+     "type": "journeys"
+    },
+    {
+     "href": "https://api.sncf.com/v1/coverage/sncf/journeys?from=stop_area:SNCF:87756056&to=stop_area:SNCF:87756403&datetime=20261112T122600&datetime_represents=departure&data_freshness=base_schedule&max_nb_transfers=0&direct_path=none&count=1&first_section_mode%5B%5D=walking&last_section_mode%5B%5D=walking&min_nb_transfers=0&min_nb_journeys=1&is_journey_schedules=True&allowed_id%5B%5D=stop_point:SNCF:87756403:Train&allowed_id%5B%5D=stop_point:SNCF:87756056:Train",
+     "templated": false,
+     "rel": "this_journey",
+     "type": "journeys"
+    }
+   ]
+  },
+  {
+   "duration": 1440,
+   "nb_transfers": 0,
+   "departure_date_time": "20261112T125500",
+   "arrival_date_time": "20261112T131900",
+   "requested_date_time": "20261112T115500",
+   "type": "rapid",
+   "status": "",
+   "air_pollutants": {
+    "unit": "g",
+    "values": {
+     "nox": 0.0,
+     "pm": 0.0
+    }
+   },
+   "sections": [
+    {
+     "id": "QbYRB2kdTk4PSEGeaHjatg_0",
+     "duration": 0,
+     "departure_date_time": "20261112T125500",
+     "arrival_date_time": "20261112T125500",
+     "to": {
+      "id": "stop_point:SNCF:87756056:Train",
+      "name": "Nice (Nice)",
+      "quality": 0,
+      "stop_point": {
+       "id": "stop_point:SNCF:87756056:Train",
+       "name": "Nice",
+       "label": "Nice (Nice)",
+       "links": []
+      },
+      "embedded_type": "stop_point"
+     },
+     "from": {
+      "id": "stop_area:SNCF:87756056",
+      "name": "Nice (Nice)",
+      "quality": 0,
+      "embedded_type": "stop_area"
+     },
+     "mode": "walking",
+     "type": "crow_fly",
+     "links": []
+    },
+    {
+     "id": "section_6_0",
+     "duration": 1440,
+     "departure_date_time": "20261112T125500",
+     "arrival_date_time": "20261112T131900",
+     "base_departure_date_time": "20261112T125500",
+     "base_arrival_date_time": "20261112T131900",
+     "data_freshness": "base_schedule",
+     "to": {
+      "id": "stop_point:SNCF:87756403:Train",
+      "name": "Monaco Monte Carlo (Monaco)",
+      "quality": 0,
+      "stop_point": {
+       "id": "stop_point:SNCF:87756403:Train",
+       "name": "Monaco Monte Carlo",
+       "label": "Monaco Monte Carlo (Monaco)",
+       "links": []
+      },
+      "embedded_type": "stop_point"
+     },
+     "from": {
+      "id": "stop_point:SNCF:87756056:Train",
+      "name": "Nice (Nice)",
+      "quality": 0,
+      "stop_point": {
+       "id": "stop_point:SNCF:87756056:Train",
+       "name": "Nice",
+       "label": "Nice (Nice)",
+       "links": []
+      },
+      "embedded_type": "stop_point"
+     },
+     "additional_informations": [
+      "regular"
+     ],
+     "type": "public_transport",
+     "display_informations": {
+      "commercial_mode": "ZOU !",
+      "direction": "Ventimiglia (Ventimiglia)",
+      "label": "C3",
+      "color": "",
+      "code": "C3",
+      "headsign": "86035",
+      "name": "C3",
+      "links": [
+       {
+        "templated": false,
+        "rel": "terminus",
+        "internal": true,
+        "type": "stop_area",
+        "id": "stop_area:SNCF:83045013"
+       }
+      ],
+      "text_color": "",
+      "trip_short_name": "86035",
+      "company": "SNCF Voyageurs SA",
+      "description": "",
+      "physical_mode": "TER / Intercités"
+     },
+     "links": [
+      {
+       "type": "company",
+       "id": "company:SNCF:5111"
+      },
+      {
+       "type": "vehicle_journey",
+       "id": "vehicle_journey:SNCF:2026-11-12:86035:5111:Train"
+      },
+      {
+       "type": "line",
+       "id": "line:SNCF:FR:Line::0c436faa-ccd8-4cb5-9b79-1c8a701364c4:"
+      },
+      {
+       "type": "route",
+       "id": "route:SNCF:FR:Line::0c436faa-ccd8-4cb5-9b79-1c8a701364c4:"
+      },
+      {
+       "type": "commercial_mode",
+       "id": "commercial_mode:FR:Branding::6e0a3931-d3d3-4576-a37a-b133fac0dd44:"
+      },
+      {
+       "type": "physical_mode",
+       "id": "physical_mode:Train"
+      },
+      {
+       "type": "network",
+       "id": "network:SNCF:FR:Branding::6e0a3931-d3d3-4576-a37a-b133fac0dd44:"
+      }
+     ]
+    },
+    {
+     "id": "sRTKFVrGetZB9r2kutfUjf_0",
+     "duration": 0,
+     "departure_date_time": "20261112T131900",
+     "arrival_date_time": "20261112T131900",
+     "to": {
+      "id": "stop_area:SNCF:87756403",
+      "name": "Monaco Monte Carlo (Monaco)",
+      "quality": 0,
+      "embedded_type": "stop_area"
+     },
+     "from": {
+      "id": "stop_point:SNCF:87756403:Train",
+      "name": "Monaco Monte Carlo (Monaco)",
+      "quality": 0,
+      "stop_point": {
+       "id": "stop_point:SNCF:87756403:Train",
+       "name": "Monaco Monte Carlo",
+       "label": "Monaco Monte Carlo (Monaco)",
+       "links": []
+      },
+      "embedded_type": "stop_point"
+     },
+     "mode": "walking",
+     "type": "crow_fly",
+     "links": []
+    }
+   ],
+   "links": [
+    {
+     "href": "https://api.sncf.com/v1/coverage/sncf/journeys?from=stop_area:SNCF:87756056&to=stop_area:SNCF:87756403&datetime=20261112T125500&datetime_represents=departure&data_freshness=base_schedule&max_nb_transfers=0&direct_path=none&count=8&first_section_mode%5B%5D=walking&last_section_mode%5B%5D=walking&min_nb_transfers=0&min_nb_journeys=5&is_journey_schedules=True&allowed_id%5B%5D=stop_point:SNCF:87756403:Train&allowed_id%5B%5D=stop_point:SNCF:87756056:Train&_pt_planner=kraken",
+     "templated": false,
+     "rel": "same_journey_schedules",
+     "type": "journeys"
+    },
+    {
+     "href": "https://api.sncf.com/v1/coverage/sncf/journeys?from=stop_area:SNCF:87756056&to=stop_area:SNCF:87756403&datetime=20261112T125500&datetime_represents=departure&data_freshness=base_schedule&max_nb_transfers=0&direct_path=none&count=1&first_section_mode%5B%5D=walking&last_section_mode%5B%5D=walking&min_nb_transfers=0&min_nb_journeys=1&is_journey_schedules=True&allowed_id%5B%5D=stop_point:SNCF:87756403:Train&allowed_id%5B%5D=stop_point:SNCF:87756056:Train",
+     "templated": false,
+     "rel": "this_journey",
+     "type": "journeys"
+    }
+   ]
+  },
+  {
+   "duration": 1440,
+   "nb_transfers": 0,
+   "departure_date_time": "20261112T130300",
+   "arrival_date_time": "20261112T132700",
+   "requested_date_time": "20261112T115500",
+   "type": "rapid",
+   "status": "NO_SERVICE",
+   "air_pollutants": {
+    "unit": "g",
+    "values": {
+     "nox": 0.0,
+     "pm": 0.0
+    }
+   },
+   "sections": [
+    {
+     "id": "MGHzwALCeUSAKvquCSH7VM_0",
+     "duration": 0,
+     "departure_date_time": "20261112T130300",
+     "arrival_date_time": "20261112T130300",
+     "to": {
+      "id": "stop_point:SNCF:87756056:Train",
+      "name": "Nice (Nice)",
+      "quality": 0,
+      "stop_point": {
+       "id": "stop_point:SNCF:87756056:Train",
+       "name": "Nice",
+       "label": "Nice (Nice)",
+       "links": []
+      },
+      "embedded_type": "stop_point"
+     },
+     "from": {
+      "id": "stop_area:SNCF:87756056",
+      "name": "Nice (Nice)",
+      "quality": 0,
+      "embedded_type": "stop_area"
+     },
+     "mode": "walking",
+     "type": "crow_fly",
+     "links": []
+    },
+    {
+     "id": "section_5_0",
+     "duration": 1440,
+     "departure_date_time": "20261112T130300",
+     "arrival_date_time": "20261112T132700",
+     "base_departure_date_time": "20261112T130300",
+     "base_arrival_date_time": "20261112T132700",
+     "data_freshness": "base_schedule",
+     "to": {
+      "id": "stop_point:SNCF:87756403:Train",
+      "name": "Monaco Monte Carlo (Monaco)",
+      "quality": 0,
+      "stop_point": {
+       "id": "stop_point:SNCF:87756403:Train",
+       "name": "Monaco Monte Carlo",
+       "label": "Monaco Monte Carlo (Monaco)",
+       "links": []
+      },
+      "embedded_type": "stop_point"
+     },
+     "from": {
+      "id": "stop_point:SNCF:87756056:Train",
+      "name": "Nice (Nice)",
+      "quality": 0,
+      "stop_point": {
+       "id": "stop_point:SNCF:87756056:Train",
+       "name": "Nice",
+       "label": "Nice (Nice)",
+       "links": []
+      },
+      "embedded_type": "stop_point"
+     },
+     "additional_informations": [
+      "regular"
+     ],
+     "type": "public_transport",
+     "display_informations": {
+      "commercial_mode": "ZOU !",
+      "direction": "Menton (Menton)",
+      "label": "C13",
+      "color": "",
+      "code": "C13",
+      "headsign": "881223",
+      "name": "C13",
+      "links": [
+       {
+        "templated": false,
+        "rel": "disruptions",
+        "internal": true,
+        "type": "disruption",
+        "id": "ac1de96c-de22-4606-a26d-e94b557ed313"
+       },
+       {
+        "templated": false,
+        "rel": "terminus",
+        "internal": true,
+        "type": "stop_area",
+        "id": "stop_area:SNCF:87756486"
+       }
+      ],
+      "text_color": "",
+      "trip_short_name": "881223",
+      "company": "SNCF Voyageurs SA",
+      "description": "",
+      "physical_mode": "TER / Intercités"
+     },
+     "links": [
+      {
+       "type": "company",
+       "id": "company:SNCF:5111"
+      },
+      {
+       "type": "vehicle_journey",
+       "id": "vehicle_journey:SNCF:2026-11-12:881223:5111:Train"
+      },
+      {
+       "type": "line",
+       "id": "line:SNCF:FR:Line::96809d68-f37d-4e68-ac3c-3c0540f4e2f2:"
+      },
+      {
+       "type": "route",
+       "id": "route:SNCF:FR:Line::96809d68-f37d-4e68-ac3c-3c0540f4e2f2:"
+      },
+      {
+       "type": "commercial_mode",
+       "id": "commercial_mode:FR:Branding::6e0a3931-d3d3-4576-a37a-b133fac0dd44:"
+      },
+      {
+       "type": "physical_mode",
+       "id": "physical_mode:Train"
+      },
+      {
+       "type": "network",
+       "id": "network:SNCF:FR:Branding::6e0a3931-d3d3-4576-a37a-b133fac0dd44:"
+      }
+     ]
+    },
+    {
+     "id": "um3XPTkbhnnrdMBpEeormZ_0",
+     "duration": 0,
+     "departure_date_time": "20261112T132700",
+     "arrival_date_time": "20261112T132700",
+     "to": {
+      "id": "stop_area:SNCF:87756403",
+      "name": "Monaco Monte Carlo (Monaco)",
+      "quality": 0,
+      "embedded_type": "stop_area"
+     },
+     "from": {
+      "id": "stop_point:SNCF:87756403:Train",
+      "name": "Monaco Monte Carlo (Monaco)",
+      "quality": 0,
+      "stop_point": {
+       "id": "stop_point:SNCF:87756403:Train",
+       "name": "Monaco Monte Carlo",
+       "label": "Monaco Monte Carlo (Monaco)",
+       "links": []
+      },
+      "embedded_type": "stop_point"
+     },
+     "mode": "walking",
+     "type": "crow_fly",
+     "links": []
+    }
+   ],
+   "links": [
+    {
+     "href": "https://api.sncf.com/v1/coverage/sncf/journeys?from=stop_area:SNCF:87756056&to=stop_area:SNCF:87756403&datetime=20261112T130300&datetime_represents=departure&data_freshness=base_schedule&max_nb_transfers=0&direct_path=none&count=8&first_section_mode%5B%5D=walking&last_section_mode%5B%5D=walking&min_nb_transfers=0&min_nb_journeys=5&is_journey_schedules=True&allowed_id%5B%5D=stop_point:SNCF:87756403:Train&allowed_id%5B%5D=stop_point:SNCF:87756056:Train&_pt_planner=kraken",
+     "templated": false,
+     "rel": "same_journey_schedules",
+     "type": "journeys"
+    },
+    {
+     "href": "https://api.sncf.com/v1/coverage/sncf/journeys?from=stop_area:SNCF:87756056&to=stop_area:SNCF:87756403&datetime=20261112T130300&datetime_represents=departure&data_freshness=base_schedule&max_nb_transfers=0&direct_path=none&count=1&first_section_mode%5B%5D=walking&last_section_mode%5B%5D=walking&min_nb_transfers=0&min_nb_journeys=1&is_journey_schedules=True&allowed_id%5B%5D=stop_point:SNCF:87756403:Train&allowed_id%5B%5D=stop_point:SNCF:87756056:Train",
+     "templated": false,
+     "rel": "this_journey",
+     "type": "journeys"
+    }
+   ]
+  },
+  {
+   "duration": 1440,
+   "nb_transfers": 0,
+   "departure_date_time": "20261112T132400",
+   "arrival_date_time": "20261112T134800",
+   "requested_date_time": "20261112T115500",
+   "type": "rapid",
+   "status": "SIGNIFICANT_DELAYS",
+   "air_pollutants": {
+    "unit": "g",
+    "values": {
+     "nox": 0.0,
+     "pm": 0.0
+    }
+   },
+   "sections": [
+    {
+     "id": "GLtibqULSn74R9Rzi7n2D5_0",
+     "duration": 0,
+     "departure_date_time": "20261112T132400",
+     "arrival_date_time": "20261112T132400",
+     "to": {
+      "id": "stop_point:SNCF:87756056:Train",
+      "name": "Nice (Nice)",
+      "quality": 0,
+      "stop_point": {
+       "id": "stop_point:SNCF:87756056:Train",
+       "name": "Nice",
+       "label": "Nice (Nice)",
+       "links": []
+      },
+      "embedded_type": "stop_point"
+     },
+     "from": {
+      "id": "stop_area:SNCF:87756056",
+      "name": "Nice (Nice)",
+      "quality": 0,
+      "embedded_type": "stop_area"
+     },
+     "mode": "walking",
+     "type": "crow_fly",
+     "links": []
+    },
+    {
+     "id": "section_4_0",
+     "duration": 1440,
+     "departure_date_time": "20261112T132400",
+     "arrival_date_time": "20261112T134800",
+     "base_departure_date_time": "20261112T132400",
+     "base_arrival_date_time": "20261112T134800",
+     "data_freshness": "base_schedule",
+     "to": {
+      "id": "stop_point:SNCF:87756403:Train",
+      "name": "Monaco Monte Carlo (Monaco)",
+      "quality": 0,
+      "stop_point": {
+       "id": "stop_point:SNCF:87756403:Train",
+       "name": "Monaco Monte Carlo",
+       "label": "Monaco Monte Carlo (Monaco)",
+       "links": []
+      },
+      "embedded_type": "stop_point"
+     },
+     "from": {
+      "id": "stop_point:SNCF:87756056:Train",
+      "name": "Nice (Nice)",
+      "quality": 0,
+      "stop_point": {
+       "id": "stop_point:SNCF:87756056:Train",
+       "name": "Nice",
+       "label": "Nice (Nice)",
+       "links": []
+      },
+      "embedded_type": "stop_point"
+     },
+     "additional_informations": [
+      "regular"
+     ],
+     "type": "public_transport",
+     "display_informations": {
+      "commercial_mode": "ZOU !",
+      "direction": "Ventimiglia (Ventimiglia)",
+      "label": "C3",
+      "color": "",
+      "code": "C3",
+      "headsign": "86037",
+      "name": "C3",
+      "links": [
+       {
+        "templated": false,
+        "rel": "disruptions",
+        "internal": true,
+        "type": "disruption",
+        "id": "83b543d2-388d-4180-9dd2-b173e5112f5d"
+       },
+       {
+        "templated": false,
+        "rel": "terminus",
+        "internal": true,
+        "type": "stop_area",
+        "id": "stop_area:SNCF:83045013"
+       }
+      ],
+      "text_color": "",
+      "trip_short_name": "86037",
+      "company": "SNCF Voyageurs SA",
+      "description": "",
+      "physical_mode": "TER / Intercités"
+     },
+     "links": [
+      {
+       "type": "company",
+       "id": "company:SNCF:5111"
+      },
+      {
+       "type": "vehicle_journey",
+       "id": "vehicle_journey:SNCF:2026-11-12:86037:5111:Train"
+      },
+      {
+       "type": "line",
+       "id": "line:SNCF:FR:Line::0c436faa-ccd8-4cb5-9b79-1c8a701364c4:"
+      },
+      {
+       "type": "route",
+       "id": "route:SNCF:FR:Line::0c436faa-ccd8-4cb5-9b79-1c8a701364c4:"
+      },
+      {
+       "type": "commercial_mode",
+       "id": "commercial_mode:FR:Branding::6e0a3931-d3d3-4576-a37a-b133fac0dd44:"
+      },
+      {
+       "type": "physical_mode",
+       "id": "physical_mode:Train"
+      },
+      {
+       "type": "network",
+       "id": "network:SNCF:FR:Branding::6e0a3931-d3d3-4576-a37a-b133fac0dd44:"
+      }
+     ]
+    },
+    {
+     "id": "ebcg6eTFrDHque5TYeN5fk_0",
+     "duration": 0,
+     "departure_date_time": "20261112T134800",
+     "arrival_date_time": "20261112T134800",
+     "to": {
+      "id": "stop_area:SNCF:87756403",
+      "name": "Monaco Monte Carlo (Monaco)",
+      "quality": 0,
+      "embedded_type": "stop_area"
+     },
+     "from": {
+      "id": "stop_point:SNCF:87756403:Train",
+      "name": "Monaco Monte Carlo (Monaco)",
+      "quality": 0,
+      "stop_point": {
+       "id": "stop_point:SNCF:87756403:Train",
+       "name": "Monaco Monte Carlo",
+       "label": "Monaco Monte Carlo (Monaco)",
+       "links": []
+      },
+      "embedded_type": "stop_point"
+     },
+     "mode": "walking",
+     "type": "crow_fly",
+     "links": []
+    }
+   ],
+   "links": [
+    {
+     "href": "https://api.sncf.com/v1/coverage/sncf/journeys?from=stop_area:SNCF:87756056&to=stop_area:SNCF:87756403&datetime=20261112T132400&datetime_represents=departure&data_freshness=base_schedule&max_nb_transfers=0&direct_path=none&count=8&first_section_mode%5B%5D=walking&last_section_mode%5B%5D=walking&min_nb_transfers=0&min_nb_journeys=5&is_journey_schedules=True&allowed_id%5B%5D=stop_point:SNCF:87756403:Train&allowed_id%5B%5D=stop_point:SNCF:87756056:Train&_pt_planner=kraken",
+     "templated": false,
+     "rel": "same_journey_schedules",
+     "type": "journeys"
+    },
+    {
+     "href": "https://api.sncf.com/v1/coverage/sncf/journeys?from=stop_area:SNCF:87756056&to=stop_area:SNCF:87756403&datetime=20261112T132400&datetime_represents=departure&data_freshness=base_schedule&max_nb_transfers=0&direct_path=none&count=1&first_section_mode%5B%5D=walking&last_section_mode%5B%5D=walking&min_nb_transfers=0&min_nb_journeys=1&is_journey_schedules=True&allowed_id%5B%5D=stop_point:SNCF:87756403:Train&allowed_id%5B%5D=stop_point:SNCF:87756056:Train",
+     "templated": false,
+     "rel": "this_journey",
+     "type": "journeys"
+    }
+   ]
+  },
+  {
+   "duration": 1440,
+   "nb_transfers": 0,
+   "departure_date_time": "20261112T133500",
+   "arrival_date_time": "20261112T135900",
+   "requested_date_time": "20261112T115500",
+   "type": "rapid",
+   "status": "",
+   "air_pollutants": {
+    "unit": "g",
+    "values": {
+     "nox": 0.0,
+     "pm": 0.0
+    }
+   },
+   "sections": [
+    {
+     "id": "TD7ZAcGhHnwx4V5LFEZPkF_0",
+     "duration": 0,
+     "departure_date_time": "20261112T133500",
+     "arrival_date_time": "20261112T133500",
+     "to": {
+      "id": "stop_point:SNCF:87756056:Train",
+      "name": "Nice (Nice)",
+      "quality": 0,
+      "stop_point": {
+       "id": "stop_point:SNCF:87756056:Train",
+       "name": "Nice",
+       "label": "Nice (Nice)",
+       "links": []
+      },
+      "embedded_type": "stop_point"
+     },
+     "from": {
+      "id": "stop_area:SNCF:87756056",
+      "name": "Nice (Nice)",
+      "quality": 0,
+      "embedded_type": "stop_area"
+     },
+     "mode": "walking",
+     "type": "crow_fly",
+     "links": []
+    },
+    {
+     "id": "section_3_0",
+     "duration": 1440,
+     "departure_date_time": "20261112T133500",
+     "arrival_date_time": "20261112T135900",
+     "base_departure_date_time": "20261112T133500",
+     "base_arrival_date_time": "20261112T135900",
+     "data_freshness": "base_schedule",
+     "to": {
+      "id": "stop_point:SNCF:87756403:Train",
+      "name": "Monaco Monte Carlo (Monaco)",
+      "quality": 0,
+      "stop_point": {
+       "id": "stop_point:SNCF:87756403:Train",
+       "name": "Monaco Monte Carlo",
+       "label": "Monaco Monte Carlo (Monaco)",
+       "links": []
+      },
+      "embedded_type": "stop_point"
+     },
+     "from": {
+      "id": "stop_point:SNCF:87756056:Train",
+      "name": "Nice (Nice)",
+      "quality": 0,
+      "stop_point": {
+       "id": "stop_point:SNCF:87756056:Train",
+       "name": "Nice",
+       "label": "Nice (Nice)",
+       "links": []
+      },
+      "embedded_type": "stop_point"
+     },
+     "additional_informations": [
+      "regular"
+     ],
+     "type": "public_transport",
+     "display_informations": {
+      "commercial_mode": "ZOU !",
+      "direction": "Menton (Menton)",
+      "label": "C13",
+      "color": "",
+      "code": "C13",
+      "headsign": "881135",
+      "name": "C13",
+      "links": [
+       {
+        "templated": false,
+        "rel": "terminus",
+        "internal": true,
+        "type": "stop_area",
+        "id": "stop_area:SNCF:87756486"
+       }
+      ],
+      "text_color": "",
+      "trip_short_name": "881135",
+      "company": "SNCF Voyageurs SA",
+      "description": "",
+      "physical_mode": "TER / Intercités"
+     },
+     "links": [
+      {
+       "type": "company",
+       "id": "company:SNCF:5111"
+      },
+      {
+       "type": "vehicle_journey",
+       "id": "vehicle_journey:SNCF:2026-11-12:881135:5111:Train"
+      },
+      {
+       "type": "line",
+       "id": "line:SNCF:FR:Line::96809d68-f37d-4e68-ac3c-3c0540f4e2f2:"
+      },
+      {
+       "type": "route",
+       "id": "route:SNCF:FR:Line::96809d68-f37d-4e68-ac3c-3c0540f4e2f2:"
+      },
+      {
+       "type": "commercial_mode",
+       "id": "commercial_mode:FR:Branding::6e0a3931-d3d3-4576-a37a-b133fac0dd44:"
+      },
+      {
+       "type": "physical_mode",
+       "id": "physical_mode:Train"
+      },
+      {
+       "type": "network",
+       "id": "network:SNCF:FR:Branding::6e0a3931-d3d3-4576-a37a-b133fac0dd44:"
+      }
+     ]
+    },
+    {
+     "id": "dQ6Tt7xDKVFgS34b6A48TP_0",
+     "duration": 0,
+     "departure_date_time": "20261112T135900",
+     "arrival_date_time": "20261112T135900",
+     "to": {
+      "id": "stop_area:SNCF:87756403",
+      "name": "Monaco Monte Carlo (Monaco)",
+      "quality": 0,
+      "embedded_type": "stop_area"
+     },
+     "from": {
+      "id": "stop_point:SNCF:87756403:Train",
+      "name": "Monaco Monte Carlo (Monaco)",
+      "quality": 0,
+      "stop_point": {
+       "id": "stop_point:SNCF:87756403:Train",
+       "name": "Monaco Monte Carlo",
+       "label": "Monaco Monte Carlo (Monaco)",
+       "links": []
+      },
+      "embedded_type": "stop_point"
+     },
+     "mode": "walking",
+     "type": "crow_fly",
+     "links": []
+    }
+   ],
+   "links": [
+    {
+     "href": "https://api.sncf.com/v1/coverage/sncf/journeys?from=stop_area:SNCF:87756056&to=stop_area:SNCF:87756403&datetime=20261112T133500&datetime_represents=departure&data_freshness=base_schedule&max_nb_transfers=0&direct_path=none&count=8&first_section_mode%5B%5D=walking&last_section_mode%5B%5D=walking&min_nb_transfers=0&min_nb_journeys=5&is_journey_schedules=True&allowed_id%5B%5D=stop_point:SNCF:87756403:Train&allowed_id%5B%5D=stop_point:SNCF:87756056:Train&_pt_planner=kraken",
+     "templated": false,
+     "rel": "same_journey_schedules",
+     "type": "journeys"
+    },
+    {
+     "href": "https://api.sncf.com/v1/coverage/sncf/journeys?from=stop_area:SNCF:87756056&to=stop_area:SNCF:87756403&datetime=20261112T133500&datetime_represents=departure&data_freshness=base_schedule&max_nb_transfers=0&direct_path=none&count=1&first_section_mode%5B%5D=walking&last_section_mode%5B%5D=walking&min_nb_transfers=0&min_nb_journeys=1&is_journey_schedules=True&allowed_id%5B%5D=stop_point:SNCF:87756403:Train&allowed_id%5B%5D=stop_point:SNCF:87756056:Train",
+     "templated": false,
+     "rel": "this_journey",
+     "type": "journeys"
+    }
+   ]
+  },
+  {
+   "duration": 1500,
+   "nb_transfers": 0,
+   "departure_date_time": "20261112T135500",
+   "arrival_date_time": "20261112T142000",
+   "requested_date_time": "20261112T115500",
+   "type": "rapid",
+   "status": "",
+   "air_pollutants": {
+    "unit": "g",
+    "values": {
+     "nox": 0.0,
+     "pm": 0.0
+    }
+   },
+   "sections": [
+    {
+     "id": "Uss3iS9L7XHDUZmco4KthV_0",
+     "duration": 0,
+     "departure_date_time": "20261112T135500",
+     "arrival_date_time": "20261112T135500",
+     "to": {
+      "id": "stop_point:SNCF:87756056:Train",
+      "name": "Nice (Nice)",
+      "quality": 0,
+      "stop_point": {
+       "id": "stop_point:SNCF:87756056:Train",
+       "name": "Nice",
+       "label": "Nice (Nice)",
+       "links": []
+      },
+      "embedded_type": "stop_point"
+     },
+     "from": {
+      "id": "stop_area:SNCF:87756056",
+      "name": "Nice (Nice)",
+      "quality": 0,
+      "embedded_type": "stop_area"
+     },
+     "mode": "walking",
+     "type": "crow_fly",
+     "links": []
+    },
+    {
+     "id": "section_2_0",
+     "duration": 1500,
+     "departure_date_time": "20261112T135500",
+     "arrival_date_time": "20261112T142000",
+     "base_departure_date_time": "20261112T135500",
+     "base_arrival_date_time": "20261112T142000",
+     "data_freshness": "base_schedule",
+     "to": {
+      "id": "stop_point:SNCF:87756403:Train",
+      "name": "Monaco Monte Carlo (Monaco)",
+      "quality": 0,
+      "stop_point": {
+       "id": "stop_point:SNCF:87756403:Train",
+       "name": "Monaco Monte Carlo",
+       "label": "Monaco Monte Carlo (Monaco)",
+       "links": []
+      },
+      "embedded_type": "stop_point"
+     },
+     "from": {
+      "id": "stop_point:SNCF:87756056:Train",
+      "name": "Nice (Nice)",
+      "quality": 0,
+      "stop_point": {
+       "id": "stop_point:SNCF:87756056:Train",
+       "name": "Nice",
+       "label": "Nice (Nice)",
+       "links": []
+      },
+      "embedded_type": "stop_point"
+     },
+     "additional_informations": [
+      "regular"
+     ],
+     "type": "public_transport",
+     "display_informations": {
+      "commercial_mode": "ZOU !",
+      "direction": "Ventimiglia (Ventimiglia)",
+      "label": "C3",
+      "color": "",
+      "code": "C3",
+      "headsign": "86039",
+      "name": "C3",
+      "links": [
+       {
+        "templated": false,
+        "rel": "disruptions",
+        "internal": true,
+        "type": "disruption",
+        "id": "e8d4b305-a692-4513-ac79-341c97f263c7"
+       },
+       {
+        "templated": false,
+        "rel": "terminus",
+        "internal": true,
+        "type": "stop_area",
+        "id": "stop_area:SNCF:83045013"
+       }
+      ],
+      "text_color": "",
+      "trip_short_name": "86039",
+      "company": "SNCF Voyageurs SA",
+      "description": "",
+      "physical_mode": "TER / Intercités"
+     },
+     "links": [
+      {
+       "type": "company",
+       "id": "company:SNCF:5111"
+      },
+      {
+       "type": "vehicle_journey",
+       "id": "vehicle_journey:SNCF:2026-11-12:86039:5111:Train"
+      },
+      {
+       "type": "line",
+       "id": "line:SNCF:FR:Line::0c436faa-ccd8-4cb5-9b79-1c8a701364c4:"
+      },
+      {
+       "type": "route",
+       "id": "route:SNCF:FR:Line::0c436faa-ccd8-4cb5-9b79-1c8a701364c4:"
+      },
+      {
+       "type": "commercial_mode",
+       "id": "commercial_mode:FR:Branding::6e0a3931-d3d3-4576-a37a-b133fac0dd44:"
+      },
+      {
+       "type": "physical_mode",
+       "id": "physical_mode:Train"
+      },
+      {
+       "type": "network",
+       "id": "network:SNCF:FR:Branding::6e0a3931-d3d3-4576-a37a-b133fac0dd44:"
+      }
+     ]
+    },
+    {
+     "id": "9Xt8GKviuMZrpoPRWxSxgL_0",
+     "duration": 0,
+     "departure_date_time": "20261112T142000",
+     "arrival_date_time": "20261112T142000",
+     "to": {
+      "id": "stop_area:SNCF:87756403",
+      "name": "Monaco Monte Carlo (Monaco)",
+      "quality": 0,
+      "embedded_type": "stop_area"
+     },
+     "from": {
+      "id": "stop_point:SNCF:87756403:Train",
+      "name": "Monaco Monte Carlo (Monaco)",
+      "quality": 0,
+      "stop_point": {
+       "id": "stop_point:SNCF:87756403:Train",
+       "name": "Monaco Monte Carlo",
+       "label": "Monaco Monte Carlo (Monaco)",
+       "links": []
+      },
+      "embedded_type": "stop_point"
+     },
+     "mode": "walking",
+     "type": "crow_fly",
+     "links": []
+    }
+   ],
+   "links": [
+    {
+     "href": "https://api.sncf.com/v1/coverage/sncf/journeys?from=stop_area:SNCF:87756056&to=stop_area:SNCF:87756403&datetime=20261112T135500&datetime_represents=departure&data_freshness=base_schedule&max_nb_transfers=0&direct_path=none&count=8&first_section_mode%5B%5D=walking&last_section_mode%5B%5D=walking&min_nb_transfers=0&min_nb_journeys=5&is_journey_schedules=True&allowed_id%5B%5D=stop_point:SNCF:87756403:Train&allowed_id%5B%5D=stop_point:SNCF:87756056:Train&_pt_planner=kraken",
+     "templated": false,
+     "rel": "same_journey_schedules",
+     "type": "journeys"
+    },
+    {
+     "href": "https://api.sncf.com/v1/coverage/sncf/journeys?from=stop_area:SNCF:87756056&to=stop_area:SNCF:87756403&datetime=20261112T135500&datetime_represents=departure&data_freshness=base_schedule&max_nb_transfers=0&direct_path=none&count=1&first_section_mode%5B%5D=walking&last_section_mode%5B%5D=walking&min_nb_transfers=0&min_nb_journeys=1&is_journey_schedules=True&allowed_id%5B%5D=stop_point:SNCF:87756403:Train&allowed_id%5B%5D=stop_point:SNCF:87756056:Train",
+     "templated": false,
+     "rel": "this_journey",
+     "type": "journeys"
+    }
+   ]
+  },
+  {
+   "duration": 1440,
+   "nb_transfers": 0,
+   "departure_date_time": "20261112T140400",
+   "arrival_date_time": "20261112T142800",
+   "requested_date_time": "20261112T115500",
+   "type": "rapid",
+   "status": "",
+   "air_pollutants": {
+    "unit": "g",
+    "values": {
+     "nox": 0.0,
+     "pm": 0.0
+    }
+   },
+   "sections": [
+    {
+     "id": "n8tkhQMFkswwXagaqNJSaZ_0",
+     "duration": 0,
+     "departure_date_time": "20261112T140400",
+     "arrival_date_time": "20261112T140400",
+     "to": {
+      "id": "stop_point:SNCF:87756056:Train",
+      "name": "Nice (Nice)",
+      "quality": 0,
+      "stop_point": {
+       "id": "stop_point:SNCF:87756056:Train",
+       "name": "Nice",
+       "label": "Nice (Nice)",
+       "links": []
+      },
+      "embedded_type": "stop_point"
+     },
+     "from": {
+      "id": "stop_area:SNCF:87756056",
+      "name": "Nice (Nice)",
+      "quality": 0,
+      "embedded_type": "stop_area"
+     },
+     "mode": "walking",
+     "type": "crow_fly",
+     "links": []
+    },
+    {
+     "id": "section_1_0",
+     "duration": 1440,
+     "departure_date_time": "20261112T140400",
+     "arrival_date_time": "20261112T142800",
+     "base_departure_date_time": "20261112T140400",
+     "base_arrival_date_time": "20261112T142800",
+     "data_freshness": "base_schedule",
+     "to": {
+      "id": "stop_point:SNCF:87756403:Train",
+      "name": "Monaco Monte Carlo (Monaco)",
+      "quality": 0,
+      "stop_point": {
+       "id": "stop_point:SNCF:87756403:Train",
+       "name": "Monaco Monte Carlo",
+       "label": "Monaco Monte Carlo (Monaco)",
+       "links": []
+      },
+      "embedded_type": "stop_point"
+     },
+     "from": {
+      "id": "stop_point:SNCF:87756056:Train",
+      "name": "Nice (Nice)",
+      "quality": 0,
+      "stop_point": {
+       "id": "stop_point:SNCF:87756056:Train",
+       "name": "Nice",
+       "label": "Nice (Nice)",
+       "links": []
+      },
+      "embedded_type": "stop_point"
+     },
+     "additional_informations": [
+      "regular"
+     ],
+     "type": "public_transport",
+     "display_informations": {
+      "commercial_mode": "ZOU !",
+      "direction": "Menton (Menton)",
+      "label": "C13",
+      "color": "",
+      "code": "C13",
+      "headsign": "881227",
+      "name": "C13",
+      "links": [
+       {
+        "templated": false,
+        "rel": "terminus",
+        "internal": true,
+        "type": "stop_area",
+        "id": "stop_area:SNCF:87756486"
+       }
+      ],
+      "text_color": "",
+      "trip_short_name": "881227",
+      "company": "SNCF Voyageurs SA",
+      "description": "",
+      "physical_mode": "TER / Intercités"
+     },
+     "links": [
+      {
+       "type": "company",
+       "id": "company:SNCF:5111"
+      },
+      {
+       "type": "vehicle_journey",
+       "id": "vehicle_journey:SNCF:2026-11-12:881227:5111:Train"
+      },
+      {
+       "type": "line",
+       "id": "line:SNCF:FR:Line::96809d68-f37d-4e68-ac3c-3c0540f4e2f2:"
+      },
+      {
+       "type": "route",
+       "id": "route:SNCF:FR:Line::96809d68-f37d-4e68-ac3c-3c0540f4e2f2:"
+      },
+      {
+       "type": "commercial_mode",
+       "id": "commercial_mode:FR:Branding::6e0a3931-d3d3-4576-a37a-b133fac0dd44:"
+      },
+      {
+       "type": "physical_mode",
+       "id": "physical_mode:Train"
+      },
+      {
+       "type": "network",
+       "id": "network:SNCF:FR:Branding::6e0a3931-d3d3-4576-a37a-b133fac0dd44:"
+      }
+     ]
+    },
+    {
+     "id": "L6sHsJYzNcDViXBt44yZTE_0",
+     "duration": 0,
+     "departure_date_time": "20261112T142800",
+     "arrival_date_time": "20261112T142800",
+     "to": {
+      "id": "stop_area:SNCF:87756403",
+      "name": "Monaco Monte Carlo (Monaco)",
+      "quality": 0,
+      "embedded_type": "stop_area"
+     },
+     "from": {
+      "id": "stop_point:SNCF:87756403:Train",
+      "name": "Monaco Monte Carlo (Monaco)",
+      "quality": 0,
+      "stop_point": {
+       "id": "stop_point:SNCF:87756403:Train",
+       "name": "Monaco Monte Carlo",
+       "label": "Monaco Monte Carlo (Monaco)",
+       "links": []
+      },
+      "embedded_type": "stop_point"
+     },
+     "mode": "walking",
+     "type": "crow_fly",
+     "links": []
+    }
+   ],
+   "links": [
+    {
+     "href": "https://api.sncf.com/v1/coverage/sncf/journeys?from=stop_area:SNCF:87756056&to=stop_area:SNCF:87756403&datetime=20261112T140400&datetime_represents=departure&data_freshness=base_schedule&max_nb_transfers=0&direct_path=none&count=8&first_section_mode%5B%5D=walking&last_section_mode%5B%5D=walking&min_nb_transfers=0&min_nb_journeys=5&is_journey_schedules=True&allowed_id%5B%5D=stop_point:SNCF:87756403:Train&allowed_id%5B%5D=stop_point:SNCF:87756056:Train&_pt_planner=kraken",
+     "templated": false,
+     "rel": "same_journey_schedules",
+     "type": "journeys"
+    },
+    {
+     "href": "https://api.sncf.com/v1/coverage/sncf/journeys?from=stop_area:SNCF:87756056&to=stop_area:SNCF:87756403&datetime=20261112T140400&datetime_represents=departure&data_freshness=base_schedule&max_nb_transfers=0&direct_path=none&count=1&first_section_mode%5B%5D=walking&last_section_mode%5B%5D=walking&min_nb_transfers=0&min_nb_journeys=1&is_journey_schedules=True&allowed_id%5B%5D=stop_point:SNCF:87756403:Train&allowed_id%5B%5D=stop_point:SNCF:87756056:Train",
+     "templated": false,
+     "rel": "this_journey",
+     "type": "journeys"
+    }
+   ]
+  },
+  {
+   "duration": 1440,
+   "nb_transfers": 0,
+   "departure_date_time": "20261112T142300",
+   "arrival_date_time": "20261112T144700",
+   "requested_date_time": "20261112T115500",
+   "type": "rapid",
+   "status": "",
+   "air_pollutants": {
+    "unit": "g",
+    "values": {
+     "nox": 0.0,
+     "pm": 0.0
+    }
+   },
+   "sections": [
+    {
+     "id": "v57n3PfQzWYBJWKcEhjXCe_0",
+     "duration": 0,
+     "departure_date_time": "20261112T142300",
+     "arrival_date_time": "20261112T142300",
+     "to": {
+      "id": "stop_point:SNCF:87756056:Train",
+      "name": "Nice (Nice)",
+      "quality": 0,
+      "stop_point": {
+       "id": "stop_point:SNCF:87756056:Train",
+       "name": "Nice",
+       "label": "Nice (Nice)",
+       "links": []
+      },
+      "embedded_type": "stop_point"
+     },
+     "from": {
+      "id": "stop_area:SNCF:87756056",
+      "name": "Nice (Nice)",
+      "quality": 0,
+      "embedded_type": "stop_area"
+     },
+     "mode": "walking",
+     "type": "crow_fly",
+     "links": []
+    },
+    {
+     "id": "section_0_0",
+     "duration": 1440,
+     "departure_date_time": "20261112T142300",
+     "arrival_date_time": "20261112T144700",
+     "base_departure_date_time": "20261112T142300",
+     "base_arrival_date_time": "20261112T144700",
+     "data_freshness": "base_schedule",
+     "to": {
+      "id": "stop_point:SNCF:87756403:Train",
+      "name": "Monaco Monte Carlo (Monaco)",
+      "quality": 0,
+      "stop_point": {
+       "id": "stop_point:SNCF:87756403:Train",
+       "name": "Monaco Monte Carlo",
+       "label": "Monaco Monte Carlo (Monaco)",
+       "links": []
+      },
+      "embedded_type": "stop_point"
+     },
+     "from": {
+      "id": "stop_point:SNCF:87756056:Train",
+      "name": "Nice (Nice)",
+      "quality": 0,
+      "stop_point": {
+       "id": "stop_point:SNCF:87756056:Train",
+       "name": "Nice",
+       "label": "Nice (Nice)",
+       "links": []
+      },
+      "embedded_type": "stop_point"
+     },
+     "additional_informations": [
+      "regular"
+     ],
+     "type": "public_transport",
+     "display_informations": {
+      "commercial_mode": "ZOU !",
+      "direction": "Ventimiglia (Ventimiglia)",
+      "label": "C3",
+      "color": "",
+      "code": "C3",
+      "headsign": "86043",
+      "name": "C3",
+      "links": [
+       {
+        "templated": false,
+        "rel": "terminus",
+        "internal": true,
+        "type": "stop_area",
+        "id": "stop_area:SNCF:83045013"
+       }
+      ],
+      "text_color": "",
+      "trip_short_name": "86043",
+      "company": "SNCF Voyageurs SA",
+      "description": "",
+      "physical_mode": "TER / Intercités"
+     },
+     "links": [
+      {
+       "type": "company",
+       "id": "company:SNCF:5111"
+      },
+      {
+       "type": "vehicle_journey",
+       "id": "vehicle_journey:SNCF:2026-11-12:86043:5111:Train"
+      },
+      {
+       "type": "line",
+       "id": "line:SNCF:FR:Line::0c436faa-ccd8-4cb5-9b79-1c8a701364c4:"
+      },
+      {
+       "type": "route",
+       "id": "route:SNCF:FR:Line::0c436faa-ccd8-4cb5-9b79-1c8a701364c4:"
+      },
+      {
+       "type": "commercial_mode",
+       "id": "commercial_mode:FR:Branding::6e0a3931-d3d3-4576-a37a-b133fac0dd44:"
+      },
+      {
+       "type": "physical_mode",
+       "id": "physical_mode:Train"
+      },
+      {
+       "type": "network",
+       "id": "network:SNCF:FR:Branding::6e0a3931-d3d3-4576-a37a-b133fac0dd44:"
+      }
+     ]
+    },
+    {
+     "id": "Z7QmrjRotYbc6rjWmMskik_0",
+     "duration": 0,
+     "departure_date_time": "20261112T144700",
+     "arrival_date_time": "20261112T144700",
+     "to": {
+      "id": "stop_area:SNCF:87756403",
+      "name": "Monaco Monte Carlo (Monaco)",
+      "quality": 0,
+      "embedded_type": "stop_area"
+     },
+     "from": {
+      "id": "stop_point:SNCF:87756403:Train",
+      "name": "Monaco Monte Carlo (Monaco)",
+      "quality": 0,
+      "stop_point": {
+       "id": "stop_point:SNCF:87756403:Train",
+       "name": "Monaco Monte Carlo",
+       "label": "Monaco Monte Carlo (Monaco)",
+       "links": []
+      },
+      "embedded_type": "stop_point"
+     },
+     "mode": "walking",
+     "type": "crow_fly",
+     "links": []
+    }
+   ],
+   "links": [
+    {
+     "href": "https://api.sncf.com/v1/coverage/sncf/journeys?from=stop_area:SNCF:87756056&to=stop_area:SNCF:87756403&datetime=20261112T142300&datetime_represents=departure&data_freshness=base_schedule&max_nb_transfers=0&direct_path=none&count=8&first_section_mode%5B%5D=walking&last_section_mode%5B%5D=walking&min_nb_transfers=0&min_nb_journeys=5&is_journey_schedules=True&allowed_id%5B%5D=stop_point:SNCF:87756403:Train&allowed_id%5B%5D=stop_point:SNCF:87756056:Train&_pt_planner=kraken",
+     "templated": false,
+     "rel": "same_journey_schedules",
+     "type": "journeys"
+    },
+    {
+     "href": "https://api.sncf.com/v1/coverage/sncf/journeys?from=stop_area:SNCF:87756056&to=stop_area:SNCF:87756403&datetime=20261112T142300&datetime_represents=departure&data_freshness=base_schedule&max_nb_transfers=0&direct_path=none&count=1&first_section_mode%5B%5D=walking&last_section_mode%5B%5D=walking&min_nb_transfers=0&min_nb_journeys=1&is_journey_schedules=True&allowed_id%5B%5D=stop_point:SNCF:87756403:Train&allowed_id%5B%5D=stop_point:SNCF:87756056:Train",
+     "templated": false,
+     "rel": "this_journey",
+     "type": "journeys"
+    }
+   ]
+  }
+ ],
+ "disruptions": [
+  {
+   "id": "d9eb511f-0d66-45ca-bbb8-9e7b21164deb",
+   "disruption_id": "d9eb511f-0d66-45ca-bbb8-9e7b21164deb",
+   "impact_id": "d9eb511f-0d66-45ca-bbb8-9e7b21164deb",
+   "status": "future",
+   "updated_at": "20261112T112507",
+   "cause": "",
+   "severity": {
+    "name": "trip canceled",
+    "effect": "NO_SERVICE",
+    "color": "#000000",
+    "priority": 42
+   },
+   "messages": [
+    {
+     "text": "Réutilisation d'un train",
+     "channel": {
+      "content_type": "",
+      "id": "rt",
+      "name": "rt",
+      "types": [
+       "web",
+       "mobile"
+      ]
+     }
+    }
+   ],
+   "impacted_objects": [
+    {
+     "pt_object": {
+      "id": "SNCF:2026-11-12:86033:5111:Train",
+      "name": "SNCF:2026-11-12:86033:5111:Train",
+      "quality": 0,
+      "trip": {
+       "id": "SNCF:2026-11-12:86033:5111:Train",
+       "name": "86033"
+      },
+      "embedded_type": "trip"
+     }
+    }
+   ],
+   "uri": "d9eb511f-0d66-45ca-bbb8-9e7b21164deb",
+   "disruption_uri": "d9eb511f-0d66-45ca-bbb8-9e7b21164deb",
+   "contributor": "realtime.sncf.piv",
+   "reference": ""
+  },
+  {
+   "id": "ac1de96c-de22-4606-a26d-e94b557ed313",
+   "disruption_id": "ac1de96c-de22-4606-a26d-e94b557ed313",
+   "impact_id": "ac1de96c-de22-4606-a26d-e94b557ed313",
+   "status": "active",
+   "updated_at": "20261112T114353",
+   "cause": "",
+   "severity": {
+    "name": "reduced service",
+    "effect": "REDUCED_SERVICE",
+    "color": "#000000",
+    "priority": 42
+   },
+   "messages": [
+    {
+     "text": "Défaillance de matériel",
+     "channel": {
+      "content_type": "",
+      "id": "rt",
+      "name": "rt",
+      "types": [
+       "web",
+       "mobile"
+      ]
+     }
+    }
+   ],
+   "impacted_objects": [
+    {
+     "pt_object": {
+      "id": "SNCF:2026-11-12:881223:5111:Train",
+      "name": "SNCF:2026-11-12:881223:5111:Train",
+      "quality": 0,
+      "trip": {
+       "id": "SNCF:2026-11-12:881223:5111:Train",
+       "name": "881223"
+      },
+      "embedded_type": "trip"
+     },
+     "impacted_stops": [
+      {
+       "stop_point": {
+        "id": "stop_point:SNCF:87755447:Train",
+        "name": "Les Arcs - Draguignan",
+        "label": "Les Arcs - Draguignan (Les Arcs-sur-Argens)",
+        "links": []
+       },
+       "base_arrival_time": "112700",
+       "base_departure_time": "112700",
+       "amended_arrival_time": "115700",
+       "amended_departure_time": "115700",
+       "cause": "Défaillance de matériel",
+       "stop_time_effect": "delayed",
+       "departure_status": "delayed",
+       "arrival_status": "unchanged",
+       "is_detour": false
+      },
+      {
+       "stop_point": {
+        "id": "stop_point:SNCF:87757500:Train",
+        "name": "Fréjus",
+        "label": "Fréjus (Fréjus)",
+        "links": []
+       },
+       "base_arrival_time": "113900",
+       "base_departure_time": "114000",
+       "amended_arrival_time": "120900",
+       "amended_departure_time": "121000",
+       "cause": "Défaillance de matériel",
+       "stop_time_effect": "delayed",
+       "departure_status": "delayed",
+       "arrival_status": "delayed",
+       "is_detour": false
+      },
+      {
+       "stop_point": {
+        "id": "stop_point:SNCF:87757526:Train",
+        "name": "Saint-Raphaël Valescure",
+        "label": "Saint-Raphaël Valescure (Saint-Raphaël)",
+        "links": []
+       },
+       "base_arrival_time": "114300",
+       "base_departure_time": "114400",
+       "amended_arrival_time": "121300",
+       "amended_departure_time": "121400",
+       "cause": "Défaillance de matériel",
+       "stop_time_effect": "delayed",
+       "departure_status": "delayed",
+       "arrival_status": "delayed",
+       "is_detour": false
+      },
+      {
+       "stop_point": {
+        "id": "stop_point:SNCF:87757534:Train",
+        "name": "Boulouris sur Mer",
+        "label": "Boulouris sur Mer (Saint-Raphaël)",
+        "links": []
+       },
+       "base_arrival_time": "114700",
+       "base_departure_time": "114800",
+       "amended_arrival_time": "121700",
+       "amended_departure_time": "121800",
+       "cause": "Défaillance de matériel",
+       "stop_time_effect": "delayed",
+       "departure_status": "delayed",
+       "arrival_status": "delayed",
+       "is_detour": false
+      },
+      {
+       "stop_point": {
+        "id": "stop_point:SNCF:87757542:Train",
+        "name": "Le Dramont",
+        "label": "Le Dramont (Saint-Raphaël)",
+        "links": []
+       },
+       "base_arrival_time": "115100",
+       "base_departure_time": "115200",
+       "amended_arrival_time": "122100",
+       "amended_departure_time": "122200",
+       "cause": "Défaillance de matériel",
+       "stop_time_effect": "delayed",
+       "departure_status": "delayed",
+       "arrival_status": "delayed",
+       "is_detour": false
+      },
+      {
+       "stop_point": {
+        "id": "stop_point:SNCF:87757559:Train",
+        "name": "Agay",
+        "label": "Agay (Saint-Raphaël)",
+        "links": []
+       },
+       "base_arrival_time": "115400",
+       "base_departure_time": "115500",
+       "amended_arrival_time": "122400",
+       "amended_departure_time": "122500",
+       "cause": "Défaillance de matériel",
+       "stop_time_effect": "delayed",
+       "departure_status": "delayed",
+       "arrival_status": "delayed",
+       "is_detour": false
+      },
+      {
+       "stop_point": {
+        "id": "stop_point:SNCF:87757567:Train",
+        "name": "Anthéor Cap Roux",
+        "label": "Anthéor Cap Roux (Saint-Raphaël)",
+        "links": []
+       },
+       "base_arrival_time": "115800",
+       "base_departure_time": "115900",
+       "amended_arrival_time": "122800",
+       "amended_departure_time": "122900",
+       "cause": "Défaillance de matériel",
+       "stop_time_effect": "delayed",
+       "departure_status": "delayed",
+       "arrival_status": "delayed",
+       "is_detour": false
+      },
+      {
+       "stop_point": {
+        "id": "stop_point:SNCF:87757575:Train",
+        "name": "Le Trayas",
+        "label": "Le Trayas (Saint-Raphaël)",
+        "links": []
+       },
+       "base_arrival_time": "120400",
+       "base_departure_time": "120500",
+       "amended_arrival_time": "123400",
+       "amended_departure_time": "123500",
+       "cause": "Défaillance de matériel",
+       "stop_time_effect": "delayed",
+       "departure_status": "delayed",
+       "arrival_status": "delayed",
+       "is_detour": false
+      },
+      {
+       "stop_point": {
+        "id": "stop_point:SNCF:87757583:Train",
+        "name": "Théoule-sur-Mer",
+        "label": "Théoule-sur-Mer (Théoule-sur-Mer)",
+        "links": []
+       },
+       "base_arrival_time": "120900",
+       "base_departure_time": "121000",
+       "amended_arrival_time": "123900",
+       "amended_departure_time": "124000",
+       "cause": "Défaillance de matériel",
+       "stop_time_effect": "delayed",
+       "departure_status": "delayed",
+       "arrival_status": "delayed",
+       "is_detour": false
+      },
+      {
+       "stop_point": {
+        "id": "stop_point:SNCF:87757591:Train",
+        "name": "Mandelieu-la-Napoule",
+        "label": "Mandelieu-la-Napoule (Mandelieu-la-Napoule)",
+        "links": []
+       },
+       "base_arrival_time": "121200",
+       "base_departure_time": "121300",
+       "amended_arrival_time": "124200",
+       "amended_departure_time": "124300",
+       "cause": "Défaillance de matériel",
+       "stop_time_effect": "delayed",
+       "departure_status": "delayed",
+       "arrival_status": "delayed",
+       "is_detour": false
+      },
+      {
+       "stop_point": {
+        "id": "stop_point:SNCF:87757617:Train",
+        "name": "Cannes La Bocca",
+        "label": "Cannes La Bocca (Cannes)",
+        "links": []
+       },
+       "base_arrival_time": "121600",
+       "base_departure_time": "121700",
+       "amended_arrival_time": "124600",
+       "amended_departure_time": "124700",
+       "cause": "Défaillance de matériel",
+       "stop_time_effect": "delayed",
+       "departure_status": "delayed",
+       "arrival_status": "delayed",
+       "is_detour": false
+      },
+      {
+       "stop_point": {
+        "id": "stop_point:SNCF:87757625:Train",
+        "name": "Cannes",
+        "label": "Cannes (Cannes)",
+        "links": []
+       },
+       "base_arrival_time": "122100",
+       "base_departure_time": "122300",
+       "amended_arrival_time": "125100",
+       "amended_departure_time": "125300",
+       "cause": "Défaillance de matériel",
+       "stop_time_effect": "delayed",
+       "departure_status": "delayed",
+       "arrival_status": "delayed",
+       "is_detour": false
+      },
+      {
+       "stop_point": {
+        "id": "stop_point:SNCF:87757666:Train",
+        "name": "Juan les Pins",
+        "label": "Juan les Pins (Antibes)",
+        "links": []
+       },
+       "base_arrival_time": "122900",
+       "base_departure_time": "123000",
+       "amended_arrival_time": "125900",
+       "amended_departure_time": "130000",
+       "cause": "Défaillance de matériel",
+       "stop_time_effect": "delayed",
+       "departure_status": "delayed",
+       "arrival_status": "delayed",
+       "is_detour": false
+      },
+      {
+       "stop_point": {
+        "id": "stop_point:SNCF:87757674:Train",
+        "name": "Antibes",
+        "label": "Antibes (Antibes)",
+        "links": []
+       },
+       "base_arrival_time": "123200",
+       "base_departure_time": "123300",
+       "amended_arrival_time": "130200",
+       "amended_departure_time": "130300",
+       "cause": "Défaillance de matériel",
+       "stop_time_effect": "delayed",
+       "departure_status": "delayed",
+       "arrival_status": "delayed",
+       "is_detour": false
+      },
+      {
+       "stop_point": {
+        "id": "stop_point:SNCF:87757690:Train",
+        "name": "Biot",
+        "label": "Biot (Antibes)",
+        "links": []
+       },
+       "base_arrival_time": "123500",
+       "base_departure_time": "123600",
+       "amended_arrival_time": "130500",
+       "amended_departure_time": "130600",
+       "cause": "Défaillance de matériel",
+       "stop_time_effect": "delayed",
+       "departure_status": "delayed",
+       "arrival_status": "delayed",
+       "is_detour": false
+      },
+      {
+       "stop_point": {
+        "id": "stop_point:SNCF:87756320:Train",
+        "name": "Cagnes-sur-Mer",
+        "label": "Cagnes-sur-Mer (Cagnes-sur-Mer)",
+        "links": []
+       },
+       "base_arrival_time": "124100",
+       "base_departure_time": "124200",
+       "amended_arrival_time": "131100",
+       "amended_departure_time": "131200",
+       "cause": "Défaillance de matériel",
+       "stop_time_effect": "delayed",
+       "departure_status": "delayed",
+       "arrival_status": "delayed",
+       "is_detour": false
+      },
+      {
+       "stop_point": {
+        "id": "stop_point:SNCF:87756338:Train",
+        "name": "Cros de Cagnes",
+        "label": "Cros de Cagnes (Cagnes-sur-Mer)",
+        "links": []
+       },
+       "base_arrival_time": "124400",
+       "base_departure_time": "124500",
+       "amended_arrival_time": "131400",
+       "amended_departure_time": "131500",
+       "cause": "Défaillance de matériel",
+       "stop_time_effect": "delayed",
+       "departure_status": "delayed",
+       "arrival_status": "delayed",
+       "is_detour": false
+      },
+      {
+       "stop_point": {
+        "id": "stop_point:SNCF:87756346:Train",
+        "name": "Saint-Laurent-du-Var",
+        "label": "Saint-Laurent-du-Var (Saint-Laurent-du-Var)",
+        "links": []
+       },
+       "base_arrival_time": "124800",
+       "base_departure_time": "124900",
+       "amended_arrival_time": "131800",
+       "amended_departure_time": "131900",
+       "cause": "Défaillance de matériel",
+       "stop_time_effect": "delayed",
+       "departure_status": "delayed",
+       "arrival_status": "delayed",
+       "is_detour": false
+      },
+      {
+       "stop_point": {
+        "id": "stop_point:SNCF:87756254:Train",
+        "name": "Nice Saint-Augustin",
+        "label": "Nice Saint-Augustin (Nice)",
+        "links": []
+       },
+       "base_arrival_time": "125100",
+       "base_departure_time": "125300",
+       "amended_arrival_time": "132100",
+       "amended_departure_time": "132300",
+       "cause": "Défaillance de matériel",
+       "stop_time_effect": "delayed",
+       "departure_status": "delayed",
+       "arrival_status": "delayed",
+       "is_detour": false
+      },
+      {
+       "stop_point": {
+        "id": "stop_point:SNCF:87756056:Train",
+        "name": "Nice",
+        "label": "Nice (Nice)",
+        "links": []
+       },
+       "base_arrival_time": "130000",
+       "base_departure_time": "130300",
+       "amended_arrival_time": "133000",
+       "cause": "Défaillance de matériel",
+       "stop_time_effect": "delayed",
+       "departure_status": "deleted",
+       "arrival_status": "delayed",
+       "is_detour": false
+      },
+      {
+       "stop_point": {
+        "id": "stop_point:SNCF:87756353:Train",
+        "name": "Nice Riquier",
+        "label": "Nice Riquier (Nice)",
+        "links": []
+       },
+       "base_arrival_time": "130600",
+       "base_departure_time": "130800",
+       "cause": "Défaillance de matériel",
+       "stop_time_effect": "deleted",
+       "departure_status": "deleted",
+       "arrival_status": "deleted",
+       "is_detour": false
+      },
+      {
+       "stop_point": {
+        "id": "stop_point:SNCF:87756361:Train",
+        "name": "Villefranche-sur-Mer",
+        "label": "Villefranche-sur-Mer (Villefranche-sur-Mer)",
+        "links": []
+       },
+       "base_arrival_time": "131000",
+       "base_departure_time": "131100",
+       "cause": "Défaillance de matériel",
+       "stop_time_effect": "deleted",
+       "departure_status": "deleted",
+       "arrival_status": "deleted",
+       "is_detour": false
+      },
+      {
+       "stop_point": {
+        "id": "stop_point:SNCF:87756379:Train",
+        "name": "Beaulieu-sur-Mer",
+        "label": "Beaulieu-sur-Mer (Beaulieu-sur-Mer)",
+        "links": []
+       },
+       "base_arrival_time": "131400",
+       "base_departure_time": "131500",
+       "cause": "Défaillance de matériel",
+       "stop_time_effect": "deleted",
+       "departure_status": "deleted",
+       "arrival_status": "deleted",
+       "is_detour": false
+      },
+      {
+       "stop_point": {
+        "id": "stop_point:SNCF:87756387:Train",
+        "name": "Èze",
+        "label": "Èze (Èze)",
+        "links": []
+       },
+       "base_arrival_time": "131800",
+       "base_departure_time": "131900",
+       "cause": "Défaillance de matériel",
+       "stop_time_effect": "deleted",
+       "departure_status": "deleted",
+       "arrival_status": "deleted",
+       "is_detour": false
+      },
+      {
+       "stop_point": {
+        "id": "stop_point:SNCF:87756395:Train",
+        "name": "Cap-d'Ail",
+        "label": "Cap-d'Ail (Cap-d'Ail)",
+        "links": []
+       },
+       "base_arrival_time": "132300",
+       "base_departure_time": "132400",
+       "cause": "Défaillance de matériel",
+       "stop_time_effect": "deleted",
+       "departure_status": "deleted",
+       "arrival_status": "deleted",
+       "is_detour": false
+      },
+      {
+       "stop_point": {
+        "id": "stop_point:SNCF:87756403:Train",
+        "name": "Monaco Monte Carlo",
+        "label": "Monaco Monte Carlo (Monaco)",
+        "links": []
+       },
+       "base_arrival_time": "132700",
+       "base_departure_time": "132900",
+       "cause": "Défaillance de matériel",
+       "stop_time_effect": "deleted",
+       "departure_status": "deleted",
+       "arrival_status": "deleted",
+       "is_detour": false
+      },
+      {
+       "stop_point": {
+        "id": "stop_point:SNCF:87756460:Train",
+        "name": "Roquebrune-Cap-Martin",
+        "label": "Roquebrune-Cap-Martin (Roquebrune-Cap-Martin)",
+        "links": []
+       },
+       "base_arrival_time": "133300",
+       "base_departure_time": "133400",
+       "cause": "Défaillance de matériel",
+       "stop_time_effect": "deleted",
+       "departure_status": "deleted",
+       "arrival_status": "deleted",
+       "is_detour": false
+      },
+      {
+       "stop_point": {
+        "id": "stop_point:SNCF:87756478:Train",
+        "name": "Carnoles",
+        "label": "Carnoles (Roquebrune-Cap-Martin)",
+        "links": []
+       },
+       "base_arrival_time": "133700",
+       "base_departure_time": "133800",
+       "cause": "Défaillance de matériel",
+       "stop_time_effect": "deleted",
+       "departure_status": "deleted",
+       "arrival_status": "deleted",
+       "is_detour": false
+      },
+      {
+       "stop_point": {
+        "id": "stop_point:SNCF:87756486:Train",
+        "name": "Menton",
+        "label": "Menton (Menton)",
+        "links": []
+       },
+       "base_arrival_time": "134000",
+       "base_departure_time": "134000",
+       "amended_departure_time": "135000",
+       "cause": "Défaillance de matériel",
+       "stop_time_effect": "deleted",
+       "departure_status": "unchanged",
+       "arrival_status": "deleted",
+       "is_detour": false
+      }
+     ]
+    }
+   ],
+   "uri": "ac1de96c-de22-4606-a26d-e94b557ed313",
+   "disruption_uri": "ac1de96c-de22-4606-a26d-e94b557ed313",
+   "contributor": "realtime.sncf.piv",
+   "reference": ""
+  },
+  {
+   "id": "83b543d2-388d-4180-9dd2-b173e5112f5d",
+   "disruption_id": "83b543d2-388d-4180-9dd2-b173e5112f5d",
+   "impact_id": "83b543d2-388d-4180-9dd2-b173e5112f5d",
+   "status": "active",
+   "updated_at": "20261112T121344",
+   "cause": "",
+   "severity": {
+    "name": "trip delayed",
+    "effect": "SIGNIFICANT_DELAYS",
+    "color": "#000000",
+    "priority": 42
+   },
+   "messages": [
+    {
+     "text": "Conditions météorologiques",
+     "channel": {
+      "content_type": "",
+      "id": "rt",
+      "name": "rt",
+      "types": [
+       "web",
+       "mobile"
+      ]
+     }
+    }
+   ],
+   "impacted_objects": [
+    {
+     "pt_object": {
+      "id": "SNCF:2026-11-12:86037:5111:Train",
+      "name": "SNCF:2026-11-12:86037:5111:Train",
+      "quality": 0,
+      "trip": {
+       "id": "SNCF:2026-11-12:86037:5111:Train",
+       "name": "86037"
+      },
+      "embedded_type": "trip"
+     },
+     "impacted_stops": [
+      {
+       "stop_point": {
+        "id": "stop_point:SNCF:87757724:Train",
+        "name": "Grasse",
+        "label": "Grasse (Grasse)",
+        "links": []
+       },
+       "base_arrival_time": "120800",
+       "base_departure_time": "120800",
+       "amended_arrival_time": "130800",
+       "amended_departure_time": "130800",
+       "cause": "Conditions météorologiques",
+       "stop_time_effect": "delayed",
+       "departure_status": "delayed",
+       "arrival_status": "unchanged",
+       "is_detour": false
+      },
+      {
+       "stop_point": {
+        "id": "stop_point:SNCF:87401323:Train",
+        "name": "Mouans-Sartoux",
+        "label": "Mouans-Sartoux (Mouans-Sartoux)",
+        "links": []
+       },
+       "base_arrival_time": "121500",
+       "base_departure_time": "121600",
+       "amended_arrival_time": "131500",
+       "amended_departure_time": "131600",
+       "cause": "Conditions météorologiques",
+       "stop_time_effect": "delayed",
+       "departure_status": "delayed",
+       "arrival_status": "delayed",
+       "is_detour": false
+      },
+      {
+       "stop_point": {
+        "id": "stop_point:SNCF:87757732:Train",
+        "name": "Ranguin",
+        "label": "Ranguin (Mougins)",
+        "links": []
+       },
+       "base_arrival_time": "122400",
+       "base_departure_time": "122500",
+       "amended_arrival_time": "132400",
+       "amended_departure_time": "132500",
+       "cause": "Conditions météorologiques",
+       "stop_time_effect": "delayed",
+       "departure_status": "delayed",
+       "arrival_status": "delayed",
+       "is_detour": false
+      },
+      {
+       "stop_point": {
+        "id": "stop_point:SNCF:87757740:Train",
+        "name": "La Frayère",
+        "label": "La Frayère (Cannes)",
+        "links": []
+       },
+       "base_arrival_time": "122800",
+       "base_departure_time": "122900",
+       "amended_arrival_time": "132800",
+       "amended_departure_time": "132900",
+       "cause": "Conditions météorologiques",
+       "stop_time_effect": "delayed",
+       "departure_status": "delayed",
+       "arrival_status": "delayed",
+       "is_detour": false
+      },
+      {
+       "stop_point": {
+        "id": "stop_point:SNCF:87757757:Train",
+        "name": "Le Bosquet",
+        "label": "Le Bosquet (Cannes)",
+        "links": []
+       },
+       "base_arrival_time": "123200",
+       "base_departure_time": "123600",
+       "amended_arrival_time": "133200",
+       "amended_departure_time": "133600",
+       "cause": "Conditions météorologiques",
+       "stop_time_effect": "delayed",
+       "departure_status": "delayed",
+       "arrival_status": "delayed",
+       "is_detour": false
+      },
+      {
+       "stop_point": {
+        "id": "stop_point:SNCF:87757625:Train",
+        "name": "Cannes",
+        "label": "Cannes (Cannes)",
+        "links": []
+       },
+       "base_arrival_time": "124100",
+       "base_departure_time": "124300",
+       "amended_arrival_time": "134100",
+       "amended_departure_time": "134300",
+       "cause": "Conditions météorologiques",
+       "stop_time_effect": "delayed",
+       "departure_status": "delayed",
+       "arrival_status": "delayed",
+       "is_detour": false
+      },
+      {
+       "stop_point": {
+        "id": "stop_point:SNCF:87757641:Train",
+        "name": "Golfe Juan - Vallauris",
+        "label": "Golfe Juan - Vallauris (Vallauris)",
+        "links": []
+       },
+       "base_arrival_time": "124800",
+       "base_departure_time": "124900",
+       "amended_arrival_time": "134800",
+       "amended_departure_time": "134900",
+       "cause": "Conditions météorologiques",
+       "stop_time_effect": "delayed",
+       "departure_status": "delayed",
+       "arrival_status": "delayed",
+       "is_detour": false
+      },
+      {
+       "stop_point": {
+        "id": "stop_point:SNCF:87757666:Train",
+        "name": "Juan les Pins",
+        "label": "Juan les Pins (Antibes)",
+        "links": []
+       },
+       "base_arrival_time": "125200",
+       "base_departure_time": "125300",
+       "amended_arrival_time": "135200",
+       "amended_departure_time": "135300",
+       "cause": "Conditions météorologiques",
+       "stop_time_effect": "delayed",
+       "departure_status": "delayed",
+       "arrival_status": "delayed",
+       "is_detour": false
+      },
+      {
+       "stop_point": {
+        "id": "stop_point:SNCF:87757674:Train",
+        "name": "Antibes",
+        "label": "Antibes (Antibes)",
+        "links": []
+       },
+       "base_arrival_time": "125600",
+       "base_departure_time": "125700",
+       "amended_arrival_time": "135600",
+       "amended_departure_time": "135700",
+       "cause": "Conditions météorologiques",
+       "stop_time_effect": "delayed",
+       "departure_status": "delayed",
+       "arrival_status": "delayed",
+       "is_detour": false
+      },
+      {
+       "stop_point": {
+        "id": "stop_point:SNCF:87756304:Train",
+        "name": "Villeneuve-Loubet - Plage",
+        "label": "Villeneuve-Loubet - Plage (Villeneuve-Loubet)",
+        "links": []
+       },
+       "base_arrival_time": "130100",
+       "base_departure_time": "130200",
+       "amended_arrival_time": "140100",
+       "amended_departure_time": "140200",
+       "cause": "Conditions météorologiques",
+       "stop_time_effect": "delayed",
+       "departure_status": "delayed",
+       "arrival_status": "delayed",
+       "is_detour": false
+      },
+      {
+       "stop_point": {
+        "id": "stop_point:SNCF:87756320:Train",
+        "name": "Cagnes-sur-Mer",
+        "label": "Cagnes-sur-Mer (Cagnes-sur-Mer)",
+        "links": []
+       },
+       "base_arrival_time": "130500",
+       "base_departure_time": "130600",
+       "amended_arrival_time": "140500",
+       "amended_departure_time": "140600",
+       "cause": "Conditions météorologiques",
+       "stop_time_effect": "delayed",
+       "departure_status": "delayed",
+       "arrival_status": "delayed",
+       "is_detour": false
+      },
+      {
+       "stop_point": {
+        "id": "stop_point:SNCF:87756346:Train",
+        "name": "Saint-Laurent-du-Var",
+        "label": "Saint-Laurent-du-Var (Saint-Laurent-du-Var)",
+        "links": []
+       },
+       "base_arrival_time": "130900",
+       "base_departure_time": "131000",
+       "amended_arrival_time": "140900",
+       "amended_departure_time": "141000",
+       "cause": "Conditions météorologiques",
+       "stop_time_effect": "delayed",
+       "departure_status": "delayed",
+       "arrival_status": "delayed",
+       "is_detour": false
+      },
+      {
+       "stop_point": {
+        "id": "stop_point:SNCF:87756254:Train",
+        "name": "Nice Saint-Augustin",
+        "label": "Nice Saint-Augustin (Nice)",
+        "links": []
+       },
+       "base_arrival_time": "131300",
+       "base_departure_time": "131500",
+       "amended_arrival_time": "141300",
+       "amended_departure_time": "141500",
+       "cause": "Conditions météorologiques",
+       "stop_time_effect": "delayed",
+       "departure_status": "delayed",
+       "arrival_status": "delayed",
+       "is_detour": false
+      },
+      {
+       "stop_point": {
+        "id": "stop_point:SNCF:87756056:Train",
+        "name": "Nice",
+        "label": "Nice (Nice)",
+        "links": []
+       },
+       "base_arrival_time": "132100",
+       "base_departure_time": "132400",
+       "amended_arrival_time": "142100",
+       "amended_departure_time": "142400",
+       "cause": "Conditions météorologiques",
+       "stop_time_effect": "delayed",
+       "departure_status": "delayed",
+       "arrival_status": "delayed",
+       "is_detour": false
+      },
+      {
+       "stop_point": {
+        "id": "stop_point:SNCF:87756353:Train",
+        "name": "Nice Riquier",
+        "label": "Nice Riquier (Nice)",
+        "links": []
+       },
+       "base_arrival_time": "132700",
+       "base_departure_time": "132900",
+       "amended_arrival_time": "142700",
+       "amended_departure_time": "142900",
+       "cause": "Conditions météorologiques",
+       "stop_time_effect": "delayed",
+       "departure_status": "delayed",
+       "arrival_status": "delayed",
+       "is_detour": false
+      },
+      {
+       "stop_point": {
+        "id": "stop_point:SNCF:87756361:Train",
+        "name": "Villefranche-sur-Mer",
+        "label": "Villefranche-sur-Mer (Villefranche-sur-Mer)",
+        "links": []
+       },
+       "base_arrival_time": "133100",
+       "base_departure_time": "133200",
+       "amended_arrival_time": "143100",
+       "amended_departure_time": "143200",
+       "cause": "Conditions météorologiques",
+       "stop_time_effect": "delayed",
+       "departure_status": "delayed",
+       "arrival_status": "delayed",
+       "is_detour": false
+      },
+      {
+       "stop_point": {
+        "id": "stop_point:SNCF:87756379:Train",
+        "name": "Beaulieu-sur-Mer",
+        "label": "Beaulieu-sur-Mer (Beaulieu-sur-Mer)",
+        "links": []
+       },
+       "base_arrival_time": "133500",
+       "base_departure_time": "133600",
+       "amended_arrival_time": "143500",
+       "amended_departure_time": "143600",
+       "cause": "Conditions météorologiques",
+       "stop_time_effect": "delayed",
+       "departure_status": "delayed",
+       "arrival_status": "delayed",
+       "is_detour": false
+      },
+      {
+       "stop_point": {
+        "id": "stop_point:SNCF:87756387:Train",
+        "name": "Èze",
+        "label": "Èze (Èze)",
+        "links": []
+       },
+       "base_arrival_time": "134000",
+       "base_departure_time": "134100",
+       "amended_arrival_time": "144000",
+       "amended_departure_time": "144100",
+       "cause": "Conditions météorologiques",
+       "stop_time_effect": "delayed",
+       "departure_status": "delayed",
+       "arrival_status": "delayed",
+       "is_detour": false
+      },
+      {
+       "stop_point": {
+        "id": "stop_point:SNCF:87756395:Train",
+        "name": "Cap-d'Ail",
+        "label": "Cap-d'Ail (Cap-d'Ail)",
+        "links": []
+       },
+       "base_arrival_time": "134400",
+       "base_departure_time": "134500",
+       "amended_arrival_time": "144400",
+       "amended_departure_time": "144500",
+       "cause": "Conditions météorologiques",
+       "stop_time_effect": "delayed",
+       "departure_status": "delayed",
+       "arrival_status": "delayed",
+       "is_detour": false
+      },
+      {
+       "stop_point": {
+        "id": "stop_point:SNCF:87756403:Train",
+        "name": "Monaco Monte Carlo",
+        "label": "Monaco Monte Carlo (Monaco)",
+        "links": []
+       },
+       "base_arrival_time": "134800",
+       "base_departure_time": "135100",
+       "amended_arrival_time": "144800",
+       "amended_departure_time": "145100",
+       "cause": "Conditions météorologiques",
+       "stop_time_effect": "delayed",
+       "departure_status": "delayed",
+       "arrival_status": "delayed",
+       "is_detour": false
+      },
+      {
+       "stop_point": {
+        "id": "stop_point:SNCF:87756460:Train",
+        "name": "Roquebrune-Cap-Martin",
+        "label": "Roquebrune-Cap-Martin (Roquebrune-Cap-Martin)",
+        "links": []
+       },
+       "base_arrival_time": "135600",
+       "base_departure_time": "135700",
+       "amended_arrival_time": "145600",
+       "amended_departure_time": "145700",
+       "cause": "Conditions météorologiques",
+       "stop_time_effect": "delayed",
+       "departure_status": "delayed",
+       "arrival_status": "delayed",
+       "is_detour": false
+      },
+      {
+       "stop_point": {
+        "id": "stop_point:SNCF:87756478:Train",
+        "name": "Carnoles",
+        "label": "Carnoles (Roquebrune-Cap-Martin)",
+        "links": []
+       },
+       "base_arrival_time": "135900",
+       "base_departure_time": "140000",
+       "amended_arrival_time": "145900",
+       "amended_departure_time": "150000",
+       "cause": "Conditions météorologiques",
+       "stop_time_effect": "delayed",
+       "departure_status": "delayed",
+       "arrival_status": "delayed",
+       "is_detour": false
+      },
+      {
+       "stop_point": {
+        "id": "stop_point:SNCF:87756486:Train",
+        "name": "Menton",
+        "label": "Menton (Menton)",
+        "links": []
+       },
+       "base_arrival_time": "140200",
+       "base_departure_time": "140300",
+       "amended_arrival_time": "150200",
+       "amended_departure_time": "150300",
+       "cause": "Conditions météorologiques",
+       "stop_time_effect": "delayed",
+       "departure_status": "delayed",
+       "arrival_status": "delayed",
+       "is_detour": false
+      },
+      {
+       "stop_point": {
+        "id": "stop_point:SNCF:87756494:Train",
+        "name": "Menton Garavan",
+        "label": "Menton Garavan (Menton)",
+        "links": []
+       },
+       "base_arrival_time": "140600",
+       "base_departure_time": "140700",
+       "amended_arrival_time": "150600",
+       "amended_departure_time": "150700",
+       "cause": "Conditions météorologiques",
+       "stop_time_effect": "delayed",
+       "departure_status": "delayed",
+       "arrival_status": "delayed",
+       "is_detour": false
+      },
+      {
+       "stop_point": {
+        "id": "stop_point:SNCF:83045013:Train",
+        "name": "Ventimiglia",
+        "label": "Ventimiglia (Ventimiglia)",
+        "links": []
+       },
+       "base_arrival_time": "141800",
+       "base_departure_time": "141800",
+       "amended_arrival_time": "151800",
+       "amended_departure_time": "151800",
+       "cause": "Conditions météorologiques",
+       "stop_time_effect": "delayed",
+       "departure_status": "unchanged",
+       "arrival_status": "delayed",
+       "is_detour": false
+      }
+     ]
+    }
+   ],
+   "uri": "83b543d2-388d-4180-9dd2-b173e5112f5d",
+   "disruption_uri": "83b543d2-388d-4180-9dd2-b173e5112f5d",
+   "contributor": "realtime.sncf.piv",
+   "reference": ""
+  },
+  {
+   "id": "e8d4b305-a692-4513-ac79-341c97f263c7",
+   "disruption_id": "e8d4b305-a692-4513-ac79-341c97f263c7",
+   "impact_id": "e8d4b305-a692-4513-ac79-341c97f263c7",
+   "status": "future",
+   "updated_at": "20261112T121411",
+   "cause": "",
+   "severity": {
+    "name": "reduced service",
+    "effect": "REDUCED_SERVICE",
+    "color": "#000000",
+    "priority": 42
+   },
+   "messages": [
+    {
+     "text": "Conditions météorologiques",
+     "channel": {
+      "content_type": "",
+      "id": "rt",
+      "name": "rt",
+      "types": [
+       "web",
+       "mobile"
+      ]
+     }
+    }
+   ],
+   "impacted_objects": [
+    {
+     "pt_object": {
+      "id": "SNCF:2026-11-12:86039:5111:Train",
+      "name": "SNCF:2026-11-12:86039:5111:Train",
+      "quality": 0,
+      "trip": {
+       "id": "SNCF:2026-11-12:86039:5111:Train",
+       "name": "86039"
+      },
+      "embedded_type": "trip"
+     },
+     "impacted_stops": [
+      {
+       "stop_point": {
+        "id": "stop_point:SNCF:87757724:Train",
+        "name": "Grasse",
+        "label": "Grasse (Grasse)",
+        "links": []
+       },
+       "base_arrival_time": "123800",
+       "base_departure_time": "123800",
+       "amended_arrival_time": "123800",
+       "cause": "Conditions météorologiques",
+       "stop_time_effect": "deleted",
+       "departure_status": "deleted",
+       "arrival_status": "unchanged",
+       "is_detour": false
+      },
+      {
+       "stop_point": {
+        "id": "stop_point:SNCF:87401323:Train",
+        "name": "Mouans-Sartoux",
+        "label": "Mouans-Sartoux (Mouans-Sartoux)",
+        "links": []
+       },
+       "base_arrival_time": "124500",
+       "base_departure_time": "124600",
+       "cause": "Conditions météorologiques",
+       "stop_time_effect": "deleted",
+       "departure_status": "deleted",
+       "arrival_status": "deleted",
+       "is_detour": false
+      },
+      {
+       "stop_point": {
+        "id": "stop_point:SNCF:87757732:Train",
+        "name": "Ranguin",
+        "label": "Ranguin (Mougins)",
+        "links": []
+       },
+       "base_arrival_time": "125400",
+       "base_departure_time": "125500",
+       "cause": "Conditions météorologiques",
+       "stop_time_effect": "deleted",
+       "departure_status": "deleted",
+       "arrival_status": "deleted",
+       "is_detour": false
+      },
+      {
+       "stop_point": {
+        "id": "stop_point:SNCF:87757740:Train",
+        "name": "La Frayère",
+        "label": "La Frayère (Cannes)",
+        "links": []
+       },
+       "base_arrival_time": "125800",
+       "base_departure_time": "125900",
+       "cause": "Conditions météorologiques",
+       "stop_time_effect": "deleted",
+       "departure_status": "deleted",
+       "arrival_status": "deleted",
+       "is_detour": false
+      },
+      {
+       "stop_point": {
+        "id": "stop_point:SNCF:87757757:Train",
+        "name": "Le Bosquet",
+        "label": "Le Bosquet (Cannes)",
+        "links": []
+       },
+       "base_arrival_time": "130200",
+       "base_departure_time": "130500",
+       "amended_departure_time": "130500",
+       "cause": "Conditions météorologiques",
+       "stop_time_effect": "deleted",
+       "departure_status": "unchanged",
+       "arrival_status": "deleted",
+       "is_detour": false
+      },
+      {
+       "stop_point": {
+        "id": "stop_point:SNCF:87757625:Train",
+        "name": "Cannes",
+        "label": "Cannes (Cannes)",
+        "links": []
+       },
+       "base_arrival_time": "131100",
+       "base_departure_time": "131300",
+       "amended_arrival_time": "131100",
+       "amended_departure_time": "131300",
+       "cause": "",
+       "stop_time_effect": "unchanged",
+       "departure_status": "unchanged",
+       "arrival_status": "unchanged",
+       "is_detour": false
+      },
+      {
+       "stop_point": {
+        "id": "stop_point:SNCF:87757641:Train",
+        "name": "Golfe Juan - Vallauris",
+        "label": "Golfe Juan - Vallauris (Vallauris)",
+        "links": []
+       },
+       "base_arrival_time": "131900",
+       "base_departure_time": "132000",
+       "amended_arrival_time": "131900",
+       "amended_departure_time": "132000",
+       "cause": "",
+       "stop_time_effect": "unchanged",
+       "departure_status": "unchanged",
+       "arrival_status": "unchanged",
+       "is_detour": false
+      },
+      {
+       "stop_point": {
+        "id": "stop_point:SNCF:87757666:Train",
+        "name": "Juan les Pins",
+        "label": "Juan les Pins (Antibes)",
+        "links": []
+       },
+       "base_arrival_time": "132300",
+       "base_departure_time": "132400",
+       "amended_arrival_time": "132300",
+       "amended_departure_time": "132400",
+       "cause": "",
+       "stop_time_effect": "unchanged",
+       "departure_status": "unchanged",
+       "arrival_status": "unchanged",
+       "is_detour": false
+      },
+      {
+       "stop_point": {
+        "id": "stop_point:SNCF:87757674:Train",
+        "name": "Antibes",
+        "label": "Antibes (Antibes)",
+        "links": []
+       },
+       "base_arrival_time": "132600",
+       "base_departure_time": "132700",
+       "amended_arrival_time": "132600",
+       "amended_departure_time": "132700",
+       "cause": "",
+       "stop_time_effect": "unchanged",
+       "departure_status": "unchanged",
+       "arrival_status": "unchanged",
+       "is_detour": false
+      },
+      {
+       "stop_point": {
+        "id": "stop_point:SNCF:87756304:Train",
+        "name": "Villeneuve-Loubet - Plage",
+        "label": "Villeneuve-Loubet - Plage (Villeneuve-Loubet)",
+        "links": []
+       },
+       "base_arrival_time": "133100",
+       "base_departure_time": "133200",
+       "amended_arrival_time": "133100",
+       "amended_departure_time": "133200",
+       "cause": "",
+       "stop_time_effect": "unchanged",
+       "departure_status": "unchanged",
+       "arrival_status": "unchanged",
+       "is_detour": false
+      },
+      {
+       "stop_point": {
+        "id": "stop_point:SNCF:87756320:Train",
+        "name": "Cagnes-sur-Mer",
+        "label": "Cagnes-sur-Mer (Cagnes-sur-Mer)",
+        "links": []
+       },
+       "base_arrival_time": "133500",
+       "base_departure_time": "133600",
+       "amended_arrival_time": "133500",
+       "amended_departure_time": "133600",
+       "cause": "",
+       "stop_time_effect": "unchanged",
+       "departure_status": "unchanged",
+       "arrival_status": "unchanged",
+       "is_detour": false
+      },
+      {
+       "stop_point": {
+        "id": "stop_point:SNCF:87756346:Train",
+        "name": "Saint-Laurent-du-Var",
+        "label": "Saint-Laurent-du-Var (Saint-Laurent-du-Var)",
+        "links": []
+       },
+       "base_arrival_time": "134000",
+       "base_departure_time": "134100",
+       "amended_arrival_time": "134000",
+       "amended_departure_time": "134100",
+       "cause": "",
+       "stop_time_effect": "unchanged",
+       "departure_status": "unchanged",
+       "arrival_status": "unchanged",
+       "is_detour": false
+      },
+      {
+       "stop_point": {
+        "id": "stop_point:SNCF:87756254:Train",
+        "name": "Nice Saint-Augustin",
+        "label": "Nice Saint-Augustin (Nice)",
+        "links": []
+       },
+       "base_arrival_time": "134300",
+       "base_departure_time": "134500",
+       "amended_arrival_time": "134300",
+       "amended_departure_time": "134500",
+       "cause": "",
+       "stop_time_effect": "unchanged",
+       "departure_status": "unchanged",
+       "arrival_status": "unchanged",
+       "is_detour": false
+      },
+      {
+       "stop_point": {
+        "id": "stop_point:SNCF:87756056:Train",
+        "name": "Nice",
+        "label": "Nice (Nice)",
+        "links": []
+       },
+       "base_arrival_time": "135200",
+       "base_departure_time": "135500",
+       "amended_arrival_time": "135200",
+       "amended_departure_time": "135500",
+       "cause": "",
+       "stop_time_effect": "unchanged",
+       "departure_status": "unchanged",
+       "arrival_status": "unchanged",
+       "is_detour": false
+      },
+      {
+       "stop_point": {
+        "id": "stop_point:SNCF:87756353:Train",
+        "name": "Nice Riquier",
+        "label": "Nice Riquier (Nice)",
+        "links": []
+       },
+       "base_arrival_time": "135800",
+       "base_departure_time": "140000",
+       "amended_arrival_time": "135800",
+       "amended_departure_time": "140000",
+       "cause": "",
+       "stop_time_effect": "unchanged",
+       "departure_status": "unchanged",
+       "arrival_status": "unchanged",
+       "is_detour": false
+      },
+      {
+       "stop_point": {
+        "id": "stop_point:SNCF:87756361:Train",
+        "name": "Villefranche-sur-Mer",
+        "label": "Villefranche-sur-Mer (Villefranche-sur-Mer)",
+        "links": []
+       },
+       "base_arrival_time": "140200",
+       "base_departure_time": "140300",
+       "amended_arrival_time": "140200",
+       "amended_departure_time": "140300",
+       "cause": "",
+       "stop_time_effect": "unchanged",
+       "departure_status": "unchanged",
+       "arrival_status": "unchanged",
+       "is_detour": false
+      },
+      {
+       "stop_point": {
+        "id": "stop_point:SNCF:87756379:Train",
+        "name": "Beaulieu-sur-Mer",
+        "label": "Beaulieu-sur-Mer (Beaulieu-sur-Mer)",
+        "links": []
+       },
+       "base_arrival_time": "140600",
+       "base_departure_time": "140700",
+       "amended_arrival_time": "140600",
+       "amended_departure_time": "140700",
+       "cause": "",
+       "stop_time_effect": "unchanged",
+       "departure_status": "unchanged",
+       "arrival_status": "unchanged",
+       "is_detour": false
+      },
+      {
+       "stop_point": {
+        "id": "stop_point:SNCF:87756387:Train",
+        "name": "Èze",
+        "label": "Èze (Èze)",
+        "links": []
+       },
+       "base_arrival_time": "141100",
+       "base_departure_time": "141200",
+       "amended_arrival_time": "141100",
+       "amended_departure_time": "141200",
+       "cause": "",
+       "stop_time_effect": "unchanged",
+       "departure_status": "unchanged",
+       "arrival_status": "unchanged",
+       "is_detour": false
+      },
+      {
+       "stop_point": {
+        "id": "stop_point:SNCF:87756395:Train",
+        "name": "Cap-d'Ail",
+        "label": "Cap-d'Ail (Cap-d'Ail)",
+        "links": []
+       },
+       "base_arrival_time": "141600",
+       "base_departure_time": "141700",
+       "amended_arrival_time": "141600",
+       "amended_departure_time": "141700",
+       "cause": "",
+       "stop_time_effect": "unchanged",
+       "departure_status": "unchanged",
+       "arrival_status": "unchanged",
+       "is_detour": false
+      },
+      {
+       "stop_point": {
+        "id": "stop_point:SNCF:87756403:Train",
+        "name": "Monaco Monte Carlo",
+        "label": "Monaco Monte Carlo (Monaco)",
+        "links": []
+       },
+       "base_arrival_time": "142000",
+       "base_departure_time": "142300",
+       "amended_arrival_time": "142000",
+       "amended_departure_time": "142300",
+       "cause": "",
+       "stop_time_effect": "unchanged",
+       "departure_status": "unchanged",
+       "arrival_status": "unchanged",
+       "is_detour": false
+      },
+      {
+       "stop_point": {
+        "id": "stop_point:SNCF:87756460:Train",
+        "name": "Roquebrune-Cap-Martin",
+        "label": "Roquebrune-Cap-Martin (Roquebrune-Cap-Martin)",
+        "links": []
+       },
+       "base_arrival_time": "142800",
+       "base_departure_time": "142900",
+       "amended_arrival_time": "142800",
+       "amended_departure_time": "142900",
+       "cause": "",
+       "stop_time_effect": "unchanged",
+       "departure_status": "unchanged",
+       "arrival_status": "unchanged",
+       "is_detour": false
+      },
+      {
+       "stop_point": {
+        "id": "stop_point:SNCF:87756478:Train",
+        "name": "Carnoles",
+        "label": "Carnoles (Roquebrune-Cap-Martin)",
+        "links": []
+       },
+       "base_arrival_time": "143200",
+       "base_departure_time": "143300",
+       "amended_arrival_time": "143200",
+       "amended_departure_time": "143300",
+       "cause": "",
+       "stop_time_effect": "unchanged",
+       "departure_status": "unchanged",
+       "arrival_status": "unchanged",
+       "is_detour": false
+      },
+      {
+       "stop_point": {
+        "id": "stop_point:SNCF:87756486:Train",
+        "name": "Menton",
+        "label": "Menton (Menton)",
+        "links": []
+       },
+       "base_arrival_time": "143500",
+       "base_departure_time": "143600",
+       "amended_arrival_time": "143500",
+       "amended_departure_time": "143600",
+       "cause": "",
+       "stop_time_effect": "unchanged",
+       "departure_status": "unchanged",
+       "arrival_status": "unchanged",
+       "is_detour": false
+      },
+      {
+       "stop_point": {
+        "id": "stop_point:SNCF:87756494:Train",
+        "name": "Menton Garavan",
+        "label": "Menton Garavan (Menton)",
+        "links": []
+       },
+       "base_arrival_time": "143900",
+       "base_departure_time": "144000",
+       "amended_arrival_time": "143900",
+       "amended_departure_time": "144000",
+       "cause": "",
+       "stop_time_effect": "unchanged",
+       "departure_status": "unchanged",
+       "arrival_status": "unchanged",
+       "is_detour": false
+      },
+      {
+       "stop_point": {
+        "id": "stop_point:SNCF:83045013:Train",
+        "name": "Ventimiglia",
+        "label": "Ventimiglia (Ventimiglia)",
+        "links": []
+       },
+       "base_arrival_time": "145200",
+       "base_departure_time": "145200",
+       "amended_arrival_time": "145200",
+       "amended_departure_time": "145200",
+       "cause": "",
+       "stop_time_effect": "unchanged",
+       "departure_status": "unchanged",
+       "arrival_status": "unchanged",
+       "is_detour": false
+      }
+     ]
+    }
+   ],
+   "uri": "e8d4b305-a692-4513-ac79-341c97f263c7",
+   "disruption_uri": "e8d4b305-a692-4513-ac79-341c97f263c7",
+   "contributor": "realtime.sncf.piv",
+   "reference": ""
+  }
+ ],
+ "terminus": [
+  {
+   "id": "stop_area:SNCF:87756486",
+   "name": "Menton",
+   "timezone": "Europe/Paris",
+   "label": "Menton (Menton)",
+   "links": []
+  },
+  {
+   "id": "stop_area:SNCF:83045013",
+   "name": "Ventimiglia",
+   "timezone": "Europe/Paris",
+   "label": "Ventimiglia (Ventimiglia)",
+   "links": []
+  }
+ ],
+ "context": {
+  "car_direct_path": {
+   "air_pollutants": {
+    "unit": "g",
+    "values": {
+     "nox": 5.8235,
+     "pm": 0.7412
+    }
+   }
+  },
+  "current_datetime": "20261112T121522",
+  "timezone": "Europe/Paris"
+ },
+ "notes": [],
+ "exceptions": []
+}

@@ -777,3 +777,150 @@ async def test_poll_interval_real_elapsed_time_across_dst_fall_back(repo):
 async def test_constructor_defaults(repo):
     w = Watcher(repo, FakeSource(), FakeNotifier(), poll_interval_s=120, window_before_min=60)
     await w.tick(at(FRI, "07:30"))  # no follows: nothing to do, no error
+
+
+# --- Final review C1 (ruling R24): accepting a replacement train ----------------------------------
+# replace_dep_time wipes the follow's daily_state, and the watcher's in-memory per-day sets are keyed
+# by (follow.id, dep_time, service date): nothing observed for the old time carries over to the new.
+
+
+async def test_replacement_after_suggestion_sends_no_second_missing_dm(repo):
+    f = follow_of(repo, days=THURSDAY | FRIDAY | SATURDAY)
+    alt = train(at(FRI, "08:06"), "86999")
+    source = FakeSource([])
+    notifier = FakeNotifier()
+    w = Watcher(repo, source, notifier)
+
+    await w.tick(at(THU, "07:30"))
+    await w.tick(at(THU, "08:01"))  # missing day 1
+    source.items = [alt]
+    await w.tick(at(FRI, "07:30"))
+    await w.tick(at(FRI, "08:01"))  # missing day 2: the one suggestion
+    assert notifier.sent == [Sent(U1, format_missing(f, alt), (f.id, alt))]
+
+    # The user clicks "Suivre 08:06" a bit later (after the 08:06 departure).
+    assert repo.replace_dep_time(U1, f.id, "08:06", "86999") is True
+    for hhmm in ("08:30", "08:31", "08:40", "09:00"):
+        await w.tick(at(FRI, hhmm))
+
+    assert len(notifier.sent) == 1  # no second "introuvable depuis 2 jours"
+    assert repo.missing_streak(f.id) == 0
+    # The 08:06 train was never polled in its own window today: nothing is known about it.
+    assert repo.get_daily(f.id, FRI) == repo.get_daily(-1, FRI)
+    assert repo.get_daily(f.id, THU) == repo.get_daily(-1, THU)
+    assert repo.all_follows()[0].suggestion_sent is False
+
+    # Next day the new train is watched normally.
+    source.items = [train(at(SAT, "08:06"), "86999")]
+    await w.tick(at(SAT, "07:30"))
+    await w.tick(at(SAT, "08:07"))
+    assert repo.get_daily(f.id, SAT).found is True
+    assert repo.missing_streak(f.id) == 0
+    assert len(notifier.sent) == 1
+
+
+async def test_replacement_does_not_inherit_successful_poll_of_old_time(repo):
+    f = follow_of(repo, days=FRIDAY)
+    source = FakeSource([])  # the 08:00 is absent, the call succeeds
+    notifier = FakeNotifier()
+    w = Watcher(repo, source, notifier)
+
+    await w.tick(at(FRI, "07:30"))  # successful poll for 08:00
+    assert repo.replace_dep_time(U1, f.id, "08:06", "86999") is True
+
+    source.error = SncfUnavailable("API SNCF indisponible (HTTP 503)")
+    await w.tick(at(FRI, "07:31"))  # the new group (08:06) is polled at once, and fails
+    assert source.calls[-1] == Call(MONACO, NICE, at(FRI, "08:05"), 4)
+    await w.tick(at(FRI, "08:10"))  # both windows over
+
+    assert len(source.calls) == 2
+    assert repo.get_daily(f.id, FRI).found is None  # no false found=0 for the new time
+    assert repo.missing_streak(f.id) == 0
+    assert notifier.sent == []
+
+
+async def test_replacement_found_in_window_alerts_despite_old_trains_state(repo):
+    f = follow_of(repo, days=FRIDAY)
+    old = train(at(FRI, "08:00"), "86053", delay=10)
+    new = train(at(FRI, "08:06"), "86999", delay=10)
+    source = FakeSource([old, new])
+    notifier = FakeNotifier()
+    w = Watcher(repo, source, notifier)
+
+    await w.tick(at(FRI, "07:30"))
+    assert notifier.sent == [Sent(U1, format_alert(AlertKind.DELAYED, old), None)]
+
+    assert repo.replace_dep_time(U1, f.id, "08:06", "86999") is True
+    await w.tick(at(FRI, "07:31"))  # fresh, successful, in-window poll of the new time
+
+    assert notifier.sent == [
+        Sent(U1, format_alert(AlertKind.DELAYED, old), None),
+        Sent(U1, format_alert(AlertKind.DELAYED, new), None),
+    ]
+    s = repo.get_daily(f.id, FRI)
+    assert (s.found, s.last_delay, s.notified_status, s.notified_delay) == (True, 10, "delayed", 10)
+
+    await w.tick(at(FRI, "08:20"))  # window over (08:06 + 10 min)
+    assert repo.get_daily(f.id, FRI).found is True
+    assert repo.missing_streak(f.id) == 0
+    assert len(notifier.sent) == 2
+
+
+# --- Final review M1 (ruling R24): a non-SncfError in one group does not abort the tick -----------
+
+
+async def test_unexpected_error_in_one_group_does_not_stop_the_tick(repo):
+    f_bad = follow_of(repo, U1, dep="08:30", days=FRIDAY)
+    f_good = follow_of(repo, U2, from_id=CANNES, to_id=ANTIBES, dep="08:30", days=FRIDAY)
+    f_closing = follow_of(repo, U3, from_id=NICE, to_id=MONACO, dep="08:00", days=FRIDAY)
+    good_train = train(at(FRI, "08:30"), "86077", from_id=CANNES, to_id=ANTIBES)
+    source = FakeSource(routes={(CANNES, ANTIBES): [good_train], (MONACO, NICE): [], (NICE, MONACO): []})
+    notifier = FakeNotifier()
+    w = Watcher(repo, source, notifier)
+
+    await w.tick(at(FRI, "07:30"))  # every group polled successfully; f_closing's 08:00 is absent
+    assert len(source.calls) == 3
+    assert repo.get_daily(f_closing.id, FRI).found is None
+
+    source.route_errors[(MONACO, NICE)] = ValueError("Horaire de départ absent de la réponse SNCF")
+    await w.tick(at(FRI, "08:01"))  # must not raise
+
+    # The group after the failing one is still polled in the same tick...
+    assert [c for c in source.calls if c.from_id == CANNES] == [Call(CANNES, ANTIBES, at(FRI, "08:29"), 4)] * 2
+    assert repo.get_daily(f_good.id, FRI).found is True
+    # ...and the end-of-window pass still runs.
+    assert repo.get_daily(f_closing.id, FRI).found is False
+    assert repo.get_daily(f_bad.id, FRI).found is None
+    assert notifier.sent == []
+
+
+# --- Ruling R25: a cancelled train merged in from the base_schedule cross-check -------------------
+
+
+async def test_merged_cancelled_train_sends_one_supprime_dm(repo):
+    import json
+    from pathlib import Path
+
+    from monatrain.sncf.parse import parse_journeys
+
+    payload = json.loads(
+        (Path(__file__).parent / "fixtures" / "live_journeys_nice_monaco_base_schedule.json").read_text(encoding="utf-8")
+    )
+    thu = date(2026, 11, 12)
+    [cancelled] = [t for t in parse_journeys(payload, NICE, MONACO) if t.train_number == "86033"]
+    assert cancelled.status is Status.CANCELLED and cancelled.base_departure == at(thu, "12:26")
+
+    f = follow_of(repo, from_id=NICE, to_id=MONACO, dep="12:26", days=THURSDAY, number="86033")
+    source = FakeSource(routes={(NICE, MONACO): [cancelled]})
+    notifier = FakeNotifier()
+    w = Watcher(repo, source, notifier)
+
+    for hhmm in ("11:30", "11:33", "12:00", "12:26"):
+        await w.tick(at(thu, hhmm))
+    await w.tick(at(thu, "12:27"))  # window over
+
+    assert notifier.sent == [Sent(U1, format_alert(AlertKind.CANCELLED, cancelled), None)]
+    assert "❌ Supprimé" in notifier.sent[0].text
+    s = repo.get_daily(f.id, thu)
+    assert (s.found, s.notified_status) == (True, "cancelled")
+    assert repo.missing_streak(f.id) == 0

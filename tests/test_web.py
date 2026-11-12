@@ -692,3 +692,20 @@ def test_pages_are_french_mobile_layout(make_web):
     assert client.get("/static/app.css").status_code == 200
     assert client.get("/static/app.js").status_code == 200
     assert client.get("/static/manifest.webmanifest").status_code == 200
+
+
+# --- Final review M1 (ruling R24): French catch-all 500 page -------------------------------------
+
+
+def test_unexpected_error_500_french(repo, clock):
+    source = FakeSource(error=RuntimeError("kaboom interne"))
+    app = create_app(make_settings(), source=source, repo=repo, clock=clock)
+    # Starlette re-raises after the 500 handler ran (so that the server logs it): look at the answer.
+    with TestClient(app, raise_server_exceptions=False) as client:
+        resp = client.get("/trajet", params={"de": MONACO, "vers": NICE, "heure": "08:00"})
+
+    assert resp.status_code == 500
+    assert "Une erreur est survenue" in text(resp)
+    assert "Internal Server Error" not in resp.text
+    assert "kaboom" not in resp.text
+    assert "text/html" in resp.headers["content-type"]

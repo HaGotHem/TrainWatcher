@@ -215,6 +215,65 @@ def test_replace_dep_time_only_owner(repo):
     assert (same.dep_time, same.train_number) == ("08:04", "86053")
 
 
+# Final review C1 (ruling R24): the daily state of a follow belongs to its old train. Replacing the
+# time wipes every daily_state row of that follow (all dates), in the same transaction.
+
+
+def test_replace_dep_time_clears_all_daily_state_of_that_follow(repo, db):
+    _user(repo)
+    f = _follow(repo, dep_time="08:04", train_number="86053")
+    other = _follow(repo, dep_time="09:04", train_number="86077")
+    repo.set_found(f.id, D1, False)
+    repo.set_found(f.id, D2, False)
+    repo.set_found(f.id, D3, False)
+    repo.set_last_delay(f.id, D3, 12)
+    repo.set_notified(f.id, D3, "delayed", 12)
+    repo.set_found(other.id, D2, False)
+    repo.set_notified(other.id, D3, "cancelled", 0)
+    assert repo.missing_streak(f.id) == 3
+
+    assert repo.replace_dep_time("111", f.id, "08:15", "86055") is True
+
+    for d in (D1, D2, D3):
+        assert repo.get_daily(f.id, d) == DailyState(None, None, None, None)
+    assert repo.missing_streak(f.id) == 0
+    assert db.execute("SELECT COUNT(*) FROM daily_state WHERE followed_id = ?", (f.id,)).fetchone()[0] == 0
+    # Other follows keep their state.
+    assert repo.get_daily(other.id, D2).found is False
+    assert repo.get_daily(other.id, D3).notified_status == "cancelled"
+    assert not db.in_transaction
+
+
+def test_replace_dep_time_not_owned_or_missing_keeps_daily_state(repo, db):
+    _user(repo)
+    _user(repo, "222")
+    f = _follow(repo, dep_time="08:04", train_number="86053")
+    repo.set_found(f.id, D2, False)
+    repo.set_found(f.id, D3, False)
+
+    assert repo.replace_dep_time("222", f.id, "08:15", "86055") is False  # not the owner
+    assert repo.replace_dep_time("111", f.id + 999, "08:15", "86055") is False  # no such follow
+    assert repo.get_daily(f.id, D3).found is False
+    assert repo.missing_streak(f.id) == 2
+    assert not db.in_transaction
+
+
+def test_replace_dep_time_duplicate_keeps_daily_state(repo, db):
+    _user(repo)
+    f = _follow(repo, dep_time="08:04", train_number="86053")
+    _follow(repo, dep_time="08:15", train_number="86055")
+    repo.set_found(f.id, D3, False)
+    repo.set_notified(f.id, D3, "delayed", 7)
+
+    with pytest.raises(DuplicateFollowError):
+        repo.replace_dep_time("111", f.id, "08:15", "86055")
+    s = repo.get_daily(f.id, D3)
+    assert (s.found, s.notified_status, s.notified_delay) == (False, "delayed", 7)
+    assert not db.in_transaction  # the failed replace left no open transaction behind
+    repo.set_found(f.id, D2, False)  # the connection is still usable (autocommit)
+    assert repo.missing_streak(f.id) == 2
+
+
 def test_mark_suggestion_sent(repo):
     _user(repo)
     f = _follow(repo)

@@ -14,7 +14,7 @@ from pathlib import Path
 import httpx
 import pytest
 
-from monatrain.models import Fetched
+from monatrain.models import Fetched, Status
 from monatrain.sncf.client import (
     BASE_URL,
     SncfAuthError,
@@ -44,10 +44,16 @@ class FakeServer:
 
     `reply` is either an httpx.Response factory `(request) -> Response`, or an exception
     instance to raise (e.g. a timeout).
+
+    Ruling R25: the client also sends a `data_freshness=base_schedule` cross-check request.
+    `requests` records only the other (realtime) requests, `base_requests` the base_schedule
+    ones; both get the same `reply` (the fixtures here hold no cancelled train, so the
+    cross-check adds nothing to the results).
     """
 
     def __init__(self, body: dict | None = None, status: int = 200) -> None:
         self.requests: list[httpx.Request] = []
+        self.base_requests: list[httpx.Request] = []
         self.set(body if body is not None else JOURNEYS, status)
 
     def set(self, body: dict, status: int = 200) -> None:
@@ -68,7 +74,10 @@ class FakeServer:
         self.reply = raise_timeout
 
     def __call__(self, request: httpx.Request) -> httpx.Response:
-        self.requests.append(request)
+        if request.url.params.get("data_freshness") == "base_schedule":
+            self.base_requests.append(request)
+        else:
+            self.requests.append(request)
         return self.reply(request)
 
 
@@ -175,7 +184,8 @@ async def test_cache_hit_within_60s_makes_one_request(make_client, repo, clock, 
     second = await client.journeys(MONACO, NICE, when)
 
     assert len(server.requests) == 1
-    assert repo.quota_count(fixed_now.date()) == 1
+    assert len(server.base_requests) == 1  # R25: the base_schedule cross-check, cached 300 s
+    assert repo.quota_count(fixed_now.date()) == 2
     assert second.items == first.items == expected_journeys()
     assert second.stale is False
     assert second.fetched_at == fixed_now
@@ -190,7 +200,8 @@ async def test_cache_key_truncates_when_to_the_minute(make_client, repo, fixed_n
 
     await client.journeys(MONACO, NICE, datetime(2026, 11, 6, 8, 1, 0, tzinfo=PARIS))
     assert len(server.requests) == 2
-    assert repo.quota_count(fixed_now.date()) == 2
+    assert len(server.base_requests) == 2  # R25: one cross-check per distinct query
+    assert repo.quota_count(fixed_now.date()) == 4
 
 
 async def test_cache_distinguishes_routes(make_client):
@@ -212,7 +223,8 @@ async def test_cache_older_than_60s_is_refetched(make_client, repo, clock, fixed
     result = await client.journeys(MONACO, NICE, when)
 
     assert len(server.requests) == 2
-    assert repo.quota_count(fixed_now.date()) == 2
+    assert len(server.base_requests) == 1  # R25: the cross-check is still fresh (300 s)
+    assert repo.quota_count(fixed_now.date()) == 3
     assert result.stale is False
     assert result.fetched_at == fixed_now + timedelta(seconds=61)
 
@@ -234,7 +246,7 @@ async def test_departures_cache_hit_within_the_same_minute(make_client, repo, cl
     clock.advance(seconds=35)
     result = await client.departures(MONACO)
     assert len(server.requests) == 1
-    assert repo.quota_count(fixed_now.date()) == 1
+    assert repo.quota_count(fixed_now.date()) == 2  # R25: + 1 base_schedule cross-check
     assert result.items == parse_departures(DEPARTURES_MONACO, MONACO)
     assert result.stale is False
 
@@ -251,9 +263,10 @@ async def test_quota_counter_increments_per_consumer(make_client, repo, fixed_no
     await make_client(watcher_server, consumer="watcher").departures(MONACO)
 
     day = fixed_now.date()
-    assert repo.quota_count(day, "web") == 1
-    assert repo.quota_count(day, "watcher") == 1
-    assert repo.quota_count(day) == 2
+    # R25: each call = 1 realtime + 1 base_schedule request, both counted for the caller.
+    assert repo.quota_count(day, "web") == 2
+    assert repo.quota_count(day, "watcher") == 2
+    assert repo.quota_count(day) == 4
 
 
 async def test_budget_refused_without_cache_raises_quota_error(make_client, budget, repo, fixed_now):
@@ -471,7 +484,7 @@ async def test_departures_cache_uses_ttl_not_minute(make_client, repo, clock, fi
     assert len(server.requests) == 2
     assert result.stale is False
     assert result.fetched_at == fixed_now + timedelta(seconds=65)
-    assert repo.quota_count(fixed_now.date()) == 2
+    assert repo.quota_count(fixed_now.date()) == 3  # R25: + 1 cross-check, still fresh at 65 s
 
 
 async def test_departures_cache_hit_across_a_minute_boundary(make_client, clock):
@@ -617,7 +630,7 @@ async def test_journeys_404_no_solution_is_an_empty_answer(make_client, repo, cl
     again = await client.journeys(MONACO, NICE, when)
     assert again == Fetched(items=[], fetched_at=fixed_now, stale=False)
     assert len(server.requests) == 1
-    assert repo.quota_count(fixed_now.date()) == 1
+    assert repo.quota_count(fixed_now.date()) == 2  # R25: + 1 base_schedule cross-check
 
 
 async def test_departures_404_no_solution_is_an_empty_answer(make_client, repo, clock, fixed_now):
@@ -631,7 +644,7 @@ async def test_departures_404_no_solution_is_an_empty_answer(make_client, repo, 
     again = await client.departures(MONACO)
     assert again.items == [] and again.stale is False
     assert len(server.requests) == 1
-    assert repo.quota_count(fixed_now.date()) == 1
+    assert repo.quota_count(fixed_now.date()) == 2  # R25: + 1 base_schedule cross-check
 
 
 async def test_404_no_solution_is_cached_in_the_route_family(make_client, budget, clock, fixed_now):
@@ -730,3 +743,155 @@ async def test_httpx_request_errors_serve_stale(make_client, clock, fixed_now, e
     assert result.stale is True
     assert result.items == parse_departures(DEPARTURES_MONACO, MONACO)
     assert result.fetched_at == fixed_now
+
+
+# --- ruling R25: base_schedule cross-check for trains deleted from the realtime graph -----------
+# Live capture 2026-11-12 ~12:15 (Nice -> Monaco): 86033 (12:26) and 881223 (13:03) are NO_SERVICE in
+# base_schedule answers but ABSENT from realtime /journeys and /departures. journeys() and
+# departures() therefore also send the same query with data_freshness=base_schedule (cached 300 s,
+# counted in the quota like any request); every base_schedule item parsed as CANCELLED whose
+# (train_number, base_departure) is absent from the realtime answer is added to the result, and
+# the result is sorted by base_departure. A failed cross-check never fails the call.
+
+LIVE_J_RT = load("live_journeys_nice_monaco_realtime.json")
+LIVE_J_BASE = load("live_journeys_nice_monaco_base_schedule.json")
+LIVE_D_RT = load("live_departures_nice_realtime.json")
+LIVE_D_BASE = load("live_departures_nice_base_schedule.json")
+LIVE_WHEN = datetime(2026, 11, 12, 12, 15, tzinfo=PARIS)
+
+
+class FreshnessServer:
+    """Answers realtime and base_schedule requests with their own body (or status)."""
+
+    def __init__(self, realtime: dict, base: dict) -> None:
+        self.bodies = {"realtime": realtime, "base_schedule": base}
+        self.statuses = {"realtime": 200, "base_schedule": 200}
+        self.requests: list[httpx.Request] = []
+
+    def of(self, freshness: str) -> list[httpx.Request]:
+        return [r for r in self.requests if r.url.params.get("data_freshness") == freshness]
+
+    def __call__(self, request: httpx.Request) -> httpx.Response:
+        self.requests.append(request)
+        freshness = request.url.params.get("data_freshness")
+        status = self.statuses[freshness]
+        if status != 200:
+            return httpx.Response(status, json={"message": f"HTTP {status}"})
+        return httpx.Response(200, json=self.bodies[freshness])
+
+
+def _key(t) -> tuple:
+    return (t.train_number, t.base_departure)
+
+
+def _merged(realtime: list, base: list) -> list:
+    seen = {_key(t) for t in realtime}
+    added = [t for t in base if t.status is Status.CANCELLED and _key(t) not in seen]
+    return sorted(realtime + added, key=lambda t: t.base_departure)
+
+
+async def test_journeys_adds_cancelled_trains_missing_from_realtime(make_client, repo, fixed_now):
+    server = FreshnessServer(LIVE_J_RT, LIVE_J_BASE)
+    client = make_client(server)
+
+    result = await client.journeys(NICE, MONACO, LIVE_WHEN)
+
+    realtime = parse_journeys(LIVE_J_RT, NICE, MONACO)
+    base = parse_journeys(LIVE_J_BASE, NICE, MONACO)
+    assert result.items == _merged(realtime, base)
+    assert result.stale is False
+
+    by_number = {t.train_number: t for t in result.items}
+    for number, hhmm in (("86033", (12, 26)), ("881223", (13, 3))):
+        assert number not in {t.train_number for t in realtime}  # really absent from realtime
+        t = by_number[number]
+        assert t.status is Status.CANCELLED
+        assert t.base_departure == datetime(2026, 11, 12, *hhmm, tzinfo=PARIS)
+    assert {t.train_number for t in result.items} >= {t.train_number for t in realtime}
+    assert len({_key(t) for t in result.items}) == len(result.items)  # no duplicates
+    assert [t.base_departure for t in result.items] == sorted(t.base_departure for t in result.items)
+    assert by_number["86037"].status is Status.DELAYED  # realtime wins over base for kept trains
+
+    [rt_req], [base_req] = server.of("realtime"), server.of("base_schedule")
+    rt_params, base_params = dict(rt_req.url.params), dict(base_req.url.params)
+    assert base_params.pop("data_freshness") == "base_schedule"
+    assert rt_params.pop("data_freshness") == "realtime"
+    assert base_params == rt_params  # same query otherwise
+    assert repo.quota_count(fixed_now.date(), "web") == 2
+
+
+async def test_departures_adds_cancelled_trains_missing_from_realtime(make_client, repo, fixed_now):
+    server = FreshnessServer(LIVE_D_RT, LIVE_D_BASE)
+    client = make_client(server)
+
+    result = await client.departures(NICE)
+
+    realtime = parse_departures(LIVE_D_RT, NICE)
+    base = parse_departures(LIVE_D_BASE, NICE)
+    assert result.items == _merged(realtime, base)
+    assert result.stale is False
+    [t86033] = [t for t in result.items if t.train_number == "86033"]
+    assert t86033.status is Status.CANCELLED
+    assert t86033.base_departure == datetime(2026, 11, 12, 12, 26, tzinfo=PARIS)
+    assert "86033" not in {t.train_number for t in realtime}
+    assert len({_key(t) for t in result.items}) == len(result.items)
+
+    [rt_req], [base_req] = server.of("realtime"), server.of("base_schedule")
+    assert base_req.url.path == rt_req.url.path == f"/v1/coverage/sncf/stop_areas/{NICE}/departures"
+    assert base_req.url.params["count"] == rt_req.url.params["count"]
+    assert repo.quota_count(fixed_now.date(), "web") == 2
+
+
+async def test_base_schedule_cross_check_cached_300_s(make_client, repo, clock, fixed_now):
+    server = FreshnessServer(LIVE_J_RT, LIVE_J_BASE)
+    client = make_client(server, consumer="watcher")
+
+    await client.journeys(NICE, MONACO, LIVE_WHEN)
+    assert (len(server.of("realtime")), len(server.of("base_schedule"))) == (1, 1)
+
+    clock.advance(seconds=120)
+    result = await client.journeys(NICE, MONACO, LIVE_WHEN)
+    assert (len(server.of("realtime")), len(server.of("base_schedule"))) == (2, 1)  # only the realtime one
+    assert "86033" in {t.train_number for t in result.items}  # still merged from the cached cross-check
+    assert repo.quota_count(fixed_now.date(), "watcher") == 3
+
+    clock.advance(seconds=181)  # 301 s after the cross-check
+    await client.journeys(NICE, MONACO, LIVE_WHEN)
+    assert (len(server.of("realtime")), len(server.of("base_schedule"))) == (3, 2)
+    assert repo.quota_count(fixed_now.date(), "watcher") == 5
+
+
+@pytest.mark.parametrize("method", ["journeys", "departures"])
+async def test_base_schedule_failure_returns_realtime_alone(make_client, method, fixed_now):
+    if method == "journeys":
+        server = FreshnessServer(LIVE_J_RT, LIVE_J_BASE)
+        call = lambda c: c.journeys(NICE, MONACO, LIVE_WHEN)  # noqa: E731
+        realtime = parse_journeys(LIVE_J_RT, NICE, MONACO)
+    else:
+        server = FreshnessServer(LIVE_D_RT, LIVE_D_BASE)
+        call = lambda c: c.departures(NICE)  # noqa: E731
+        realtime = parse_departures(LIVE_D_RT, NICE)
+    server.statuses["base_schedule"] = 503
+
+    result = await call(make_client(server))  # no exception
+
+    assert sorted(result.items, key=_key) == sorted(realtime, key=_key)
+    assert result.stale is False
+    assert result.fetched_at == fixed_now
+    assert len(server.of("base_schedule")) == 1
+
+
+async def test_base_schedule_answer_never_serves_as_realtime_fallback(make_client, clock, fixed_now):
+    server = FreshnessServer(LIVE_J_RT, LIVE_J_BASE)
+    client = make_client(server)
+    await client.journeys(NICE, MONACO, LIVE_WHEN)  # caches the realtime answer, then the base_schedule one
+
+    clock.advance(minutes=2)
+    server.statuses["realtime"] = 503
+    result = await client.journeys(NICE, MONACO, LIVE_WHEN + timedelta(minutes=5))  # exact key unknown
+
+    assert result.stale is True
+    assert result.fetched_at == fixed_now
+    numbers = {t.train_number: t for t in result.items}
+    assert "22031" in numbers  # a realtime-only train: the fallback is the realtime answer
+    assert numbers["86037"].status is Status.DELAYED and numbers["86037"].delay_min == 60
