@@ -45,6 +45,7 @@ def create_app(
     clock: Callable[[], datetime] | None = None,
 ) -> FastAPI:
     """Build the site. `source`, `repo`, `http` and `clock` are injected by the tests."""
+    from monatrain.web.auth import router as auth_router
     from monatrain.web.routes import LoginRequired, RateLimited, current_user, redirect, router, templates
 
     settings = settings or Settings.from_env()
@@ -53,6 +54,9 @@ def create_app(
         conn = connect(settings.db_path)
         init_schema(conn)
         repo = Repo(conn)
+    owned_http: httpx.AsyncClient | None = None
+    if http is None:
+        owned_http = http = httpx.AsyncClient(timeout=10.0)
     owned_client: SncfClient | None = None
     if source is None:
         owned_client = SncfClient(settings.sncf_token, repo, QuotaBudget(repo), "web", http=http, clock=clock)
@@ -63,11 +67,14 @@ def create_app(
         yield
         if owned_client is not None:
             await owned_client.aclose()
+        if owned_http is not None:
+            await owned_http.aclose()
 
     app = FastAPI(lifespan=lifespan, docs_url=None, redoc_url=None, openapi_url=None)
     app.state.settings = settings
     app.state.repo = repo
     app.state.source = source
+    app.state.http = http
     app.state.clock = clock
     app.state.limiter = SlidingWindowLimiter(RATE_LIMIT, RATE_WINDOW_S)
     app.state.refresh_limiter = SlidingWindowLimiter(REFRESH_LIMIT, RATE_WINDOW_S)
@@ -80,6 +87,7 @@ def create_app(
     )
     app.mount("/static", StaticFiles(directory=HERE / "static"), name="static")
     app.include_router(router)
+    app.include_router(auth_router)
 
     def error_page(request: Request, status: int, message: str) -> HTMLResponse:
         return templates.TemplateResponse(
