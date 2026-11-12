@@ -124,9 +124,19 @@ def require_user(request: Request) -> dict:
     return user
 
 
+def _client_ip(request: Request) -> str:
+    return request.headers.get("CF-Connecting-IP") or (request.client.host if request.client else "inconnu")
+
+
 def rate_limit(request: Request) -> None:
-    ip = request.headers.get("CF-Connecting-IP") or (request.client.host if request.client else "inconnu")
-    if not request.app.state.limiter.hit(ip):
+    """Searches and actions: one bucket per IP."""
+    if not request.app.state.limiter.hit(_client_ip(request)):
+        raise RateLimited()
+
+
+def refresh_rate_limit(request: Request) -> None:
+    """Auto-refresh fragments and the home page: a separate, larger bucket per IP."""
+    if not request.app.state.refresh_limiter.hit(_client_ip(request)):
         raise RateLimited()
 
 
@@ -193,7 +203,7 @@ async def trajet(request: Request, de: str = "", vers: str = "", heure: str = ""
     )
 
 
-@router.get("/fragments/trajet", response_class=HTMLResponse, dependencies=[Depends(rate_limit)])
+@router.get("/fragments/trajet", response_class=HTMLResponse, dependencies=[Depends(refresh_rate_limit)])
 async def fragment_trajet(request: Request, de: str = "", vers: str = "", heure: str = ""):
     when = parse_when(heure, request.app.state.clock().astimezone(PARIS))
     return fragment(request, await build_trajet(request, de, vers, when))
@@ -211,10 +221,12 @@ async def build_gare(request: Request, stop_id: str, vers: str) -> tuple[TrainsV
     state = request.app.state
     fetched: Fetched[list[TrainInfo]] = await state.source.departures(stop_id, GARE_DEPARTURES)
     directions = list(dict.fromkeys(t.direction for t in fetched.items if t.direction))
+    # A stale board may list trains that already left: keep those still due (expected departure from now on).
+    now = state.clock()
     rows = [
         train_row(t, title=f"Direction {t.direction}", meta=f"Train {t.train_number}")
         for t in fetched.items
-        if not vers or t.direction == vers
+        if t.departure >= now and (not vers or t.direction == vers)
     ]
     stale = age_minutes(state.clock(), fetched.fetched_at) if fetched.stale else None
     return TrainsView(rows, stale, empty="Aucun départ trouvé."), directions
@@ -226,7 +238,7 @@ async def gare(request: Request, id: str = "", vers: str = ""):
     return render(request, "gare.html", "gare", stop_id=id, vers=vers, view=view, directions=directions)
 
 
-@router.get("/fragments/gare", response_class=HTMLResponse, dependencies=[Depends(rate_limit)])
+@router.get("/fragments/gare", response_class=HTMLResponse, dependencies=[Depends(refresh_rate_limit)])
 async def fragment_gare(request: Request, id: str = "", vers: str = ""):
     view, _ = await build_gare(request, id, vers)
     return fragment(request, view)
@@ -267,7 +279,7 @@ def install_url(request: Request) -> str | None:
     )
 
 
-@router.get("/", response_class=HTMLResponse)
+@router.get("/", response_class=HTMLResponse, dependencies=[Depends(refresh_rate_limit)])
 async def home(request: Request):
     user = current_user(request)
     if user is None:
@@ -289,7 +301,7 @@ async def home(request: Request):
     )
 
 
-@router.get("/fragments/mes-trains", response_class=HTMLResponse, dependencies=[Depends(rate_limit)])
+@router.get("/fragments/mes-trains", response_class=HTMLResponse, dependencies=[Depends(refresh_rate_limit)])
 async def fragment_mes_trains(request: Request):
     user = current_user(request)
     if user is None:

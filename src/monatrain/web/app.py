@@ -27,7 +27,8 @@ log = logging.getLogger(__name__)
 mimetypes.add_type("application/manifest+json", ".webmanifest")
 
 HERE = Path(__file__).parent
-RATE_LIMIT = 30
+RATE_LIMIT = 30  # searches and actions per IP
+REFRESH_LIMIT = 120  # auto-refresh fragments and home per IP
 RATE_WINDOW_S = 600
 
 MSG_RATE = "Trop de recherches, réessaie dans quelques minutes."
@@ -69,6 +70,7 @@ def create_app(
     app.state.source = source
     app.state.clock = clock
     app.state.limiter = SlidingWindowLimiter(RATE_LIMIT, RATE_WINDOW_S)
+    app.state.refresh_limiter = SlidingWindowLimiter(REFRESH_LIMIT, RATE_WINDOW_S)
 
     app.add_middleware(
         SessionMiddleware,
