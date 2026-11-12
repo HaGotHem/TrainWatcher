@@ -18,8 +18,9 @@
 - API : `https://api.sncf.com/v1/coverage/sncf`, HTTP Basic (token, mot de passe vide). Dates `YYYYMMDDTHHMMSS`, heure locale **Europe/Paris** ; toutes les `datetime` manipulées sont *aware* `ZoneInfo("Europe/Paris")`.
 - Quota : 5 000 req/jour, 150 000/mois ; **2 000/jour réservées au watcher** ; au-delà de **3 000 req « web »/jour**, le site ne sert plus que du cache. Cache frais **60 s** ; données périmées conservées **24 h** pour le repli.
 - Alertes : fenêtre de surveillance à partir de **60 min avant le départ prévu** ; DM si retard **≥ 5 min** ; nouveau DM seulement si le retard augmente encore de **≥ 5 min** par rapport au dernier DM, ou si le train passe à supprimé ou remplacé par car. Aucun DM « tout va bien ». Interrogation d'un même train au plus toutes les **120 s**.
+- Suppressions (R25) : `journeys` et `departures` recoupent le temps réel avec `data_freshness=base_schedule` (cache 300 s, compté dans le quota, jamais repli du temps réel) et ajoutent les trains `CANCELLED` absents du temps réel.
 - Introuvable : après **2 jours prévus consécutifs** introuvable → **un seul DM**, qui propose le train le plus proche à **± 15 min**.
-- Limites : **30 requêtes / 10 min par IP** sur les routes web qui appellent l'API ; **20 interactions / 10 min par utilisateur Discord** qui appellent l'API ; **10 trains suivis max** par utilisateur.
+- Limites : **30 requêtes / 10 min par IP** pour les recherches et actions web (`/trajet`, `/gare`, `POST /suivis`…) et **120 / 10 min par IP** pour `GET /` et `/fragments/*` (R18) ; **20 interactions / 10 min par utilisateur Discord** qui appellent l'API ; **10 trains suivis max** par utilisateur.
 - Gares : uniquement la liste de la spec § 4.4 (29 gares, IDs exacts).
 - Interface (site, DM, commandes) **en français**. Thème clair et sombre selon `prefers-color-scheme`. Manifest PWA, sans mode hors ligne.
 - Jours de circulation codés en masque de bits : lun = 1, mar = 2, mer = 4, jeu = 8, ven = 16, sam = 32, dim = 64 ; préréglages : semaine = 31, tous les jours = 127, week-end = 96.
@@ -133,8 +134,10 @@ def test_settings_missing_token_names_variable():
 Règles de classement (dans `parse.py`, par ordre de priorité) :
 1. `CANCELLED` si `journeys[].status == "NO_SERVICE"`, **ou** si une disruption liée au train (`display_informations.links[rel=disruptions].id` → `disruptions[]` racine) a `severity.effect == "NO_SERVICE"`, **ou** si cette disruption a un `impacted_stops[]` dont `uic_code(stop_point.id)` est celui de la gare de départ **ou** de la gare d'arrivée de l'utilisateur, avec `stop_time_effect == "deleted"`. Un arrêt supprimé ailleurs sur la ligne ne compte pas.
 2. `REPLACED_BY_BUS` si `physical_mode` contient « autocar » ou « bus » (insensible à la casse).
-3. `DELAYED` si `delay_min ≥ 1`, avec `delay_min = (departure - base_departure)` en minutes entières.
+3. `DELAYED` si `realtime` et `delay_min ≥ 1`, avec `delay_min = (departure - base_departure)` en minutes entières (R9). `realtime` vaut `data_freshness != "base_schedule"` : `adapted_schedule` est du temps réel.
 4. Sinon `ON_TIME`. Si `data_freshness == "base_schedule"`, on a `realtime=False` et `ON_TIME`.
+
+Un élément sans heure de départ exploitable est ignoré et journalisé, sans faire échouer le reste de la réponse.
 
 Autres règles : `reason` = `messages[0].text` de la première disruption liée, sinon `None`. Si `departure_date_time` est absent, `departure = base_departure` et `delay_min = 0`. Les sections `crow_fly` sont ignorées. Pour `/departures`, `to_id=None` et `direction` = `display_informations.direction`.
 
@@ -236,7 +239,7 @@ async def test_401_raises_auth_error_without_token_in_message(make_client): ...
   - `decide(state: DailyState, train: TrainInfo) -> AlertKind | None` (fonction pure). Règles :
     - `CANCELLED`, et le dernier statut notifié n'est pas `cancelled` → `CANCELLED` ;
     - `REPLACED_BY_BUS`, et le dernier statut notifié n'est ni `replaced_by_bus` ni `cancelled` → `REPLACED_BY_BUS` ;
-    - `delay_min ≥ 5`, et (rien n'a été notifié, ou le dernier DM était `delayed` avec `delay_min ≥ notified_delay + 5`) → `DELAYED` ;
+    - `status == DELAYED`, `delay_min ≥ 5`, et (rien n'a été notifié, ou le dernier DM était `delayed` avec `delay_min ≥ notified_delay + 5`) → `DELAYED` ;
     - sinon `None`. Après un DM `cancelled` ou `replaced_by_bus`, un retard ne génère plus de DM.
   - `format_alert(kind: AlertKind, train: TrainInfo) -> str` ; `format_missing(follow: Follow, suggestion: TrainInfo | None) -> str`.
 
@@ -269,7 +272,7 @@ Textes exacts (le motif n'apparaît que s'il existe) :
   - `async resolve_train(source, from_id, to_id, hhmm, days, now) -> TrainInfo` : cherche le train dont l'heure prévue est la plus proche de `hhmm` à ± 15 min, le jour `next_service_date`. Lève `FollowError("Aucun train direct trouvé autour de HH:MM.")` si rien ne correspond, et `FollowError("Les gares de départ et d'arrivée doivent être différentes.")` si départ = arrivée, ou si une gare est hors liste.
   - `async add_follow(repo, source, user_id, from_id, to_id, hhmm, days, now) -> Follow` : appelle `resolve_train`, enregistre l'heure **exacte** du train trouvé et son numéro, et convertit `FollowLimitError` / `DuplicateFollowError` en `FollowError` (« Tu suis déjà 10 trains. » / « Tu suis déjà ce train. »).
   - `@dataclass TodayItem` : `follow: Follow`, `state: Literal["upcoming","live","past","missing"]`, `train: TrainInfo | None`, `stale: bool`.
-  - `async today_statuses(repo, source, user_id, now) -> list[TodayItem]` : liste les trains suivis qui circulent aujourd'hui, triés par heure. Appelle l'API **uniquement** pour les trains dont l'heure prévue est dans `[now − 30 min, now + 3 h]` (`live`). Les autres sont `upcoming` ou `past`, sans appel. Un train `live` absent de la réponse prend l'état `missing` si son `daily_state.found` vaut `False`, sinon `live` avec `train=None`.
+  - `async today_statuses(repo, source, user_id, now) -> list[TodayItem]` : liste les trains suivis qui circulent aujourd'hui, triés par heure. Appelle l'API **uniquement** pour les trains dont l'heure prévue est dans `[now − 30 min, now + 3 h]` (`live`). Les autres sont `upcoming` ou `past`, sans appel. Un train `live` absent de la réponse prend l'état `missing` si son `daily_state.found` vaut `False`, sinon `live` avec `train=None`. Un train dont l'heure est passée reste `missing` (sans appel) si son `found` du jour vaut `False`, sinon `past`.
   - `async nearest_alternative(source, follow, on: date) -> TrainInfo | None` (± 15 min, hors heure actuelle).
 
 - [ ] **Step 1 : Écrire les tests (opus)**, avec un `FakeSource` qui enregistre ses appels : `test_resolve_exact_time`, `test_resolve_nearest_within_15_min_saves_exact_time` (saisie 08:00 → enregistré 08:04), `test_resolve_none_raises_french_message`, `test_follow_same_station_rejected`, `test_follow_unknown_station_rejected`, `test_add_follow_limit_message`, `test_today_statuses_only_calls_api_for_live_window` (3 trains à 06:00, 09:00 et 20:00, `now` = 08:30 → 1 seul appel), `test_today_statuses_skips_days_not_running`.
@@ -293,7 +296,7 @@ Textes exacts (le motif n'apparaît que s'il existe) :
   - `class Watcher(repo, source, notifier, *, poll_interval_s=120, window_before_min=60)` avec `async tick(now: datetime) -> None` et `async run_forever(interval_s=60)`. `run_forever` appelle `tick(now_paris())` toutes les 60 s, intercepte et logue toute exception, et appelle `repo.cache_purge(now − 24 h)` une fois par jour.
 
 Algorithme de `tick(now)` :
-1. Pour chaque `Follow` dont le jour de service *d* inclut un départ prévu `base = d + dep_time` qui vérifie `base − 60 min ≤ now ≤ base + max(daily_state.last_delay, 0)`, en considérant *d* = aujourd'hui **et** *d* = hier (pour les trains autour de minuit), on regroupe par clé `(from_id, to_id, d, dep_time)`.
+1. Pour chaque `Follow` dont le jour de service *d* inclut un départ prévu `base = d + dep_time` qui vérifie `base − 60 min ≤ now ≤ base + max(daily_state.last_delay, 0)`, en considérant *d* = hier, aujourd'hui **et** demain (R15 : trains autour de minuit et changement d'heure), on regroupe par clé `(from_id, to_id, d, dep_time)`.
 2. Pour chaque groupe dont la dernière interrogation date de plus de 120 s (mémoire du processus) : un seul `source.journeys(from_id, to_id, base − 1 min, count=4)`, puis on cherche le train dont l'heure de départ prévue vaut exactement `base`. Une `SncfError` est loguée, et on passe au groupe suivant.
 3. Si le train est trouvé : `set_found(True)` et `set_last_delay(train.delay_min)` pour chaque abonné du groupe, puis `decide()`. Si une alerte en sort : `notifier.send`, puis `set_notified` **seulement si** l'envoi a réussi. En cas d'échec, `set_dm_ok(False)`. L'échec d'un abonné n'arrête pas les autres.
 4. Fin de fenêtre (`now > base`) sans que le train ait jamais été vu ce jour-là : `set_found(False)` (une fois). Si `missing_streak ≥ 2` et `suggestion_sent == 0` : `nearest_alternative`, puis `send(format_missing(...), suggestion=...)` et `mark_suggestion_sent`.
@@ -306,7 +309,7 @@ Algorithme de `tick(now)` :
   - `test_window_across_midnight` (train 23:50 à +15 min, tick à 00:03 → toujours surveillé, pas de DM en double) ;
   - `test_tick_survives_source_error` ;
   - `test_missing_two_days_sends_one_suggestion` ;
-  - `test_absent_train_never_sends_cancel` ;
+  - `test_absent_train_never_sends_cancel` (un train simplement absent ne déclenche aucune alerte ; un train supprimé n'arrive au watcher que par le recoupement `base_schedule` du client, R25) ;
   - `test_day_not_in_mask_ignored`.
 - [ ] **Step 2 : Lancer `pytest tests/test_watcher.py -q`, attendu : FAIL.**
 - [ ] **Step 3 : Implémenter `watcher.py` selon l'algorithme.**
@@ -348,7 +351,7 @@ Algorithme de `tick(now)` :
     - `Introuvable` (gris) ;
     - `Prévu` et `Parti` (gris) pour les états `upcoming` et `past`.
   - Le motif est affiché sous la ligne. Si `stale`, un bandeau indique « Données d'il y a X min ». Si `dm_ok == 0`, un bandeau indique « Le bot ne peut pas t'envoyer de DM » avec un lien d'installation.
-  - **Limite par IP** : 30 requêtes par fenêtre de 600 s, sur `/trajet`, `/gare`, `/fragments/*` et `POST /suivis`. La clé est l'en-tête `CF-Connecting-IP`, à défaut `request.client.host`. Au-delà : page `erreur.html` en 429 avec « Trop de recherches, réessaie dans quelques minutes. »
+  - **Limite par IP** (R18), deux seaux par fenêtre de 600 s : 30 requêtes sur `/trajet`, `/gare` et `POST /suivis` ; 120 requêtes sur `GET /` et `/fragments/*` (rafraîchissement automatique). La clé est l'en-tête `CF-Connecting-IP`, à défaut `request.client.host`. Au-delà : page `erreur.html` en 429 avec « Trop de recherches, réessaie dans quelques minutes. »
   - Une `SncfError` sans cache donne la page `erreur.html` en 503 avec « Horaires SNCF momentanément indisponibles. » Une `SncfAuthError` donne le même message côté utilisateur, plus un log d'erreur.
   - Mise en page conforme à la maquette C de la spec : en-tête bleu foncé `#0b3d91`, cartes arrondies, barre d'onglets fixe en bas (Accueil / Trajet / Gare), `<meta name="viewport">`, variables CSS clair et sombre, `lang="fr"`.
 

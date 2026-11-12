@@ -28,8 +28,8 @@ python -m venv .venv
 Pour lancer le site et le bot dans Docker (sans le tunnel) :
 
 ```powershell
-Copy-Item .env.example .env
-# remplir le fichier .env (voir ci-dessous)
+if (-not (Test-Path .env)) { Copy-Item .env.example .env }   # ne jamais écraser un .env existant
+# compléter le fichier .env (voir ci-dessous)
 docker compose up --build
 ```
 
@@ -37,10 +37,10 @@ Le site est alors disponible sur `http://localhost:8000`. Le bot exige `DISCORD_
 
 ## Configuration du `.env`
 
-Le fichier `.env` contient les secrets. Il n'est jamais versionné (il figure dans `.gitignore` et `.dockerignore`). Partir du modèle commité :
+Le fichier `.env` contient les secrets. Il n'est jamais versionné (il figure dans `.gitignore` et `.dockerignore`). Partir du modèle commité, sans écraser un `.env` déjà rempli (il contient déjà `SNCF_TOKEN`, par exemple) :
 
 ```bash
-cp .env.example .env
+[ -f .env ] || cp .env.example .env
 ```
 
 | Variable | Obligatoire | Rôle |
@@ -52,7 +52,7 @@ cp .env.example .env
 | `SESSION_SECRET` | oui | Clé de signature des sessions du site. |
 | `PUBLIC_URL` | oui en production | Adresse publique du site, **sans slash final** : `https://train.sbertacchi.dev`, ou `http://localhost:8000` en local. |
 | `CLOUDFLARE_TUNNEL_TOKEN` | oui en production | Token du tunnel Cloudflare. |
-| `DISCORD_DEV_GUILD_ID` | non | Identifiant d'un serveur Discord de test (voir ci-dessous). Laissé vide, les commandes slash sont globales et peuvent mettre jusqu'à une heure à apparaître. |
+| `DISCORD_DEV_GUILD_ID` | non | Identifiant d'un serveur Discord de test (voir ci-dessous). Laissé vide, les commandes slash sont globales et peuvent mettre jusqu'à une heure à apparaître. **À laisser vide en production** : renseigné, les commandes n'existent que dans ce serveur et ne fonctionnent plus en DM ni en installation utilisateur. |
 
 Générer la valeur de `SESSION_SECRET` (PowerShell sous Windows) :
 
@@ -137,13 +137,13 @@ git pull && docker compose --profile prod up -d --build
 
 ## Sauvegarde
 
-La base SQLite est `data/monatrain.db`, en mode WAL : le site et le bot y écrivent en continu. Ne pas copier ce fichier directement, car les écritures récentes peuvent se trouver dans les fichiers `-wal` et `-shm` et être absentes de la copie.
+La base SQLite est `data/monatrain.db`, en mode WAL : le site et le bot y écrivent en continu. Ne pas copier ce fichier directement, car les écritures récentes peuvent se trouver dans le fichier `-wal` et être absentes de la copie.
 
 La sauvegarde utilise l'API de sauvegarde en ligne de SQLite. Elle se lance dans le conteneur `web` pendant qu'il tourne, sans l'arrêter :
 
 ```bash
 mkdir -p ~/sauvegardes
-docker compose exec web python -c "import sqlite3; sqlite3.connect('data/monatrain.db').backup(sqlite3.connect('data/sauvegarde.db'))"
+docker compose exec web python -c "import sqlite3; s=sqlite3.connect('data/monatrain.db'); d=sqlite3.connect('data/sauvegarde.db'); s.backup(d); d.close(); s.close()"
 mv data/sauvegarde.db ~/sauvegardes/monatrain-$(date +%F).db
 ```
 
@@ -163,6 +163,7 @@ L'API SNCF est limitée à 5 000 requêtes par jour et 150 000 par mois. Le budg
 
 - 2 000 requêtes par jour sont réservées au watcher, qui surveille les trains suivis (alertes) ;
 - au-delà de 3 000 requêtes « web » dans la journée, le site ne sert plus que les données en cache (avec la mention de leur âge) ;
-- le cache est rafraîchi au plus toutes les 60 secondes et conservé 24 h pour le repli.
+- le cache est rafraîchi au plus toutes les 60 secondes et conservé 24 h pour le repli ;
+- chaque requête temps réel de trajets ou de départs est doublée d'un recoupement avec l'horaire théorique (`base_schedule`, mis en cache 5 minutes) pour retrouver les trains supprimés, que le temps réel ne renvoie plus.
 
 Un même train suivi par plusieurs utilisateurs ne consomme qu'une seule requête.
