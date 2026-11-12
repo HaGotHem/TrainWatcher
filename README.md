@@ -68,7 +68,7 @@ python3 -c "import secrets; print(secrets.token_urlsafe(32))"
 
 ### Serveur de développement Discord (facultatif)
 
-`DISCORD_DEV_GUILD_ID` est optionnel. Pour l'utiliser :
+`DISCORD_DEV_GUILD_ID` est optionnel. Son intérêt : les commandes slash y apparaissent immédiatement, alors qu'une synchronisation globale peut prendre jusqu'à une heure. Pour l'utiliser, après avoir créé l'application (voir la section Création de l'application Discord) :
 
 1. Installer d'abord l'application sur ce serveur : dans le Developer Portal, **Installation → Guild Install**, ouvrir le lien généré et choisir le serveur.
 2. Activer le mode développeur de Discord : **Paramètres → Avancés → Mode développeur**.
@@ -137,15 +137,17 @@ git pull && docker compose --profile prod up -d --build
 
 ## Sauvegarde
 
-La base SQLite est `data/monatrain.db`. Elle est en mode WAL et le site écrit aussi dedans : arrêter `web` **et** `bot` avant la copie, sinon la sauvegarde peut être incohérente.
+La base SQLite est `data/monatrain.db`, en mode WAL : le site et le bot y écrivent en continu. Ne pas copier ce fichier directement, car les écritures récentes peuvent se trouver dans les fichiers `-wal` et `-shm` et être absentes de la copie.
+
+La sauvegarde utilise l'API de sauvegarde en ligne de SQLite. Elle se lance dans le conteneur `web` pendant qu'il tourne, sans l'arrêter :
 
 ```bash
-docker compose stop web bot
-cp data/monatrain.db sauvegarde-$(date +%F).db
-docker compose start web bot
+mkdir -p ~/sauvegardes
+docker compose exec web python -c "import sqlite3; sqlite3.connect('data/monatrain.db').backup(sqlite3.connect('data/sauvegarde.db'))"
+mv data/sauvegarde.db ~/sauvegardes/monatrain-$(date +%F).db
 ```
 
-Une fois `web` et `bot` arrêtés, les fichiers `data/monatrain.db-wal` et `data/monatrain.db-shm` disparaissent : leur absence est normale, et la copie `monatrain.db` contient alors toutes les données.
+Le fichier final est dans `~/sauvegardes`, hors du dépôt. Le fichier temporaire `data/sauvegarde.db` est déplacé immédiatement.
 
 ## Logs
 
