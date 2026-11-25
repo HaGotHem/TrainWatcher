@@ -1,0 +1,249 @@
+{
+  "departures": [
+    {
+      "route": {
+        "id": "route:SNCF:FR:Line::96809d68-f37d-4e68-ac3c-3c0540f4e2f2:",
+        "name": "C13",
+        "is_frequence": "False",
+        "direction_type": "forward",
+        "physical_modes": [
+          {
+            "id": "physical_mode:Train",
+            "name": "TER / Intercités"
+          }
+        ],
+        "direction": {
+          "id": "stop_area:SNCF:87756486",
+          "name": "Menton (Menton)",
+          "quality": 0,
+          "stop_area": {
+            "id": "stop_area:SNCF:87756486",
+            "name": "Menton",
+            "codes": [
+              {
+                "type": "source",
+                "value": "87756486"
+              },
+              {
+                "type": "uic",
+                "value": "87756486"
+              }
+            ],
+            "timezone": "Europe/Paris",
+            "label": "Menton (Menton)",
+            "coord": {
+              "lon": "7.493212",
+              "lat": "43.774435"
+            },
+            "links": []
+          },
+          "embedded_type": "stop_area"
+        },
+        "geojson": {
+          "type": "MultiLineString",
+          "coordinates": []
+        },
+        "links": [],
+        "line": {
+          "id": "line:SNCF:FR:Line::96809d68-f37d-4e68-ac3c-3c0540f4e2f2:",
+          "name": "C13",
+          "code": "C13",
+          "color": "",
+          "text_color": "",
+          "codes": [],
+          "physical_modes": [
+            {
+              "id": "physical_mode:Train",
+              "name": "TER / Intercités"
+            }
+          ],
+          "commercial_mode": {
+            "id": "commercial_mode:FR:Branding::6e0a3931-d3d3-4576-a37a-b133fac0dd44:",
+            "name": "ZOU !"
+          },
+          "network": {
+            "id": "network:SNCF:FR:Branding::6e0a3931-d3d3-4576-a37a-b133fac0dd44:",
+            "name": "ZOU !",
+            "links": []
+          },
+          "opening_time": "053600",
+          "closing_time": "024000",
+          "geojson": {
+            "type": "MultiLineString",
+            "coordinates": []
+          },
+          "links": []
+        }
+      },
+      "stop_point": {
+        "id": "stop_point:SNCF:87756403:Train",
+        "name": "Monaco Monte Carlo",
+        "label": "Monaco Monte Carlo (Monaco)",
+        "coord": {
+          "lon": "7.419747",
+          "lat": "43.738414"
+        },
+        "links": [],
+        "commercial_modes": [
+          {
+            "id": "commercial_mode:FR:Branding::6e0a3931-d3d3-4576-a37a-b133fac0dd44:",
+            "name": "ZOU !"
+          }
+        ],
+        "physical_modes": [
+          {
+            "id": "physical_mode:Train",
+            "name": "TER / Intercités",
+            "co2_emission_rate": {
+              "value": 11.9,
+              "unit": "gEC/Km"
+            }
+          }
+        ],
+        "administrative_regions": [
+          {
+            "id": "admin:osm:relation:2220322",
+            "name": "Monaco",
+            "level": 8,
+            "zip_code": "",
+            "label": "Monaco",
+            "insee": "",
+            "coord": {
+              "lon": "7.4197576",
+              "lat": "43.7311424"
+            }
+          }
+        ],
+        "stop_area": {
+          "id": "stop_area:SNCF:87756403",
+          "name": "Monaco Monte Carlo",
+          "codes": [
+            {
+              "type": "source",
+              "value": "87756403"
+            },
+            {
+              "type": "uic",
+              "value": "87756403"
+            }
+          ],
+          "timezone": "Europe/Paris",
+          "label": "Monaco Monte Carlo (Monaco)",
+          "coord": {
+            "lon": "7.419747",
+            "lat": "43.738414"
+          },
+          "links": [],
+          "administrative_regions": [
+            {
+              "id": "admin:osm:relation:2220322",
+              "name": "Monaco",
+              "level": 8,
+              "zip_code": "",
+              "label": "Monaco",
+              "insee": "",
+              "coord": {
+                "lon": "7.4197576",
+                "lat": "43.7311424"
+              }
+            }
+          ]
+        },
+        "equipments": []
+      },
+      "stop_date_time": {
+        "departure_date_time": "20261107T060400",
+        "base_departure_date_time": "20261107T060400",
+        "arrival_date_time": "20261107T060100",
+        "base_arrival_date_time": "20261107T060100",
+        "additional_informations": [],
+        "links": [
+          {
+            "type": "stop_area",
+            "rel": "origins",
+            "category": "origin",
+            "id": "stop_area:SNCF:87756486",
+            "internal": true
+          },
+          {
+            "type": "stop_area",
+            "rel": "terminus",
+            "category": "terminus",
+            "id": "stop_area:SNCF:87755447",
+            "internal": true
+          }
+        ],
+        "data_freshness": "base_schedule"
+      },
+      "display_informations": {
+        "commercial_mode": "ZOU !",
+        "network": "ZOU !",
+        "direction": "Les Arcs - Draguignan (Les Arcs-sur-Argens)",
+        "label": "C13",
+        "color": "",
+        "code": "C13",
+        "headsign": "881202",
+        "name": "C13",
+        "links": [
+          {
+            "templated": false,
+            "rel": "origins",
+            "internal": true,
+            "type": "stop_area",
+            "id": "stop_area:SNCF:87756486",
+            "category": "origin"
+          },
+          {
+            "templated": false,
+            "rel": "terminus",
+            "internal": true,
+            "type": "stop_area",
+            "id": "stop_area:SNCF:87755447",
+            "category": "terminus"
+          }
+        ],
+        "text_color": "",
+        "trip_short_name": "881202",
+        "company": "SNCF Voyageurs SA",
+        "description": "",
+        "physical_mode": "TER / Intercités",
+        "equipments": []
+      },
+      "links": [
+        {
+          "type": "line",
+          "id": "line:SNCF:FR:Line::96809d68-f37d-4e68-ac3c-3c0540f4e2f2:"
+        },
+        {
+          "type": "company",
+          "id": "company:SNCF:5111"
+        },
+        {
+          "type": "vehicle_journey",
+          "id": "vehicle_journey:SNCF:2026-11-07:881202:5111:Train"
+        },
+        {
+          "type": "route",
+          "id": "route:SNCF:FR:Line::96809d68-f37d-4e68-ac3c-3c0540f4e2f2:"
+        },
+        {
+          "type": "commercial_mode",
+          "id": "commercial_mode:FR:Branding::6e0a3931-d3d3-4576-a37a-b133fac0dd44:"
+        },
+        {
+          "type": "physical_mode",
+          "id": "physical_mode:Train"
+        },
+        {
+          "type": "network",
+          "id": "network:SNCF:FR:Branding::6e0a3931-d3d3-4576-a37a-b133fac0dd44:"
+        }
+      ]
+    }
+  ],
+  "disruptions": [],
+  "context": {
+    "current_datetime": "20261107T014519",
+    "timezone": "Europe/Paris"
+  }
+}

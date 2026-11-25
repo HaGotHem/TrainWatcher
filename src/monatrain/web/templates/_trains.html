@@ -1,0 +1,25 @@
+{% if view.stale_min is not none %}
+  <div class="banner banner-warn">Données d'il y a {{ view.stale_min }} min</div>
+{% endif %}
+{% if view.notice %}
+  <p class="empty">{{ view.notice }}</p>
+{% elif view.rows %}
+  <ul class="cards">
+    {% for r in view.rows %}
+      <li class="card train">
+        <div class="train-time">
+          {% if r.expected %}<s>{{ r.scheduled }}</s> <strong>{{ r.expected }}</strong>{% else %}<strong>{{ r.scheduled }}</strong>{% endif %}
+        </div>
+        <div class="train-info">
+          {% if r.title %}<div class="train-title">{{ r.title }}</div>{% endif %}
+          {% if r.meta %}<div class="muted">{{ r.meta }}</div>{% endif %}
+          {% if r.reason %}<div class="reason">{{ r.reason }}</div>{% endif %}
+          {% if r.suivre %}<a class="link" href="{{ r.suivre }}">Suivre ce train</a>{% endif %}
+        </div>
+        <span class="badge badge-{{ r.badge_kind }}">{{ r.badge }}</span>
+      </li>
+    {% endfor %}
+  </ul>
+{% else %}
+  <p class="empty">{{ view.empty }}</p>
+{% endif %}
